@@ -2,6 +2,12 @@
 
 > Idiomatic way to build chatgpt apps using async generators in python
 
+## Installation
+
+```bash
+pip install turbo-chat
+```
+
 ## Example
 
 ```python

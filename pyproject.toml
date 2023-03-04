@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "turbo-chat"
+version = "0.1.0"
+description = "Idiomatic way to build chatgpt apps using async generators in python"
+authors = ["Diwank Singh Tomer <singh@diwank.name>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "turbo_chat"}]
+
+[tool.poetry.dependencies]
+python = "<3.11,>=3.8"
+aiohttp = "^3.8.4"
+openai = "^0.27.0"
+pydantic = "^1.10.5"
+tenacity = "^8.2.2"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+ruff = "^0.0.254"
+pytype = "^2023.3.2"
+poethepoet = "^0.18.1"
+ward = "^0.67.2b0"
+
+[tool.poe.tasks]
+_ruff = "ruff --fix **/*.py"
+_black = "black ."
+_pytype = "pytype ."
+check = ["_ruff", "_black", "_pytype"]
+test = "ward"
+all = ["check", "test"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

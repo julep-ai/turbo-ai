@@ -13,8 +13,9 @@ pip install turbo-chat
 ```python
 from turbo_chat import *
 
+# Horoscope app
 @turbo()
-async def horoscope(context):
+async def horoscope(context: dict):
 
     yield System(content="You are a fortune teller")
     yield User(content=f"My zodiac sign is {context['zodiac']}")
@@ -25,14 +26,15 @@ async def horoscope(context):
     value = yield Generate(settings={"temperature": 0.9})
     print(f"generated: {value}")
 
-b = horoscope({"zodiac": "pisces"})
+# Testing
+app = horoscope({"zodiac": "pisces"})
 
-output, done = await run(b)
+output, done = await run(app)
 assert isinstance(output, GetUserInput)
 assert not done
 
 user_input = "Tell me my fortune"
-output, done = await run(b, user_input)
+output, done = await run(app, user_input)
 assert isinstance(output, str)
 assert done
 ```

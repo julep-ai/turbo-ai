@@ -70,11 +70,8 @@ async def horoscope(context: dict):
 
     yield System(content="You are a fortune teller")
 
-    while response := await run(set_user_zodiac(context)):
-        output, done = response
+    async for output in set_user_zodiac(context):
         yield output
-        if done:
-            break
 
     # Prompt runner to ask for user input
     input = yield GetUserInput(message="What do you want to know?")
@@ -90,8 +87,8 @@ async def horoscope(context: dict):
 app: AsyncGenerator[Union[Assistant, GetUserInput], str] = horoscope({"user_id": 1})
 
 _input = None
-while True:
-    result, done = await run(app, _input)
+while response := await run(app, _input):
+    result, done = response
 
     if isinstance(result, GetUserInput):
         _input = input(result.message)

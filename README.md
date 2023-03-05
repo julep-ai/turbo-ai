@@ -102,6 +102,12 @@ while True:
 
     if done:
         break
+        
+# Output
+# >>> What do you want to know? Tell me my fortune
+# >>> As an AI language model, I cannot predict the future or provide supernatural fortune-telling. However, I can offer guidance and advice based on your current situation and past experiences. Is there anything specific you would like me to help you with?
+#
+
 ```
 
 You can also customize how the messages are persisted in-between the executions.

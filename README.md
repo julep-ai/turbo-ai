@@ -129,7 +129,7 @@ class RedisMemory(BaseMemory):
 
 
 # Now use the memory in a turbo_chat app
-@turbo(memory=RedisMemory())
+@turbo(memory_class=RedisMemory)
 async def app(context):
     ...
 ```
@@ -138,7 +138,7 @@ async def app(context):
 
 ```python
 @turbo()
-async def app(context, memory):
+async def app(context: dict, memory: BaseMemory):
 
     messages = await memory.get()
     ...

@@ -11,6 +11,7 @@ from typing import (
     Literal,
     Optional,
     Tuple,
+    Type,
     Union,
 )
 
@@ -244,7 +245,7 @@ def validate_args(gen_fn: Callable[..., Any]) -> List[str]:
 
 # Decorator
 def turbo(
-    memory: Optional[BaseMemory] = None,
+    memory_class: Type[BaseMemory] = ListMemory,
     model: TurboModel = "gpt-3.5-turbo",
     stream: bool = False,
     **kwargs,
@@ -257,10 +258,6 @@ def turbo(
         "model": model,
         "stream": stream,
     }
-
-    # Get or create memory
-    if memory is None:
-        memory = ListMemory()
 
     # Create tenacity retry decorator
     with_retries = create_retry_decorator()
@@ -302,6 +299,7 @@ def turbo(
             """Wrapped chatml app from an async generator"""
 
             # Init memory
+            memory = memory_class()
             await memory.init(context)
 
             # Init generator

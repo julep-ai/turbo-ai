@@ -108,6 +108,8 @@ while response := await run(app, _input):
 
 ```
 
+### Custom memory
+
 You can also customize how the messages are persisted in-between the executions.
 
 ```python
@@ -128,7 +130,17 @@ class RedisMemory(BaseMemory):
 
 # Now use the memory in a turbo_chat app
 @turbo(memory=RedisMemory())
-async def app():
+async def app(context):
+    ...
+```
+
+### Get access to memory object directly (just declare an additional param)
+
+```python
+@turbo()
+async def app(context, memory):
+
+    messages = await memory.get()
     ...
 ```
 

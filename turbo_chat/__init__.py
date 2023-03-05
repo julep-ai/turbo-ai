@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import wraps
+import inspect
 import os
 from typing import (
     Any,
@@ -134,12 +135,7 @@ class GeneratorAlreadyExhaustedError(StopAsyncIteration):
     ...
 
 
-# Types
 Context = Dict[str, Any]
-TurboGen = AsyncGenerator[Union[Assistant, GetUserInput], Any]
-TurboGenFn = Callable[[Context], TurboGen]
-TurboGenTemplate = AsyncGenerator[PrefixMessage, Any]
-TurboGenTemplateFn = Callable[[Context], TurboGenTemplate]
 
 
 # Abstract classes
@@ -172,6 +168,16 @@ class BaseMemory(BasePrefixMessageCollection):
     async def extend(self, items: List[PrefixMessage]) -> None:
         for item in items:
             await self.append(item)
+
+
+# Types
+TurboGen = AsyncGenerator[Union[Assistant, GetUserInput], Any]
+TurboGenFn = Callable[[Context], TurboGen]
+TurboGenTemplate = AsyncGenerator[PrefixMessage, Any]
+TurboGenTemplateFn = Union[
+    Callable[[Context], TurboGenTemplate],
+    Callable[[Context, BaseMemory], TurboGenTemplate],
+]
 
 
 # Abstract implementations
@@ -223,6 +229,17 @@ def create_retry_decorator(
             | retry_if_exception_type(openai.error.ServiceUnavailableError)
         ),
     )
+
+
+# Validate args for generator fn
+def validate_args(gen_fn: Callable[..., Any]) -> List[str]:
+    """Checks if function needs a memory"""
+
+    signature = inspect.signature(gen_fn)
+    arg_names = [k for k in signature.parameters.keys()]
+    assert 1 <= len(arg_names) <= 2, "Only either 1 or 2 args allowed"
+
+    return arg_names
 
 
 # Decorator
@@ -284,9 +301,17 @@ def turbo(
         async def turbo_gen_fn(context: Context) -> TurboGen:
             """Wrapped chatml app from an async generator"""
 
-            # Init
+            # Init memory
             await memory.init(context)
-            turbo_gen = gen_fn(context)
+
+            # Init generator
+            arg_list = validate_args(gen_fn)
+            args = [context]
+
+            if len(arg_list) == 2:
+                args.append(memory)
+
+            turbo_gen = gen_fn(*args)
 
             # Parameters
             payload: Any = None

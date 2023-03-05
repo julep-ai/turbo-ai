@@ -1,23 +1,25 @@
 # flake8: noqa
 from ward import test
 
+from typing import AsyncGenerator, Union
+
+from turbo_chat import (
+    turbo,
+    System,
+    User,
+    Assistant,
+    GetUserInput,
+    Generate,
+    run,
+)
+
+
 def input(*args):
     return "Tell me my horoscope"
 
+
 @test("contains returns True when the example works")
 async def test_turbo_example():
-    from typing import AsyncGenerator, Union
-
-    from turbo_chat import (
-        turbo,
-        System,
-        User,
-        Assistant,
-        GetUserInput,
-        Generate,
-        run,
-    )
-
     # Get user
     async def get_user(id):
         return {"zodiac": "pisces"}

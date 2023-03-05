@@ -11,7 +11,22 @@ messages = [
 ]
 ```
 
-The idea here is to incrementally build the messages using an async generator and then use that to generate completions. [Async generators](https://superfastpython.com/asynchronous-generators-in-python/) are incredibly versatile and simple abstraction for doing this kind of stuff. They can also be composed together very easily. See example below.
+The idea here is to incrementally build the messages using an async generator and then use that to generate completions. [Async generators](https://superfastpython.com/asynchronous-generators-in-python/) are incredibly versatile and simple abstraction for doing this kind of stuff. They can also be composed together very easily.
+
+```python
+# Equivalent turbo-chat generator
+async def example():
+    yield System(content="Greet the user!")
+    yield User(content="Hello World!")
+
+    # To run generation, just yield Generate(),
+    # the lib will take care of correctly running the app, and
+    # return the value back here.
+    output = yield Generate()
+    print(output.content)
+```
+
+See more detailed example below.
 
 ## Installation
 
@@ -84,6 +99,30 @@ while True:
 
     if done:
         break
+```
+
+You can also customize how the messages are persisted in-between the executions.
+
+```python
+from turbo_chat import turbo, BaseMemory
+
+class RedisMemory(BaseMemory):
+    """Implement BaseMemory methods here"""
+
+    async def init(self, context) -> None:
+        ...
+
+    async def append(self, item) -> None:
+        ...
+
+    async def clear(self) -> None:
+        ...
+
+
+# Now use the memory in a turbo_chat app
+@turbo(memory=RedisMemory())
+async def app():
+    ...
 ```
 
 ---

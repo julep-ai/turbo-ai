@@ -25,5 +25,5 @@ async def test_inappropriate_bad():
 
     output, done = await run(b, "Tell me my fortune")
     print((output, done))
-    assert isinstance(output, str)
+    assert isinstance(output, Assistant)
     assert done

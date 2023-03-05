@@ -36,7 +36,6 @@ __all__ = [
     "InvalidValueYieldedError",
     "GeneratorAlreadyExhaustedError",
     "TurboGen",
-    "TurboGenStr",
     "BasePrefixMessageCollection",
     "BaseMemory",
     "Example",
@@ -138,10 +137,10 @@ class GeneratorAlreadyExhaustedError(StopAsyncIteration):
 
 # Types
 Context = Dict[str, Any]
-TurboGen = AsyncGenerator[PrefixMessage, Any]
-TurboGenStr = AsyncGenerator[Union[str, GetUserInput], Any]
+TurboGen = AsyncGenerator[Union[Assistant, GetUserInput], Any]
 TurboGenFn = Callable[[Context], TurboGen]
-TurboGenStrFn = Callable[[Context], TurboGenStr]
+TurboGenTemplate = AsyncGenerator[PrefixMessage, Any]
+TurboGenTemplateFn = Callable[[Context], TurboGenTemplate]
 
 
 # Abstract classes
@@ -233,7 +232,7 @@ def turbo(
     model: TurboModel = "gpt-3.5-turbo",
     stream: bool = False,
     **kwargs,
-) -> Callable[[TurboGenFn], TurboGenStrFn]:
+) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
     """Parameterized decorator for creating a chatml app from an async generator"""
 
     # Prepare openai args
@@ -252,7 +251,7 @@ def turbo(
 
     # Chat runner
     @with_retries
-    async def run_chat(memory: BaseMemory, **kwargs) -> str:
+    async def run_chat(memory: BaseMemory, **kwargs) -> Assistant:
         """Run ChatCompletion for the memory so far"""
 
         # Get messages from memory
@@ -271,20 +270,19 @@ def turbo(
 
         # Parse result
         output = chat_completion.choices[0].message
-        content = output["content"]
-        result = Assistant(content=content)
+        result = Assistant(content=output["content"])
 
         # Append result to memory
         await memory.append(result)
 
-        return content
+        return result
 
     # Parameterized decorator fn
-    def wrap_turbo_gen_fn(gen_fn: TurboGenFn) -> TurboGenStrFn:
+    def wrap_turbo_gen_fn(gen_fn: TurboGenTemplateFn) -> TurboGenFn:
         """Wrapper for chatml app async generator"""
 
         @wraps(gen_fn)
-        async def turbo_gen_fn(context: Context) -> TurboGenStr:
+        async def turbo_gen_fn(context: Context) -> TurboGen:
             """Wrapped chatml app from an async generator"""
 
             # Init
@@ -346,9 +344,9 @@ def turbo(
 
 
 async def run(
-    gen: TurboGenStr,
+    gen: TurboGen,
     input: Optional[str] = None,
-) -> Tuple[Union[str, GetUserInput], bool]:
+) -> Tuple[Union[Assistant, GetUserInput], bool]:
     """Run a turbo app"""
 
     # Set placeholder values

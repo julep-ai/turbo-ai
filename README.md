@@ -41,11 +41,11 @@ async def get_user(id):
 # Set user zodiac mixin
 @turbo()
 async def set_user_zodiac(context: dict):
-    
+
     user_id: int = context["user_id"]
     user_data: dict = await get_user(user_id)
     zodiac: str = user_data["zodiac"]
-    
+
     yield User(content=f"My zodiac sign is {context['zodiac']}")
 
 
@@ -54,19 +54,19 @@ async def set_user_zodiac(context: dict):
 async def horoscope(context: dict):
 
     yield System(content="You are a fortune teller")
-    
+
     async for (output, _) in run(set_user_zodiac()):
         yield output
 
     # Prompt runner to ask for user input
     input = yield GetUserInput(message="What do you want to know?")
-    
+
     # Yield the input
     yield User(content=input)
 
     # Generate (overriding the temperature)
     value = yield Generate(settings={"temperature": 0.9})
-    
+
 
 # Let's run this
 app: AsyncGenerator[Assistant | GetUserInput, str] = horoscope({"user_id": 1})
@@ -74,18 +74,18 @@ app: AsyncGenerator[Assistant | GetUserInput, str] = horoscope({"user_id": 1})
 _input = None
 while True:
     result, done = await run(app, _input)
-    
+
     if isinstance(result, GetUserInput):
         _input = raw_input(result.message)
         continue
-        
-    print(result.content)
-    
+
+    if isinstance(result, Assistant):
+        print(result.content)
+
     if done:
         break
 ```
 
-*****
-
+---
 
 ![turbo](https://user-images.githubusercontent.com/931887/222912628-8662fad0-091f-4cb8-92f3-6cce287716e9.jpg)

@@ -13,7 +13,6 @@ from typing import (
     Union,
 )
 
-from aiohttp import ClientSession
 import openai
 import pydantic
 
@@ -294,9 +293,6 @@ def turbo(
             already_yielded: bool = False
 
             try:
-                # Create a new aiohttp session for this
-                openai.aiosession.set(ClientSession())
-
                 while True:
                     # Step through the wrapped generator
                     output = await turbo_gen.asend(payload)
@@ -332,11 +328,6 @@ def turbo(
                 if not already_yielded:
                     payload = await run_chat(memory)
                     yield payload
-
-            finally:
-                # close the http session
-                session = openai.aiosession.get()
-                session and (await session.close())
 
         return turbo_gen_fn
 

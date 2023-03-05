@@ -37,7 +37,7 @@ pip install turbo-chat
 ## Example
 
 ```python
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Union
 
 from turbo_chat import (
     turbo,
@@ -61,7 +61,7 @@ async def set_user_zodiac(context: dict):
     user_data: dict = await get_user(user_id)
     zodiac: str = user_data["zodiac"]
 
-    yield User(content=f"My zodiac sign is {context['zodiac']}")
+    yield User(content=f"My zodiac sign is {zodiac}")
 
 
 # Horoscope app
@@ -70,8 +70,11 @@ async def horoscope(context: dict):
 
     yield System(content="You are a fortune teller")
 
-    async for (output, _) in run(set_user_zodiac()):
+    while response := await run(set_user_zodiac(context)):
+        output, done = response
         yield output
+        if done:
+            break
 
     # Prompt runner to ask for user input
     input = yield GetUserInput(message="What do you want to know?")
@@ -84,14 +87,14 @@ async def horoscope(context: dict):
 
 
 # Let's run this
-app: AsyncGenerator[Assistant | GetUserInput, str] = horoscope({"user_id": 1})
+app: AsyncGenerator[Union[Assistant, GetUserInput], str] = horoscope({"user_id": 1})
 
 _input = None
 while True:
     result, done = await run(app, _input)
 
     if isinstance(result, GetUserInput):
-        _input = raw_input(result.message)
+        _input = input(result.message)
         continue
 
     if isinstance(result, Assistant):

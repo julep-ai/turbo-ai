@@ -5,7 +5,7 @@ from turbo_chat import *
 
 
 @test("contains returns True when turbo works")
-async def test_inappropriate_bad():
+async def test_turbo():
     @turbo()
     async def example(context):
         yield System(content="You are a fortune teller")

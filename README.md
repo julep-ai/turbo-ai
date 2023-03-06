@@ -144,6 +144,24 @@ async def app(context: dict, memory: BaseMemory):
     ...
 ```
 
+### Generate a response to use internally but don't yield downstream
+
+```python
+@turbo()
+async def example(context):
+    yield System(content="You are a good guy named John")
+    yield User(content="What is your name?")
+    result = yield Generate(yield_downstream=False)
+
+    yield User(content="How are you doing?")
+    result = yield Generate()
+
+b = example()
+results = [output async for output in b]
+
+assert len(results) == 1
+```
+
 ---
 
 ![turbo](https://user-images.githubusercontent.com/931887/222912628-8662fad0-091f-4cb8-92f3-6cce287716e9.jpg)

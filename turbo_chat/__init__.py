@@ -10,6 +10,7 @@ from typing import (
     List,
     Literal,
     Optional,
+    Protocol,
     Tuple,
     Type,
     Union,
@@ -110,6 +111,7 @@ class Generate(pydantic.BaseModel):
     """Placeholder value to indicate that completion should be run"""
 
     settings: Dict[str, Any] = {}
+    yield_downstream: bool = True
 
 
 class GetUserInput(pydantic.BaseModel):
@@ -155,7 +157,7 @@ class BasePrefixMessageCollection(ABC):
 class BaseMemory(BasePrefixMessageCollection):
     """Base class for interface for persisting prefix messages for a session"""
 
-    async def init(self, context: Context) -> None:
+    async def init(self, context: Optional[Context]) -> None:
         ...
 
     @abstractmethod
@@ -173,12 +175,24 @@ class BaseMemory(BasePrefixMessageCollection):
 
 # Types
 TurboGen = AsyncGenerator[Union[Assistant, GetUserInput], Any]
-TurboGenFn = Callable[[Context], TurboGen]
 TurboGenTemplate = AsyncGenerator[PrefixMessage, Any]
-TurboGenTemplateFn = Union[
-    Callable[[Context], TurboGenTemplate],
-    Callable[[Context, BaseMemory], TurboGenTemplate],
-]
+
+
+class TurboGenFn(Protocol):
+    def __call__(
+        self,
+        context: Optional[Context] = None,
+    ) -> TurboGen:
+        ...
+
+
+class TurboGenTemplateFn(Protocol):
+    def __call__(
+        self,
+        context: Optional[Context] = None,
+        memory: Optional[BaseMemory] = None,
+    ) -> TurboGenTemplate:
+        ...
 
 
 # Abstract implementations
@@ -252,6 +266,10 @@ def turbo(
 ) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
     """Parameterized decorator for creating a chatml app from an async generator"""
 
+    # Streaming not supported yet
+    if stream:
+        raise NotImplementedError("Streaming not supported yet")
+
     # Prepare openai args
     chat_completion_args = {
         **kwargs,
@@ -295,7 +313,7 @@ def turbo(
         """Wrapper for chatml app async generator"""
 
         @wraps(gen_fn)
-        async def turbo_gen_fn(context: Context) -> TurboGen:
+        async def turbo_gen_fn(context: Optional[Context] = None) -> TurboGen:
             """Wrapped chatml app from an async generator"""
 
             # Init memory
@@ -334,12 +352,14 @@ def turbo(
                         payload = yield output
                         assert payload, f"User input was required, {payload} passed"
 
-                    # Generate and yield result
+                    # Generate result
                     elif isinstance(output, Generate):
                         payload = await run_chat(memory)
-                        yield payload
 
-                        already_yielded = True
+                        # Yield generated result if needed
+                        if output.yield_downstream:
+                            yield payload
+                            already_yielded = True
 
                     else:
                         raise InvalidValueYieldedError(

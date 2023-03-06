@@ -162,6 +162,26 @@ results = [output async for output in b]
 assert len(results) == 1
 ```
 
+### Add a simple in-memory cache
+
+You can also subclass the `BaseCache` class to create a custom cache.
+
+```python
+cache = SimpleCache()
+
+@turbo(cache=cache)
+async def example(context={}):
+    yield System(content="You are a good guy named John")
+    yield User(content="What is your name?")
+    result = yield Generate()
+
+b = example()
+results = [output async for output in b]
+
+assert len(cache.cache) == 1
+
+```
+
 ---
 
 ![turbo](https://user-images.githubusercontent.com/931887/222912628-8662fad0-091f-4cb8-92f3-6cce287716e9.jpg)

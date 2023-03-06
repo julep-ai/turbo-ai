@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from functools import wraps
 import inspect
+import json
 import os
 from typing import (
     Any,
@@ -41,6 +42,8 @@ __all__ = [
     "BasePrefixMessageCollection",
     "BaseMemory",
     "Example",
+    "BaseCache",
+    "SimpleCache",
     "turbo",
     "run",
 ]
@@ -138,7 +141,7 @@ class GeneratorAlreadyExhaustedError(StopAsyncIteration):
     ...
 
 
-Context = Dict[str, Any]
+Context = Union[Dict[str, Any], pydantic.BaseModel]
 
 
 # Abstract classes
@@ -152,6 +155,35 @@ class BasePrefixMessageCollection(ABC):
     async def get_dicts(self) -> List[Dict[str, str]]:
         messages = await self.get()
         return [message.dict() for message in messages]
+
+
+class BaseCache(ABC):
+    """Base class for caching agent responses"""
+
+    def serialize(self, obj: Any) -> Any:
+        return obj
+
+    def deserialize(self, hashed: Any) -> Any:
+        return hashed
+
+    def to_key(self, obj: Any) -> str:
+        return json.dumps(self.serialize(obj))
+
+    @abstractmethod
+    async def has(self, key: Any) -> bool:
+        ...
+
+    @abstractmethod
+    async def set(self, key: Any, value: Any) -> None:
+        ...
+
+    @abstractmethod
+    async def get(self, key: Any) -> Any:
+        ...
+
+    @abstractmethod
+    async def clear(self) -> Any:
+        ...
 
 
 class BaseMemory(BasePrefixMessageCollection):
@@ -224,6 +256,25 @@ class ListMemory(BaseMemory, pydantic.BaseModel):
         self.messages = []
 
 
+class SimpleCache(BaseCache, pydantic.BaseModel):
+    """Simple in-memory cache"""
+
+    cache: dict = {}
+
+    async def has(self, key) -> bool:
+        return self.to_key(key) in self.cache
+
+    async def set(self, key, value) -> None:
+        self.cache[self.to_key(key)] = self.serialize(value)
+
+    async def get(self, key) -> Any:
+        assert await self.has(key), "No cache entry found"
+        return self.deserialize(self.cache[self.to_key(key)])
+
+    async def clear(self) -> Any:
+        self.cache = {}
+
+
 # Retries
 def create_retry_decorator(
     min_seconds: int = 4,
@@ -262,6 +313,7 @@ def turbo(
     memory_class: Type[BaseMemory] = ListMemory,
     model: TurboModel = "gpt-3.5-turbo",
     stream: bool = False,
+    cache: Optional[BaseCache] = None,
     **kwargs,
 ) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
     """Parameterized decorator for creating a chatml app from an async generator"""
@@ -287,6 +339,9 @@ def turbo(
 
         # Get messages from memory
         messages = await memory.get_dicts()
+        if cache and await cache.has(messages):
+            cached = await cache.get(messages)
+            return Assistant(**cached)
 
         # Create completion
         args = {
@@ -301,10 +356,15 @@ def turbo(
 
         # Parse result
         output = chat_completion.choices[0].message
-        result = Assistant(content=output["content"])
+        payload = dict(content=output["content"])
+        result = Assistant(**payload)
 
         # Append result to memory
         await memory.append(result)
+
+        # Add to cache
+        if cache:
+            await cache.set(messages, payload)
 
         return result
 

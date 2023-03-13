@@ -410,6 +410,10 @@ def turbo(
                     if isinstance(output, PrefixMessage):
                         await memory.append(output)
 
+                        # Yield to user if Assistant
+                        if isinstance(output, Assistant):
+                            yield output
+
                     elif isinstance(output, BasePrefixMessageCollection):
                         await memory.extend(output)
 

@@ -396,14 +396,12 @@ def turbo(
 
             # Parameters
             payload: Any = None
-            already_yielded: bool = False
 
             try:
                 while True:
                     # Step through the wrapped generator
                     output = await turbo_gen.asend(payload)
                     payload = None
-                    already_yielded = False
 
                     if log:
                         log(output)
@@ -427,7 +425,6 @@ def turbo(
                         # Yield generated result if needed
                         if output.yield_downstream:
                             yield payload
-                            already_yielded = True
 
                     else:
                         raise InvalidValueYieldedError(
@@ -435,10 +432,8 @@ def turbo(
                         )
 
             except StopAsyncIteration:
-                # Generator over, yield result if not already yielded
-                if not already_yielded:
-                    payload = await run_chat(memory)
-                    yield payload
+                # Generator over, exit
+                pass
 
         # Add reference to the original function
         turbo_gen_fn.fn = gen_fn

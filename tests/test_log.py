@@ -15,6 +15,7 @@ async def test_log():
     @turbo(log=log)
     async def example(context):
         yield System(content="You are a fortune teller")
+        yield Generate()
 
     await run(example())
     assert log_ran

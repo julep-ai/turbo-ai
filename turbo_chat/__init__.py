@@ -318,6 +318,7 @@ def turbo(
     model: TurboModel = "gpt-3.5-turbo",
     stream: bool = False,
     cache: Optional[BaseCache] = None,
+    log: Optional[Callable[[Any], None]] = None,
     **kwargs,
 ) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
     """Parameterized decorator for creating a chatml app from an async generator"""
@@ -403,6 +404,9 @@ def turbo(
                     output = await turbo_gen.asend(payload)
                     payload = None
                     already_yielded = False
+
+                    if log:
+                        log(output)
 
                     # Add to memory
                     if isinstance(output, PrefixMessage):

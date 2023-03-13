@@ -39,6 +39,8 @@ __all__ = [
     "InvalidValueYieldedError",
     "GeneratorAlreadyExhaustedError",
     "TurboGen",
+    "MessageRole",
+    "PrefixMessage",
     "BasePrefixMessageCollection",
     "BaseMemory",
     "Example",
@@ -210,14 +212,6 @@ TurboGen = AsyncGenerator[Union[Assistant, GetUserInput], Any]
 TurboGenTemplate = AsyncGenerator[PrefixMessage, Any]
 
 
-class TurboGenFn(Protocol):
-    def __call__(
-        self,
-        context: Optional[Context] = None,
-    ) -> TurboGen:
-        ...
-
-
 class TurboGenTemplateFn(Protocol):
     def __call__(
         self,
@@ -227,8 +221,18 @@ class TurboGenTemplateFn(Protocol):
         ...
 
 
+class TurboGenFn(Protocol):
+    fn: TurboGenTemplateFn
+
+    def __call__(
+        self,
+        context: Optional[Context] = None,
+    ) -> TurboGen:
+        ...
+
+
 # Abstract implementations
-class Example(pydantic.BaseModel, BasePrefixMessageCollection):
+class Example(BasePrefixMessageCollection, pydantic.BaseModel):
     user: str
     assistant: str
 
@@ -431,6 +435,9 @@ def turbo(
                 if not already_yielded:
                     payload = await run_chat(memory)
                     yield payload
+
+        # Add reference to the original function
+        turbo_gen_fn.fn = gen_fn
 
         return turbo_gen_fn
 

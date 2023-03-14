@@ -13,7 +13,7 @@ async def test_turbo():
         input = yield GetUserInput(message="What do you want to know?")
         yield User(content=input)
 
-        value = yield Generate(settings={"temperature": 0.9})
+        value = yield Generate(temperature=0.9)
         print(f"generated: {value}")
 
     original_fn = example

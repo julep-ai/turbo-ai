@@ -112,10 +112,9 @@ class ExampleAssistant(PrefixMessage):
 
 
 # Utility classes
-class Generate(pydantic.BaseModel):
+class Generate(pydantic.BaseModel, extra=pydantic.Extra.allow):
     """Placeholder value to indicate that completion should be run"""
 
-    settings: Dict[str, Any] = {}
     yield_downstream: bool = True
 
 
@@ -424,10 +423,13 @@ def turbo(
 
                     # Generate result
                     elif isinstance(output, Generate):
-                        payload = await run_chat(memory)
+                        output_dict = output.dict()
+                        yield_downstream = output_dict.pop("yield_downstream")
+
+                        payload = await run_chat(memory, **output_dict)
 
                         # Yield generated result if needed
-                        if output.yield_downstream:
+                        if yield_downstream:
                             yield payload
 
                     else:

@@ -81,8 +81,7 @@ async def horoscope(context: dict):
     yield User(content=input)
 
     # Generate (overriding the temperature)
-    value = yield Generate(settings={"temperature": 0.9})
-
+    value = yield Generate(temperature=0.9)
 
 # Let's run this
 app: AsyncGenerator[Union[Assistant, GetUserInput], str] = horoscope({"user_id": 1})

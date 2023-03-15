@@ -79,6 +79,7 @@ class PrefixMessage(pydantic.BaseModel):
 
     role: MessageRole
     content: str
+    yield_downstream: bool = False
 
 
 class System(PrefixMessage):
@@ -97,6 +98,7 @@ class Assistant(PrefixMessage):
     """Assistant message"""
 
     role: MessageRole = "assistant"
+    yield_downstream: bool = True
 
 
 class ExampleUser(PrefixMessage):
@@ -155,7 +157,7 @@ class BasePrefixMessageCollection(ABC):
 
     async def get_dicts(self) -> List[Dict[str, str]]:
         messages = await self.get()
-        return [message.dict() for message in messages]
+        return [message.dict(include={"role", "content"}) for message in messages]
 
 
 class BaseCache(ABC):
@@ -409,8 +411,8 @@ def turbo(
                     if isinstance(output, PrefixMessage):
                         await memory.append(output)
 
-                        # Yield to user if Assistant
-                        if isinstance(output, Assistant):
+                        # Yield to user if yield_downstream
+                        if output.yield_downstream:
                             yield output
 
                     elif isinstance(output, BasePrefixMessageCollection):

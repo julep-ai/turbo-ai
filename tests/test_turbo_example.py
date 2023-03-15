@@ -26,8 +26,7 @@ async def test_turbo_example():
 
     # Set user zodiac mixin
     # Notice that no `@turbo()` decorator used here
-    async def set_user_zodiac(context: dict):
-        user_id: int = context["user_id"]
+    async def set_user_zodiac(user_id: int):
         user_data: dict = await get_user(user_id)
         zodiac: str = user_data["zodiac"]
 
@@ -35,11 +34,11 @@ async def test_turbo_example():
 
     # Horoscope app
     @turbo(temperature=0.0)
-    async def horoscope(context: dict):
+    async def horoscope(user_id: int):
         yield System(content="You are a fortune teller")
 
         # Yield from mixin
-        async for output in set_user_zodiac(context):
+        async for output in set_user_zodiac(user_id):
             yield output
 
         # Prompt runner to ask for user input
@@ -52,7 +51,7 @@ async def test_turbo_example():
         value = yield Generate(temperature=0.9)
 
     # Let's run this
-    app: AsyncGenerator[Union[Assistant, GetUserInput], str] = horoscope({"user_id": 1})
+    app: AsyncGenerator[Union[Assistant, GetUserInput], str] = horoscope(user_id=1)
 
     _input = None
     while response := await run(app, _input):

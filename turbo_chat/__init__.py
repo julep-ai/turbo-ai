@@ -144,9 +144,6 @@ class GeneratorAlreadyExhaustedError(StopAsyncIteration):
     ...
 
 
-Context = Union[Dict[str, Any], pydantic.BaseModel]
-
-
 # Abstract classes
 class BasePrefixMessageCollection(ABC):
     """Base class for async collections of prefix messages"""
@@ -192,7 +189,7 @@ class BaseCache(ABC):
 class BaseMemory(BasePrefixMessageCollection):
     """Base class for interface for persisting prefix messages for a session"""
 
-    async def init(self, context: Optional[Context]) -> None:
+    async def init(self, context={}) -> None:
         ...
 
     @abstractmethod
@@ -216,8 +213,8 @@ TurboGenTemplate = AsyncGenerator[PrefixMessage, Any]
 class TurboGenTemplateFn(Protocol):
     def __call__(
         self,
-        context: Optional[Context] = None,
         memory: Optional[BaseMemory] = None,
+        **context,
     ) -> TurboGenTemplate:
         ...
 
@@ -227,7 +224,7 @@ class TurboGenFn(Protocol):
 
     def __call__(
         self,
-        context: Optional[Context] = None,
+        **context,
     ) -> TurboGen:
         ...
 
@@ -302,17 +299,6 @@ def create_retry_decorator(
     )
 
 
-# Validate args for generator fn
-def validate_args(gen_fn: Callable[..., Any]) -> List[str]:
-    """Checks if function needs a memory"""
-
-    signature = inspect.signature(gen_fn)
-    arg_names = [k for k in signature.parameters.keys()]
-    assert 1 <= len(arg_names) <= 2, "Only either 1 or 2 args allowed"
-
-    return arg_names
-
-
 # Decorator
 def turbo(
     memory_class: Type[BaseMemory] = ListMemory,
@@ -379,7 +365,7 @@ def turbo(
         """Wrapper for chatml app async generator"""
 
         @wraps(gen_fn)
-        async def turbo_gen_fn(context: Optional[Context] = None) -> TurboGen:
+        async def turbo_gen_fn(**context) -> TurboGen:
             """Wrapped chatml app from an async generator"""
 
             # Init memory
@@ -387,13 +373,13 @@ def turbo(
             await memory.init(context)
 
             # Init generator
-            arg_list = validate_args(gen_fn)
-            args = [context]
+            signature = inspect.signature(gen_fn)
+            arg_names = [k for k in signature.parameters.keys()]
 
-            if len(arg_list) == 2:
-                args.append(memory)
+            if "memory" in arg_names:
+                context["memory"] = memory
 
-            turbo_gen = gen_fn(*args)
+            turbo_gen = gen_fn(**context)
 
             # Parameters
             payload: Any = None

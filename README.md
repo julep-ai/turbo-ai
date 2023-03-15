@@ -55,9 +55,8 @@ async def get_user(id):
 
 # Set user zodiac mixin
 # Notice that no `@turbo()` decorator used here
-async def set_user_zodiac(context: dict):
+async def set_user_zodiac(user_id: int):
 
-    user_id: int = context["user_id"]
     user_data: dict = await get_user(user_id)
     zodiac: str = user_data["zodiac"]
 
@@ -66,12 +65,12 @@ async def set_user_zodiac(context: dict):
 
 # Horoscope app
 @turbo(temperature=0.0)
-async def horoscope(context: dict):
+async def horoscope(user_id: int):
 
     yield System(content="You are a fortune teller")
 
     # Yield from mixin
-    async for output in set_user_zodiac(context):
+    async for output in set_user_zodiac(user_id):
         yield output
 
     # Prompt runner to ask for user input
@@ -129,7 +128,7 @@ class RedisMemory(BaseMemory):
 
 # Now use the memory in a turbo_chat app
 @turbo(memory_class=RedisMemory)
-async def app(context):
+async def app():
     ...
 ```
 
@@ -137,7 +136,7 @@ async def app(context):
 
 ```python
 @turbo()
-async def app(context: dict, memory: BaseMemory):
+async def app(some_param: Any, memory: BaseMemory):
 
     messages = await memory.get()
     ...
@@ -147,7 +146,7 @@ async def app(context: dict, memory: BaseMemory):
 
 ```python
 @turbo()
-async def example(context):
+async def example():
     yield System(content="You are a good guy named John")
     yield User(content="What is your name?")
     result = yield Generate(yield_downstream=False)
@@ -169,7 +168,7 @@ You can also subclass the `BaseCache` class to create a custom cache.
 cache = SimpleCache()
 
 @turbo(cache=cache)
-async def example(context={}):
+async def example():
     yield System(content="You are a good guy named John")
     yield User(content="What is your name?")
     result = yield Generate()

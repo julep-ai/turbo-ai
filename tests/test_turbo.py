@@ -7,9 +7,9 @@ from turbo_chat import *
 @test("contains returns True when turbo works")
 async def test_turbo():
     @turbo()
-    async def example(context):
+    async def example(zodiac: str):
         yield System(content="You are a fortune teller")
-        yield User(content=f"My zodiac sign is {context['zodiac']}")
+        yield User(content=f"My zodiac sign is {zodiac}")
 
         input = yield GetUserInput(message="What do you want to know?")
         yield User(content=input)
@@ -17,7 +17,7 @@ async def test_turbo():
         value = yield Generate(temperature=0.9)
         print(f"generated: {value}")
 
-    b = example({"zodiac": "pisces"})
+    b = example(zodiac="pisces")
     output, done = await run(b)
     print((output, done))
     assert isinstance(output, GetUserInput)

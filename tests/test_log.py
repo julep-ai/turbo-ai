@@ -13,7 +13,7 @@ async def test_log():
         log_ran = True
 
     @turbo(log=log)
-    async def example(context):
+    async def example():
         yield Assistant(content="You are a fortune teller")
 
     await run(example())

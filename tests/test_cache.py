@@ -9,7 +9,7 @@ async def test_turbo():
     cache = SimpleCache()
 
     @turbo(cache=cache)
-    async def example(context={}):
+    async def example():
         yield System(content="You are a good guy named John")
         yield User(content="What is your name?")
         result = yield Generate()

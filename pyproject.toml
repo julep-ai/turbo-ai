@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "turbo-chat"
-version = "0.1.16"
+version = "0.1.17"
 description = "Idiomatic way to build chatgpt apps using async generators in python"
 authors = ["Diwank Singh Tomer <singh@diwank.name>"]
 license = "MIT"
@@ -13,6 +13,7 @@ aiohttp = "^3.8.4"
 openai = "^0.27.0"
 pydantic = "^1.10.5"
 tenacity = "^8.2.2"
+tiktoken = "^0.3.1"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"

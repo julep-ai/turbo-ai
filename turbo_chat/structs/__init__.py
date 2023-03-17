@@ -12,7 +12,7 @@ __all__ = [
     "ExampleUser",
     "ExampleAssistant",
     "Generate",
-    "GetUserInput",
+    "GetInput",
     "Example",
     "Scratchpad",
 ]

@@ -17,7 +17,7 @@ __all__ = [
     "ExampleUser",
     "ExampleAssistant",
     "Generate",
-    "GetUserInput",
+    "GetInput",
     "InvalidValueYieldedError",
     "GeneratorAlreadyExhaustedError",
     "TurboGen",

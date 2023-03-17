@@ -3,7 +3,7 @@ import pydantic
 
 __all__ = [
     "Generate",
-    "GetUserInput",
+    "GetInput",
 ]
 
 
@@ -11,10 +11,10 @@ __all__ = [
 class Generate(pydantic.BaseModel, extra=pydantic.Extra.allow):
     """Placeholder value to indicate that completion should be run"""
 
-    yield_downstream: bool = True
+    forward: bool = True
 
 
-class GetUserInput(pydantic.BaseModel):
+class GetInput(pydantic.BaseModel):
     """Placeholder value to indicate that user input is needed"""
 
     message: str = "User input needed"

@@ -10,7 +10,7 @@ async def test_turbo():
         yield System(content="You are a fortune teller")
         yield User(content=f"My zodiac sign is {context['zodiac']}")
 
-        input = yield GetUserInput(message="What do you want to know?")
+        input = yield GetInput(message="What do you want to know?")
         yield User(content=input)
 
         value = yield Generate(temperature=0.9)

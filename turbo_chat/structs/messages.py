@@ -41,7 +41,7 @@ class Assistant(PrefixMessage):
     """Assistant message"""
 
     role: MessageRole = "assistant"
-    yield_downstream: bool = True
+    forward: bool = True
 
 
 class ExampleUser(PrefixMessage):

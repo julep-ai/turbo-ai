@@ -32,7 +32,7 @@ class PrefixMessage(pydantic.BaseModel):
 
     role: MessageRole
     content: str
-    yield_downstream: bool = False
+    forward: bool = False
 
 
 # Abstract classes

@@ -8,10 +8,11 @@ from typing import (
     Type,
 )
 
+import tiktoken
 
 from .chat import run_chat
 from .errors import InvalidValueYieldedError
-from .memory import ListMemory
+from .memory import LocalMemory
 
 from .structs import (
     Generate,
@@ -41,7 +42,7 @@ __all__ = [
 
 # Decorator
 def turbo(
-    memory_class: Type[BaseMemory] = ListMemory,
+    memory_class: Type[BaseMemory] = LocalMemory,
     model: TurboModel = "gpt-3.5-turbo",
     stream: bool = False,
     cache: Optional[BaseCache] = None,
@@ -61,6 +62,9 @@ def turbo(
         "stream": stream,
     }
 
+    # Get tiktoken encoding
+    encoding = tiktoken.encoding_for_model(model)
+
     # Parameterized decorator fn
     def wrap_turbo_gen_fn(gen_fn: TurboGenTemplateFn) -> TurboGenFn:
         """Wrapper for chatml app async generator"""
@@ -70,7 +74,7 @@ def turbo(
             """Wrapped chatml app from an async generator"""
 
             # Init memory
-            memory = memory_class()
+            memory = memory_class(encoding=encoding)
             await memory.init(context)
 
             # Init generator

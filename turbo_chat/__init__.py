@@ -25,7 +25,7 @@ __all__ = [
     "PrefixMessage",
     "BasePrefixMessageCollection",
     "BaseMemory",
-    "ListMemory",
+    "LocalMemory",
     "Example",
     "BaseCache",
     "SimpleCache",

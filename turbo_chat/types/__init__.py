@@ -10,6 +10,7 @@ from .messages import *
 __all__ = [
     "MessageRole",
     "PrefixMessage",
+    "MessageDict",
     "BasePrefixMessageCollection",
     "TurboGen",
     "TurboModel",

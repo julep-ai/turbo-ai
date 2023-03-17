@@ -183,4 +183,5 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* Update README.md. PR [#11](https://github.com/creatorrr/turbo-chat/pull/11) by [@creatorrr](https://github.com/creatorrr).
 

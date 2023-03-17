@@ -2,6 +2,10 @@
 
 > Idiomatic way to build chatgpt apps using async generators in python
 
+![turbo](https://user-images.githubusercontent.com/931887/222912628-8662fad0-091f-4cb8-92f3-6cce287716e9.jpg)
+
+## About
+
 The [ChatGPT API](https://openai.com/blog/introducing-chatgpt-and-whisper-apis) uses a new input format called [chatml](https://github.com/openai/openai-python/blob/main/chatml.md). In openai's [python client](https://github.com/openai/openai-python/blob/main/chatml.md), the format is used something like this:
 
 ```python
@@ -180,7 +184,3 @@ assert len(cache.cache) == 1
 ### Latest Changes
 
 
-  
----
-
-![turbo](https://user-images.githubusercontent.com/931887/222912628-8662fad0-091f-4cb8-92f3-6cce287716e9.jpg)

@@ -10,7 +10,7 @@ async def test_turbo():
     async def example():
         yield System(content="You are a good guy named John")
         yield User(content="What is your name?")
-        result = yield Generate(yield_downstream=False)
+        result = yield Generate(forward=False)
 
         yield User(content="How are you doing?")
         result = yield Generate()

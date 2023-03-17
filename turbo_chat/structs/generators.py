@@ -9,7 +9,7 @@ from typing import (
 
 from .messages import Assistant, PrefixMessage
 from .memory import BaseMemory
-from .signals import GetUserInput
+from .signals import GetInput
 
 __all__ = [
     "TurboGen",
@@ -17,7 +17,7 @@ __all__ = [
 
 
 # Types
-TurboGen = AsyncGenerator[Union[Assistant, GetUserInput], Any]
+TurboGen = AsyncGenerator[Union[Assistant, GetInput], Any]
 TurboGenTemplate = AsyncGenerator[PrefixMessage, Any]
 
 

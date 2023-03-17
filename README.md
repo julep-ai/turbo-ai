@@ -44,7 +44,7 @@ from turbo_chat import (
     System,
     User,
     Assistant,
-    GetUserInput,
+    GetInput,
     Generate,
     run,
 )
@@ -74,7 +74,7 @@ async def horoscope(user_id: int):
         yield output
 
     # Prompt runner to ask for user input
-    input = yield GetUserInput(message="What do you want to know?")
+    input = yield GetInput(message="What do you want to know?")
 
     # Yield the input
     yield User(content=input)
@@ -83,13 +83,13 @@ async def horoscope(user_id: int):
     value = yield Generate(temperature=0.9)
 
 # Let's run this
-app: AsyncGenerator[Union[Assistant, GetUserInput], str] = horoscope({"user_id": 1})
+app: AsyncGenerator[Union[Assistant, GetInput], str] = horoscope({"user_id": 1})
 
 _input = None
 while response := await run(app, _input):
     result, done = response
 
-    if isinstance(result, GetUserInput):
+    if isinstance(result, GetInput):
         _input = input(result.message)
         continue
 
@@ -149,7 +149,7 @@ async def app(some_param: Any, memory: BaseMemory):
 async def example():
     yield System(content="You are a good guy named John")
     yield User(content="What is your name?")
-    result = yield Generate(yield_downstream=False)
+    result = yield Generate(forward=False)
 
     yield User(content="How are you doing?")
     result = yield Generate()

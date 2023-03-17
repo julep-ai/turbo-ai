@@ -11,7 +11,7 @@ async def test_turbo():
         yield System(content="You are a fortune teller")
         yield User(content=f"My zodiac sign is {zodiac}")
 
-        input = yield GetUserInput(message="What do you want to know?")
+        input = yield GetInput(message="What do you want to know?")
         yield User(content=input)
 
         value = yield Generate(temperature=0.9)
@@ -20,7 +20,7 @@ async def test_turbo():
     b = example(zodiac="pisces")
     output, done = await run(b)
     print((output, done))
-    assert isinstance(output, GetUserInput)
+    assert isinstance(output, GetInput)
     assert not done
 
     output, done = await run(b, "Tell me my fortune")

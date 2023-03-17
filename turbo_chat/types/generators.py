@@ -8,7 +8,7 @@ from typing import (
 
 
 from ..structs.messages import Assistant
-from ..structs.signals import GetUserInput
+from ..structs.signals import GetInput
 
 from .messages import PrefixMessage
 from .memory import BaseMemory
@@ -19,7 +19,7 @@ __all__ = [
 
 
 # Types
-TurboGen = AsyncGenerator[Union[Assistant, GetUserInput], Any]
+TurboGen = AsyncGenerator[Union[Assistant, GetInput], Any]
 TurboGenTemplate = AsyncGenerator[PrefixMessage, Any]
 
 

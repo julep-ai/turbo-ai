@@ -1,12 +1,8 @@
-from typing import (
-    Optional,
-    Tuple,
-    Union,
-)
+from typing import Optional, Tuple, Union
 
+from .structs import GetInput, Assistant
 
 from .errors import GeneratorAlreadyExhausted, GeneratorAlreadyExhaustedError
-from .structs import Assistant, GetUserInput
 from .types import TurboGen
 
 __all__ = [
@@ -17,7 +13,7 @@ __all__ = [
 async def run(
     gen: TurboGen,
     input: Optional[str] = None,
-) -> Tuple[Union[Assistant, GetUserInput], bool]:
+) -> Tuple[Union[Assistant, GetInput], bool]:
     """Run a turbo app"""
 
     # Set placeholder values
@@ -26,7 +22,7 @@ async def run(
 
     # Run generator
     try:
-        while not isinstance(output := await gen.asend(input), GetUserInput):
+        while not isinstance(output := await gen.asend(input), GetInput):
             pass
 
     # Generator exhausted, mark done

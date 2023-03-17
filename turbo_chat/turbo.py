@@ -15,7 +15,7 @@ from .memory import ListMemory
 
 from .structs import (
     Generate,
-    GetUserInput,
+    GetInput,
 )
 
 from .types import (
@@ -105,22 +105,22 @@ def turbo(
                     if isinstance(output, PrefixMessage):
                         await memory.append(output)
 
-                        # Yield to user if yield_downstream
-                        if output.yield_downstream:
+                        # Yield to user if forward
+                        if output.forward:
                             yield output
 
                     elif isinstance(output, BasePrefixMessageCollection):
                         await memory.extend(output)
 
-                    # Yield to user if GetUserInput
-                    elif isinstance(output, GetUserInput):
+                    # Yield to user if GetInput
+                    elif isinstance(output, GetInput):
                         payload = yield output
                         assert payload, f"User input was required, {payload} passed"
 
                     # Generate result
                     elif isinstance(output, Generate):
                         output_dict = output.dict()
-                        yield_downstream = output_dict.pop("yield_downstream")
+                        forward = output_dict.pop("forward")
 
                         payload = await run_chat(
                             memory,
@@ -132,7 +132,7 @@ def turbo(
                         )
 
                         # Yield generated result if needed
-                        if yield_downstream:
+                        if forward:
                             yield payload
 
                     else:

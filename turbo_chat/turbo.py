@@ -12,12 +12,15 @@ from .chat import run_chat
 from .errors import InvalidValueYieldedError
 from .memory import ListMemory
 
+from .structs import (
+    Generate,
+    GetUserInput,
+)
+
 from .types import (
     BaseCache,
     BaseMemory,
     BasePrefixMessageCollection,
-    Generate,
-    GetUserInput,
     PrefixMessage,
     TurboGen,
     TurboModel,

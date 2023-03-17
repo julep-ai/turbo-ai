@@ -5,13 +5,9 @@ from typing import (
 )
 
 
-from .types import (
-    Assistant,
-    GetUserInput,
-    TurboGen,
-)
-
 from .errors import GeneratorAlreadyExhausted, GeneratorAlreadyExhaustedError
+from .structs import Assistant, GetUserInput
+from .types import TurboGen
 
 __all__ = [
     "run",

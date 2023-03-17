@@ -5,8 +5,8 @@ from typing import (
 import openai
 
 
+from .structs import Assistant
 from .types import (
-    Assistant,
     BaseCache,
     BaseMemory,
 )

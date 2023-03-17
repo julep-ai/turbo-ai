@@ -7,11 +7,9 @@ from typing import (
 )
 
 
-from ..structs.messages import Assistant
-from ..structs.signals import GetUserInput
-
-from .messages import PrefixMessage
+from .messages import Assistant, PrefixMessage
 from .memory import BaseMemory
+from .signals import GetUserInput
 
 __all__ = [
     "TurboGen",

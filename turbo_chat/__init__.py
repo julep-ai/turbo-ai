@@ -5,6 +5,7 @@ from .chat import *
 from .errors import *
 from .memory import *
 from .run import *
+from .structs import *
 from .turbo import *
 from .types import *
 from .utils import *
@@ -28,6 +29,7 @@ __all__ = [
     "Example",
     "BaseCache",
     "SimpleCache",
+    "Scratchpad",
     "turbo",
     "run",
 ]

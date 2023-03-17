@@ -7,9 +7,9 @@ from typing import (
     TypedDict,
 )
 
-from jinja2 import Environment
 import pydantic
 
+from ..utils import render_template
 
 __all__ = [
     "MessageRole",
@@ -30,41 +30,40 @@ MessageRole = Literal[
 ]
 
 
-# Utils
-jinja_env: Environment = Environment(
-    autoescape=False,
-    trim_blocks=True,
-    lstrip_blocks=True,
-)
-
-
 # Models
 class PrefixMessage(pydantic.BaseModel):
     """Container for a single chatml prefix message"""
 
     role: MessageRole
 
+    # Content / Template
     content: Optional[str] = None
     template: Optional[str] = None
     variables: Optional[dict] = None
 
+    # Check template variables
+    check: bool = False
+
+    # Should forward downstream
     forward: bool = False
 
     @pydantic.root_validator
     def validate_content_template(cls, values: dict) -> dict:
+        # Get vals
         content = values["content"]
+        check = values["check"]
         template_string = values.pop("template")
         variables = values.pop("variables")
 
-        template_set = bool(template_string) and bool(variables)
+        # Check that correct values set
+        template_set = bool(template_string) and (variables is not None)
         assert template_set ^ bool(
             content
         ), "Either content or template/variables must be set"
 
         # Render template
         if template_set:
-            template = jinja_env.from_string(template_string)
-            values["content"] = template.render(**variables)
+            values["content"] = render_template(template_string, variables, check)
 
         return values
 

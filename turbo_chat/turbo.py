@@ -55,6 +55,15 @@ def turbo(
     if stream:
         raise NotImplementedError("Streaming not supported yet")
 
+    # Settings
+    settings = dict(
+        memory_class=memory_class,
+        model=model,
+        stream=stream,
+        cache=cache,
+        debug=debug,
+    )
+
     # Prepare openai args
     chat_completion_args = {
         **kwargs,
@@ -155,6 +164,10 @@ def turbo(
 
         # Add reference to the original function
         turbo_gen_fn.fn = gen_fn
+        turbo_gen_fn.settings = settings
+        turbo_gen_fn.configure = lambda **new_settings: turbo(
+            **{**settings, **new_settings}
+        )(gen_fn)
 
         return turbo_gen_fn
 

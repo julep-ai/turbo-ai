@@ -37,6 +37,10 @@ class TurboGenTemplateFn(Protocol):
 
 class TurboGenFn(Protocol):
     fn: TurboGenTemplateFn
+    settings: dict
+
+    def configure(self, new_settings: dict) -> "TurboGenFn":
+        ...
 
     def __call__(
         self,

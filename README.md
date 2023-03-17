@@ -183,5 +183,6 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* feat: Add count_tokens. PR [#12](https://github.com/creatorrr/turbo-chat/pull/12) by [@creatorrr](https://github.com/creatorrr).
 * Update README.md. PR [#11](https://github.com/creatorrr/turbo-chat/pull/11) by [@creatorrr](https://github.com/creatorrr).
 

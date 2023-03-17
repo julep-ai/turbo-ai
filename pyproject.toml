@@ -28,7 +28,8 @@ ipython = "^8.11.0"
 _ruff = "ruff --fix **/*.py"
 _black = "black ."
 _pytype = "pytype ."
-check = ["_ruff", "_black", "_pytype"]
+lint = ["_ruff", "_black"]
+check = ["lint", "_pytype"]
 test = "ward"
 all = ["check", "test"]
 

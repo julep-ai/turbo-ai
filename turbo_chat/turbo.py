@@ -16,6 +16,7 @@ from .memory import ListMemory
 from .structs import (
     Generate,
     GetInput,
+    Result,
 )
 
 from .types import (
@@ -107,14 +108,14 @@ def turbo(
 
                         # Yield to user if forward
                         if output.forward:
-                            yield output
+                            yield Result.from_message(output)
 
                     elif isinstance(output, BasePrefixMessageCollection):
                         await memory.extend(output)
 
                     # Yield to user if GetInput
                     elif isinstance(output, GetInput):
-                        payload = yield output
+                        payload = yield Result.from_message(output)
                         assert payload, f"User input was required, {payload} passed"
 
                     # Generate result
@@ -133,7 +134,7 @@ def turbo(
 
                         # Yield generated result if needed
                         if forward:
-                            yield payload
+                            yield Result.from_message(payload)
 
                     else:
                         raise InvalidValueYieldedError(

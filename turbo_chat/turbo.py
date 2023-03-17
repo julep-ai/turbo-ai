@@ -15,6 +15,7 @@ from .errors import InvalidValueYieldedError
 from .memory import LocalMemory
 
 from .structs import (
+    Assistant,
     Generate,
     GetInput,
     Result,
@@ -132,6 +133,9 @@ def turbo(
 
                     # Yield to user if GetInput
                     elif isinstance(output, GetInput):
+                        await memory.append(Assistant(content=output.content))
+
+                        # Get input
                         payload = yield Result.from_message(output)
                         assert payload, f"User input was required, {payload} passed"
 

@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import (
-    Dict,
+    cast,
     List,
     Literal,
+    TypedDict,
 )
 
 import pydantic
@@ -11,6 +12,7 @@ import pydantic
 __all__ = [
     "MessageRole",
     "PrefixMessage",
+    "MessageDict",
     "BasePrefixMessageCollection",
 ]
 
@@ -35,6 +37,11 @@ class PrefixMessage(pydantic.BaseModel):
     forward: bool = False
 
 
+class MessageDict(TypedDict):
+    role: MessageRole
+    content: str
+
+
 # Abstract classes
 class BasePrefixMessageCollection(ABC):
     """Base class for async collections of prefix messages"""
@@ -43,6 +50,10 @@ class BasePrefixMessageCollection(ABC):
     async def get(self) -> List[PrefixMessage]:
         ...
 
-    async def get_dicts(self) -> List[Dict[str, str]]:
+    async def get_dicts(self) -> List[MessageDict]:
         messages = await self.get()
-        return [message.dict(include={"role", "content"}) for message in messages]
+
+        return [
+            cast(MessageDict, message.dict(include={"role", "content"}))
+            for message in messages
+        ]

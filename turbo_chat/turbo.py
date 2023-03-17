@@ -70,7 +70,7 @@ def turbo(
 
             # Init memory
             memory = memory_class()
-            await memory.init(context)
+            await memory.init(model, context=context)
 
             # Init generator
             signature = inspect.signature(gen_fn)

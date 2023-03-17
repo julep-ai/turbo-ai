@@ -1,0 +1,52 @@
+name: check code
+
+on: pull_request
+
+jobs:
+  check-code:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.4.0
+          virtualenvs-create: true
+          virtualenvs-in-project: false
+          virtualenvs-path: ~/.cache/virtualenvs
+          installer-parallel: true
+
+      - name: Load cached venvs
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/virtualenvs
+          key: poetry-cached-${{ hashFiles('./poetry.lock') }}
+          restore-keys: |
+            poetry-cached-
+
+      - name: Load cached pytype calcs
+        id: cached-pytype
+        uses: actions/cache@v3
+        with:
+          path: ./.pytype
+          key: pytype-cached-${{ hashFiles('./turbo_chat/**/*.py') }}
+          restore-keys: |
+            pytype-cached-
+
+      - name: Check code
+        working-directory: ./
+        run: |
+          poetry install --no-interaction --no-root
+          poetry run poe check

@@ -630,7 +630,7 @@ testing = ["Django (<3.1)", "attrs", "colorama", "docopt", "pytest (<7.0.0)"]
 name = "jinja2"
 version = "3.1.2"
 description = "A very fast and expressive template engine."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -721,7 +721,7 @@ testing = ["coverage", "pytest", "pytest-cov", "pytest-regressions"]
 name = "markupsafe"
 version = "2.1.2"
 description = "Safely add untrusted strings to HTML/XML markup."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1867,4 +1867,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "<3.11,>=3.8"
-content-hash = "6948fdf42adbfa72f8c0a79f752f1224c4cb1ecc3c6a9d83e10719371128540f"
+content-hash = "e0681a1a1a05c712b07aa67c56db2d830d6ce27c304ebc167772f66f21327f93"

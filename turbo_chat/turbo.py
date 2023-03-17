@@ -45,7 +45,7 @@ def turbo(
     model: TurboModel = "gpt-3.5-turbo",
     stream: bool = False,
     cache: Optional[BaseCache] = None,
-    log: Optional[Callable[[dict], None]] = None,
+    debug: Optional[Callable[[dict], None]] = None,
     **kwargs,
 ) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
     """Parameterized decorator for creating a chatml app from an async generator"""
@@ -91,14 +91,18 @@ def turbo(
                     output = await turbo_gen.asend(payload)
 
                     # Pass inputs & outputs to debug log if needed
-                    if log:
+                    if debug:
                         params = dict(
                             app=gen_fn.__name__,
                             timestamp=datetime.utcnow(),
                         )
 
-                        payload and log({**params, "type": "input", "payload": payload})
-                        output and log({**params, "type": "output", "output": output})
+                        payload and debug(
+                            {**params, "type": "input", "payload": payload}
+                        )
+                        output and debug(
+                            {**params, "type": "output", "payload": output}
+                        )
 
                     payload = None
 

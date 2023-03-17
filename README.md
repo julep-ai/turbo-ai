@@ -86,18 +86,13 @@ async def horoscope(user_id: int):
 app: AsyncGenerator[Union[Assistant, GetInput], str] = horoscope({"user_id": 1})
 
 _input = None
-while response := await run(app, _input):
-    result, done = response
-
-    if isinstance(result, GetInput):
-        _input = input(result.message)
+while not (result := await run(app, _input)).done:
+    if result.needs_input:
+        # Prompt user with the input message
+        _input = input(result.content)
         continue
 
-    if isinstance(result, Assistant):
-        print(result.content)
-
-    if done:
-        break
+    print(result.content)
 
 # Output
 # >>> What do you want to know? Tell me my fortune

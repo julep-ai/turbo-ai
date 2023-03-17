@@ -42,7 +42,7 @@ async def test_turbo_example():
             yield output
 
         # Prompt runner to ask for user input
-        input = yield GetInput(message="What do you want to know?")
+        input = yield GetInput(content="What do you want to know?")
 
         # Yield the input
         yield User(content=input)
@@ -54,15 +54,9 @@ async def test_turbo_example():
     app: AsyncGenerator[Union[Assistant, GetInput], str] = horoscope(user_id=1)
 
     _input = None
-    while response := await run(app, _input):
-        result, done = response
-
-        if isinstance(result, GetInput):
-            _input = input(result.message)
+    while not (result := await run(app, _input)).done:
+        if result.needs_input:
+            _input = input(result.content)
             continue
 
-        if isinstance(result, Assistant):
-            print(result.content)
-
-        if done:
-            break
+        print(result.content)

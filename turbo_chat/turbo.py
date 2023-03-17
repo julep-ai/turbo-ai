@@ -1,3 +1,4 @@
+from datetime import datetime
 from functools import wraps
 import inspect
 from typing import (
@@ -40,7 +41,7 @@ def turbo(
     model: TurboModel = "gpt-3.5-turbo",
     stream: bool = False,
     cache: Optional[BaseCache] = None,
-    log: Optional[Callable[[Any], None]] = None,
+    log: Optional[Callable[[dict], None]] = None,
     **kwargs,
 ) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
     """Parameterized decorator for creating a chatml app from an async generator"""
@@ -84,10 +85,18 @@ def turbo(
                 while True:
                     # Step through the wrapped generator
                     output = await turbo_gen.asend(payload)
-                    payload = None
 
+                    # Pass inputs & outputs to debug log if needed
                     if log:
-                        log(output)
+                        params = dict(
+                            app=gen_fn.__name__,
+                            timestamp=datetime.utcnow(),
+                        )
+
+                        payload and log({**params, "type": "input", "payload": payload})
+                        output and log({**params, "type": "output", "output": output})
+
+                    payload = None
 
                     # Add to memory
                     if isinstance(output, PrefixMessage):

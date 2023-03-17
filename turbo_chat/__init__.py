@@ -29,6 +29,7 @@ __all__ = [
     "Example",
     "BaseCache",
     "SimpleCache",
+    "Scratchpad",
     "turbo",
     "run",
 ]

@@ -8,9 +8,8 @@ from typing import (
     Type,
 )
 
-import tiktoken
-
 from .chat import run_chat
+from .config import TurboModel
 from .errors import InvalidValueYieldedError
 from .memory import LocalMemory
 
@@ -24,10 +23,9 @@ from .structs import (
 from .types import (
     BaseCache,
     BaseMemory,
-    BasePrefixMessageCollection,
-    PrefixMessage,
+    BaseMessageCollection,
+    Message,
     TurboGen,
-    TurboModel,
 )
 
 from .types.generators import (
@@ -72,9 +70,6 @@ def turbo(
         "stream": stream,
     }
 
-    # Get tiktoken encoding
-    encoding = tiktoken.encoding_for_model(model)
-
     # Parameterized decorator fn
     def wrap_turbo_gen_fn(gen_fn: TurboGenTemplateFn) -> TurboGenFn:
         """Wrapper for chatml app async generator"""
@@ -84,7 +79,7 @@ def turbo(
             """Wrapped chatml app from an async generator"""
 
             # Init memory
-            memory = memory_class(encoding=encoding)
+            memory = memory_class(model=model)
             await memory.init(context)
 
             # Init generator
@@ -121,14 +116,14 @@ def turbo(
                     payload = None
 
                     # Add to memory
-                    if isinstance(output, PrefixMessage):
+                    if isinstance(output, Message):
                         await memory.append(output)
 
                         # Yield to user if forward
                         if output.forward:
                             yield Result.from_message(output)
 
-                    elif isinstance(output, BasePrefixMessageCollection):
+                    elif isinstance(output, BaseMessageCollection):
                         await memory.extend(output)
 
                     # Yield to user if GetInput

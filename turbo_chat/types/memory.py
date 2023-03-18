@@ -1,13 +1,13 @@
 from abc import abstractmethod
-from typing import List, Optional
+from typing import List
 
 import pydantic
-from tiktoken.core import Encoding
 
+from ..config import TurboModel
 from .messages import (
-    BasePrefixMessageCollection,
+    BaseMessageCollection,
     MessageDict,
-    PrefixMessage,
+    Message,
 )
 
 __all__ = [
@@ -16,45 +16,35 @@ __all__ = [
 
 
 # Abstract classes
-class BaseMemory(BasePrefixMessageCollection, pydantic.BaseModel):
-    """Base class for interface for persisting prefix messages for a session"""
+class BaseMemory(BaseMessageCollection, pydantic.BaseModel):
+    """Base class for persisting conversation history and state."""
 
-    class Config:
-        # Needed because no validator for Encoding
-        arbitrary_types_allowed = True
-
-    encoding: Optional[Encoding] = None
+    model: TurboModel
 
     async def init(self, context={}) -> None:
         ...
 
     @abstractmethod
-    async def append(self, item: PrefixMessage) -> None:
+    async def extend(self, items: List[Message]) -> None:
         ...
 
     @abstractmethod
-    async def clear(self) -> None:
+    async def get_state(self) -> dict:
         ...
 
-    async def get_state(self) -> dict:
-        raise NotImplementedError()
-
+    @abstractmethod
     async def set_state(self, new_state: dict, merge: bool = False) -> None:
-        raise NotImplementedError()
+        ...
 
-    async def extend(self, items: List[PrefixMessage]) -> None:
-        for item in items:
-            await self.append(item)
+    async def append(self, item: Message) -> None:
+        await self.extend([item])
 
-    async def count_tokens(self) -> int:
-        """Count the number of tokens stored in the memory."""
+    async def prepare_prompt(
+        self,
+        max_tokens: int = 0,
+    ) -> List[MessageDict]:
+        """Turn message history into a prompt for openai."""
 
-        assert self.encoding, "tiktoken.Encoding is required"
-
+        # Noop: Override to add filtering
         messages: List[MessageDict] = await self.get_dicts()
-        texts: List[str] = [message["content"] for message in messages]
-        tokens_list: List[List[int]] = [self.encoding.encode(text) for text in texts]
-
-        count: int = sum([len(tokens) for tokens in tokens_list])
-
-        return count
+        return messages

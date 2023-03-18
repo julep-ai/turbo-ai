@@ -5,9 +5,9 @@ from typing import (
 import pydantic
 
 from ..types.messages import (
-    BasePrefixMessageCollection,
+    BaseMessageCollection,
     MessageRole,
-    PrefixMessage,
+    Message,
 )
 
 
@@ -18,50 +18,50 @@ __all__ = [
     "ExampleUser",
     "ExampleAssistant",
     "MessageRole",
-    "PrefixMessage",
-    "BasePrefixMessageCollection",
+    "Message",
+    "BaseMessageCollection",
     "Example",
 ]
 
 
 # Models
-class System(PrefixMessage):
+class System(Message):
     """System message"""
 
     role: MessageRole = "system"
 
 
-class User(PrefixMessage):
+class User(Message):
     """User message"""
 
     role: MessageRole = "user"
 
 
-class Assistant(PrefixMessage):
+class Assistant(Message):
     """Assistant message"""
 
     role: MessageRole = "assistant"
     forward: bool = True
 
 
-class ExampleUser(PrefixMessage):
+class ExampleUser(Message):
     """User example message"""
 
     role: MessageRole = "system name=example_user"
 
 
-class ExampleAssistant(PrefixMessage):
+class ExampleAssistant(Message):
     """Assistant example message"""
 
     role: MessageRole = "system name=example_assistant"
 
 
 # Abstract implementations
-class Example(BasePrefixMessageCollection, pydantic.BaseModel):
+class Example(BaseMessageCollection, pydantic.BaseModel):
     user: str
     assistant: str
 
-    async def get(self) -> List[PrefixMessage]:
+    async def get(self) -> List[Message]:
         return [
             ExampleUser(content=self.user),
             ExampleAssistant(content=self.assistant),

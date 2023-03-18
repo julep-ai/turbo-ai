@@ -26,6 +26,7 @@ pytype = "^2023.3.2"
 poethepoet = "^0.18.1"
 ward = "^0.67.2b0"
 ipython = "^8.11.0"
+nest-asyncio = "^1.5.6"
 
 [tool.poe.tasks]
 _ruff = "ruff --fix **/*.py"

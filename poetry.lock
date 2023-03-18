@@ -956,6 +956,18 @@ files = [
 ]
 
 [[package]]
+name = "nest-asyncio"
+version = "1.5.6"
+description = "Patch asyncio to allow nested event loops"
+category = "dev"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "nest_asyncio-1.5.6-py3-none-any.whl", hash = "sha256:b9a953fb40dceaa587d109609098db21900182b16440652454a146cffb06e8b8"},
+    {file = "nest_asyncio-1.5.6.tar.gz", hash = "sha256:d267cc1ff794403f7df692964d1d2a3fa9418ffea2a3f6859a439ff482fef290"},
+]
+
+[[package]]
 name = "networkx"
 version = "2.8.3"
 description = "Python package for creating and manipulating graphs and networks"
@@ -1987,4 +1999,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "<3.11,>=3.8"
-content-hash = "1afc652625460208d0733294f57e86746eebaaa0c5dfc75c326623755f075b7f"
+content-hash = "0b37f5404b1c7eeb24fc5facb9285fe91c278a353207b67d027f1599e87a3848"

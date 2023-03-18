@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* refactor: Move trucation logic to a separate memory class. PR [#18](https://github.com/creatorrr/turbo-chat/pull/18) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.2.3. PR [#17](https://github.com/creatorrr/turbo-chat/pull/17) by [@creatorrr](https://github.com/creatorrr).
 * f/memory improvements. PR [#16](https://github.com/creatorrr/turbo-chat/pull/16) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.2.2. PR [#15](https://github.com/creatorrr/turbo-chat/pull/15) by [@creatorrr](https://github.com/creatorrr).

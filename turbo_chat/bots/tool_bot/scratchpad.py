@@ -17,7 +17,6 @@ class ParsedTools(TypedDict):
 
 scratchpad: Scratchpad[ParsedTools] = Scratchpad[ParsedTools](
     """
-Thought: Use another tool to get information? {should_use_tool:bool}
 Tool: {tool_name:S}
 Tool Input: {tool_input}
 Response: {final_response}

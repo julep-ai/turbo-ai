@@ -57,8 +57,8 @@ class PrefixMessage(pydantic.BaseModel):
 
         # Check that correct values set
         template_set = bool(template_string) and (variables is not None)
-        assert template_set ^ bool(
-            content
+        assert template_set ^ (
+            content is not None
         ), "Either content or template/variables must be set"
 
         # Render template

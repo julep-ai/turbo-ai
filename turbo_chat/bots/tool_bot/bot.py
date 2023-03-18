@@ -19,7 +19,7 @@ END EXAMPLE
 """.strip()
 
 
-@turbo(temperature=0.1)
+@turbo(model="gpt-3.5-turbo", temperature=0.7)
 async def tool_bot(
     tools: List[Tool],
     prologue: Optional[str] = None,
@@ -38,7 +38,7 @@ async def tool_bot(
             instruction=instruction,
             additional_info=None,
         ),
-        # check=True,
+        # check=True,  # FIXME: Throws an error, possible bug in jinja2schema
     )
 
     # Yield example
@@ -65,7 +65,7 @@ async def tool_bot(
             parsed_tools = scratchpad.parse(output.content)
 
             # If no tool required to run, continue
-            if not parsed_tools.get("should_use_tool"):
+            if not parsed_tools.get("tool_name"):
                 continue
 
             # Otherwise run tool

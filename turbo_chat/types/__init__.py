@@ -10,9 +10,9 @@ from .tools import Tool
 
 __all__ = [
     "MessageRole",
-    "PrefixMessage",
+    "Message",
     "MessageDict",
-    "BasePrefixMessageCollection",
+    "BaseMessageCollection",
     "TurboGen",
     "TurboModel",
     "BaseMemory",

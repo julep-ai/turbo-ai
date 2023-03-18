@@ -5,9 +5,9 @@ import pydantic
 from tiktoken.core import Encoding
 
 from .messages import (
-    BasePrefixMessageCollection,
+    BaseMessageCollection,
     MessageDict,
-    PrefixMessage,
+    Message,
 )
 
 __all__ = [
@@ -16,7 +16,7 @@ __all__ = [
 
 
 # Abstract classes
-class BaseMemory(BasePrefixMessageCollection, pydantic.BaseModel):
+class BaseMemory(BaseMessageCollection, pydantic.BaseModel):
     """Base class for interface for persisting prefix messages for a session"""
 
     class Config:
@@ -29,7 +29,7 @@ class BaseMemory(BasePrefixMessageCollection, pydantic.BaseModel):
         ...
 
     @abstractmethod
-    async def append(self, item: PrefixMessage) -> None:
+    async def append(self, item: Message) -> None:
         ...
 
     @abstractmethod
@@ -42,7 +42,7 @@ class BaseMemory(BasePrefixMessageCollection, pydantic.BaseModel):
     async def set_state(self, new_state: dict, merge: bool = False) -> None:
         raise NotImplementedError()
 
-    async def extend(self, items: List[PrefixMessage]) -> None:
+    async def extend(self, items: List[Message]) -> None:
         for item in items:
             await self.append(item)
 

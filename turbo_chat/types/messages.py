@@ -13,9 +13,9 @@ from ..utils import render_template
 
 __all__ = [
     "MessageRole",
-    "PrefixMessage",
+    "Message",
     "MessageDict",
-    "BasePrefixMessageCollection",
+    "BaseMessageCollection",
 ]
 
 
@@ -31,7 +31,7 @@ MessageRole = Literal[
 
 
 # Models
-class PrefixMessage(pydantic.BaseModel):
+class Message(pydantic.BaseModel):
     """Container for a single chatml prefix message"""
 
     role: MessageRole
@@ -74,11 +74,11 @@ class MessageDict(TypedDict):
 
 
 # Abstract classes
-class BasePrefixMessageCollection(ABC):
+class BaseMessageCollection(ABC):
     """Base class for async collections of prefix messages"""
 
     @abstractmethod
-    async def get(self) -> List[PrefixMessage]:
+    async def get(self) -> List[Message]:
         ...
 
     async def get_dicts(self) -> List[MessageDict]:

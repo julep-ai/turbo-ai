@@ -6,7 +6,7 @@ import pydantic
 
 
 from ..types.memory import BaseMemory
-from ..types.messages import PrefixMessage
+from ..types.messages import Message
 
 __all__ = [
     "LocalMemory",
@@ -18,11 +18,11 @@ class LocalMemory(BaseMemory, pydantic.BaseModel):
     """Store messages in an in-memory list"""
 
     state: dict = {}
-    messages: List[PrefixMessage] = []
+    messages: List[Message] = []
 
-    async def get(self) -> List[PrefixMessage]:
+    async def get(self) -> List[Message]:
         return [
-            message for message in self.messages if isinstance(message, PrefixMessage)
+            message for message in self.messages if isinstance(message, Message)
         ]
 
     async def append(self, item) -> None:

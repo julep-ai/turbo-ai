@@ -10,7 +10,7 @@ from typing import (
 from ..structs.result import Result
 from ..structs.signals import Generate, GetInput
 
-from .messages import PrefixMessage
+from .messages import Message
 from .memory import BaseMemory
 
 __all__ = [
@@ -21,7 +21,7 @@ __all__ = [
 # Types
 TurboGen = AsyncGenerator[Result, Any]
 TurboGenTemplate = AsyncGenerator[
-    Union[PrefixMessage, Generate, GetInput],
+    Union[Message, Generate, GetInput],
     Any,
 ]
 

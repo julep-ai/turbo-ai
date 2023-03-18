@@ -24,8 +24,8 @@ from .structs import (
 from .types import (
     BaseCache,
     BaseMemory,
-    BasePrefixMessageCollection,
-    PrefixMessage,
+    BaseMessageCollection,
+    Message,
     TurboGen,
     TurboModel,
 )
@@ -121,14 +121,14 @@ def turbo(
                     payload = None
 
                     # Add to memory
-                    if isinstance(output, PrefixMessage):
+                    if isinstance(output, Message):
                         await memory.append(output)
 
                         # Yield to user if forward
                         if output.forward:
                             yield Result.from_message(output)
 
-                    elif isinstance(output, BasePrefixMessageCollection):
+                    elif isinstance(output, BaseMessageCollection):
                         await memory.extend(output)
 
                     # Yield to user if GetInput

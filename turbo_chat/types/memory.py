@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import List, Optional
+from typing import List
 
 import pydantic
 
@@ -41,7 +41,7 @@ class BaseMemory(BaseMessageCollection, pydantic.BaseModel):
 
     async def prepare_prompt(
         self,
-        max_tokens: Optional[int] = None,
+        max_tokens: int = 0,
     ) -> List[MessageDict]:
         """Turn message history into a prompt for openai."""
 

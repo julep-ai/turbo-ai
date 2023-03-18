@@ -3,11 +3,13 @@ from typing import (
     cast,
     List,
     Literal,
+    Optional,
     TypedDict,
 )
 
 import pydantic
 
+from ..utils import render_template
 
 __all__ = [
     "MessageRole",
@@ -33,8 +35,37 @@ class PrefixMessage(pydantic.BaseModel):
     """Container for a single chatml prefix message"""
 
     role: MessageRole
-    content: str
+
+    # Content / Template
+    content: Optional[str] = None
+    template: Optional[str] = None
+    variables: Optional[dict] = None
+
+    # Check template variables
+    check: bool = False
+
+    # Should forward downstream
     forward: bool = False
+
+    @pydantic.root_validator
+    def validate_content_template(cls, values: dict) -> dict:
+        # Get vals
+        content = values["content"]
+        check = values["check"]
+        template_string = values.pop("template")
+        variables = values.pop("variables")
+
+        # Check that correct values set
+        template_set = bool(template_string) and (variables is not None)
+        assert template_set ^ (
+            content is not None
+        ), "Either content or template/variables must be set"
+
+        # Render template
+        if template_set:
+            values["content"] = render_template(template_string, variables, check)
+
+        return values
 
 
 class MessageDict(TypedDict):

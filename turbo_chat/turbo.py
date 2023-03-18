@@ -15,6 +15,7 @@ from .errors import InvalidValueYieldedError
 from .memory import LocalMemory
 
 from .structs import (
+    Assistant,
     Generate,
     GetInput,
     Result,
@@ -54,6 +55,15 @@ def turbo(
     # Streaming not supported yet
     if stream:
         raise NotImplementedError("Streaming not supported yet")
+
+    # Settings
+    settings = dict(
+        memory_class=memory_class,
+        model=model,
+        stream=stream,
+        cache=cache,
+        debug=debug,
+    )
 
     # Prepare openai args
     chat_completion_args = {
@@ -123,6 +133,9 @@ def turbo(
 
                     # Yield to user if GetInput
                     elif isinstance(output, GetInput):
+                        await memory.append(Assistant(content=output.content))
+
+                        # Get input
                         payload = yield Result.from_message(output)
                         assert payload, f"User input was required, {payload} passed"
 
@@ -155,6 +168,10 @@ def turbo(
 
         # Add reference to the original function
         turbo_gen_fn.fn = gen_fn
+        turbo_gen_fn.settings = settings
+        turbo_gen_fn.configure = lambda **new_settings: turbo(
+            **{**settings, **new_settings}
+        )(gen_fn)
 
         return turbo_gen_fn
 

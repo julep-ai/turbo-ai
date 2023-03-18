@@ -4,7 +4,7 @@ from ward import test
 from turbo_chat import *
 
 
-@test("contains returns True when memory injection works")
+@test("contains returns True when count tokens works")
 async def test_turbo():
     @turbo()
     async def example(zodiac: str, memory):

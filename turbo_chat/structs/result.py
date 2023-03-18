@@ -1,4 +1,4 @@
-from typing import Protocol, Optional, Union
+from typing import Protocol
 
 import pydantic
 
@@ -10,13 +10,13 @@ __all__ = [
 
 
 class HasContent(Protocol):
-    content: Union[str, dict]
+    content: str
 
 
 class Result(pydantic.BaseModel):
     """Holds the result yielded by a turbo app."""
 
-    content: Optional[Union[str, dict]]
+    content: str
     needs_input: bool = False
     done: bool = False
 

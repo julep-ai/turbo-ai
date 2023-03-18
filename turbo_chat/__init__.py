@@ -1,5 +1,6 @@
 # flake8: noqa
 
+from .bots import *
 from .cache import *
 from .chat import *
 from .errors import *
@@ -31,6 +32,8 @@ __all__ = [
     "SimpleCache",
     "Scratchpad",
     "Result",
+    "Tool",
     "turbo",
     "run",
+    "tool_bot",
 ]

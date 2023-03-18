@@ -30,7 +30,7 @@ ipython = "^8.11.0"
 [tool.poe.tasks]
 _ruff = "ruff --fix **/*.py"
 _black = "black ."
-_pytype = "pytype ."
+_pytype = "pytype --config=pytype.toml"
 lint = ["_ruff", "_black"]
 check = ["lint", "_pytype"]
 test = "ward"

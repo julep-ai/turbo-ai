@@ -38,3 +38,5 @@ class LocalMemory(BaseMemory, pydantic.BaseModel):
                 **new_state,
             }
         )
+
+    # async def prepare_prompt

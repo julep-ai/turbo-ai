@@ -29,7 +29,10 @@ async def run_chat(
     """Run ChatCompletion for the memory so far"""
 
     # Get messages from memory
-    prompt = await memory.prepare_prompt()
+    max_tokens = kwargs.get("max_tokens")
+    prompt = await memory.prepare_prompt(max_tokens=max_tokens)
+
+    # Check cache
     if cache and await cache.has(prompt):
         cached = await cache.get(prompt)
         return Assistant(**cached)

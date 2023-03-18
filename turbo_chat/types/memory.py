@@ -2,8 +2,8 @@ from abc import abstractmethod
 from typing import List, Optional
 
 import pydantic
-from tiktoken.core import Encoding
 
+from ..config import TurboModel
 from .messages import (
     BaseMessageCollection,
     MessageDict,
@@ -19,11 +19,7 @@ __all__ = [
 class BaseMemory(BaseMessageCollection, pydantic.BaseModel):
     """Base class for persisting conversation history and state."""
 
-    class Config:
-        # Needed because no validator for Encoding
-        arbitrary_types_allowed = True
-
-    encoding: Optional[Encoding] = None
+    model: TurboModel
 
     async def init(self, context={}) -> None:
         ...
@@ -43,22 +39,12 @@ class BaseMemory(BaseMessageCollection, pydantic.BaseModel):
     async def append(self, item: Message) -> None:
         await self.extend([item])
 
-    async def prepare_prompt(self) -> List[MessageDict]:
+    async def prepare_prompt(
+        self,
+        max_tokens: Optional[int] = None,
+    ) -> List[MessageDict]:
         """Turn message history into a prompt for openai."""
 
         # Noop: Override to add filtering
         messages: List[MessageDict] = await self.get_dicts()
         return messages
-
-    async def count_tokens(self) -> int:
-        """Count the number of tokens stored in the memory."""
-
-        assert self.encoding, "tiktoken.Encoding is required for counting tokens"
-
-        messages: List[MessageDict] = await self.prepare_prompt()
-        texts: List[str] = [message["content"] for message in messages]
-        tokens_list: List[List[int]] = [self.encoding.encode(text) for text in texts]
-
-        count: int = sum([len(tokens) for tokens in tokens_list])
-
-        return count

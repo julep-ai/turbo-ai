@@ -3,6 +3,7 @@
 from .bots import *
 from .cache import *
 from .chat import *
+from .config import *
 from .errors import *
 from .memory import *
 from .run import *
@@ -36,4 +37,5 @@ __all__ = [
     "turbo",
     "run",
     "tool_bot",
+    "available_models",
 ]

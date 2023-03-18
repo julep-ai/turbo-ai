@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* version: 0.2.2. PR [#15](https://github.com/creatorrr/turbo-chat/pull/15) by [@creatorrr](https://github.com/creatorrr).
 * f/tool bot. PR [#14](https://github.com/creatorrr/turbo-chat/pull/14) by [@creatorrr](https://github.com/creatorrr).
 * v/0.2.1. PR [#13](https://github.com/creatorrr/turbo-chat/pull/13) by [@creatorrr](https://github.com/creatorrr).
 * feat: Add count_tokens. PR [#12](https://github.com/creatorrr/turbo-chat/pull/12) by [@creatorrr](https://github.com/creatorrr).

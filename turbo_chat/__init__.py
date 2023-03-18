@@ -28,6 +28,7 @@ __all__ = [
     "BaseMessageCollection",
     "BaseMemory",
     "LocalMemory",
+    "LocalTruncatedMemory",
     "Example",
     "BaseCache",
     "SimpleCache",

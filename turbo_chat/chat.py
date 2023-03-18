@@ -29,14 +29,14 @@ async def run_chat(
     """Run ChatCompletion for the memory so far"""
 
     # Get messages from memory
-    messages = await memory.get_dicts()
-    if cache and await cache.has(messages):
-        cached = await cache.get(messages)
+    prompt = await memory.prepare_prompt()
+    if cache and await cache.has(prompt):
+        cached = await cache.get(prompt)
         return Assistant(**cached)
 
     # Create completion
     chat_completion = await openai.ChatCompletion.acreate(
-        messages=messages,
+        messages=prompt,
         **kwargs,
     )
 
@@ -50,6 +50,6 @@ async def run_chat(
 
     # Add to cache
     if cache:
-        await cache.set(messages, payload)
+        await cache.set(prompt, payload)
 
     return result

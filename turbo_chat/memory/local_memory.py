@@ -21,15 +21,10 @@ class LocalMemory(BaseMemory, pydantic.BaseModel):
     messages: List[Message] = []
 
     async def get(self) -> List[Message]:
-        return [
-            message for message in self.messages if isinstance(message, Message)
-        ]
+        return [message for message in self.messages]
 
-    async def append(self, item) -> None:
-        self.messages.append(item)
-
-    async def clear(self) -> None:
-        self.messages = []
+    async def extend(self, items) -> None:
+        self.messages.extend(items)
 
     async def get_state(self) -> dict:
         return self.state

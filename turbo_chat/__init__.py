@@ -28,6 +28,7 @@ __all__ = [
     "BaseMessageCollection",
     "BaseMemory",
     "LocalMemory",
+    "LocalSummarizeMemory",
     "LocalTruncatedMemory",
     "Example",
     "BaseCache",
@@ -37,6 +38,7 @@ __all__ = [
     "Tool",
     "turbo",
     "run",
+    "summarize_bot",
     "tool_bot",
     "available_models",
 ]

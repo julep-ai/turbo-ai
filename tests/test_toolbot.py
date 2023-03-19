@@ -2,6 +2,7 @@
 from ward import test
 
 from turbo_chat import *
+from turbo_chat.bots import tool_bot
 
 
 @test("contains returns True when toolbot works")

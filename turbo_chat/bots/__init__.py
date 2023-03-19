@@ -1,7 +1,9 @@
 # flake8: noqa
 
-from .tool_bot import *
+from .summarize import *
+from .tool import *
 
 __all__ = [
+    "summarize_bot",
     "tool_bot",
 ]

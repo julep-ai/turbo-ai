@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* version: 0.2.7. PR [#24](https://github.com/creatorrr/turbo-chat/pull/24) by [@creatorrr](https://github.com/creatorrr).
 * feat: self-ask bot. PR [#23](https://github.com/creatorrr/turbo-chat/pull/23) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.2.6. PR [#22](https://github.com/creatorrr/turbo-chat/pull/22) by [@creatorrr](https://github.com/creatorrr).
 * feat: Add summary memory. PR [#21](https://github.com/creatorrr/turbo-chat/pull/21) by [@creatorrr](https://github.com/creatorrr).

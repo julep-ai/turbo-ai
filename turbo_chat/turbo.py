@@ -116,7 +116,10 @@ def turbo(
                     payload = None
 
                     # Add to memory
-                    if isinstance(output, Message):
+                    if isinstance(output, Result):
+                        yield output
+
+                    elif isinstance(output, Message):
                         await memory.append(output)
 
                         # Yield to user if forward

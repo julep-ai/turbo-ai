@@ -5,17 +5,24 @@ from jinja2 import Environment
 from jinja2schema import infer, to_json_schema
 from jsonschema import validate
 
+from .lang import inflect
+
 __all__ = [
     "render_template",
 ]
 
+# jinja environment
 jinja_env: Environment = Environment(
     autoescape=False,
     trim_blocks=True,
     lstrip_blocks=True,
 )
 
+# Add custom filters
+jinja_env.filters["inflect"] = inflect
 
+
+# Funcs
 def render_template(template_string: str, variables: dict, check: bool = False) -> str:
     # Parse template
     template = jinja_env.from_string(template_string)

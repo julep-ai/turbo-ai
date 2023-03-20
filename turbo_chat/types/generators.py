@@ -21,7 +21,7 @@ __all__ = [
 # Types
 TurboGen = AsyncGenerator[Result, Any]
 TurboGenTemplate = AsyncGenerator[
-    Union[Message, Generate, GetInput],
+    Union[Message, Generate, GetInput, Result],
     Any,
 ]
 

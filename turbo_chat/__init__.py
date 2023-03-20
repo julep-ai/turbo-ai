@@ -6,7 +6,7 @@ from .chat import *
 from .config import *
 from .errors import *
 from .memory import *
-from .run import *
+from .runner import *
 from .structs import *
 from .turbo import *
 from .types import *
@@ -39,6 +39,9 @@ __all__ = [
     "turbo",
     "run",
     "summarize_bot",
+    "subqueries_bot",
     "tool_bot",
+    "self_ask_bot",
+    "qa_bot",
     "available_models",
 ]

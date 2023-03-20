@@ -1,5 +1,3 @@
-# flake8: noqa
-
 from ..structs import Generate, User
 from ..turbo import turbo
 

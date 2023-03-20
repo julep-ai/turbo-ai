@@ -2,7 +2,7 @@ from typing import List
 
 
 from ..config import TurboModel
-from ..run import run
+from ..runner import run
 from ..structs import User
 from ..types.messages import MessageDict
 from .local_memory import LocalMemory

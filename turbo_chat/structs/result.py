@@ -1,4 +1,4 @@
-from typing import Protocol
+from typing import Any, Protocol
 
 import pydantic
 
@@ -16,7 +16,7 @@ class HasContent(Protocol):
 class Result(pydantic.BaseModel):
     """Holds the result yielded by a turbo app."""
 
-    content: str
+    content: Any
     needs_input: bool = False
     done: bool = False
 

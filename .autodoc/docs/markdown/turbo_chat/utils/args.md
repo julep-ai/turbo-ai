@@ -1,0 +1,42 @@
+[View code on GitHub](https://github.com/creatorrr/turbo-chat/blob/master/turbo_chat/utils/args.py)
+
+The code in this file provides utility functions to work with function arguments in the larger turbo-chat project. It helps to ensure that the required arguments for a specific function are provided when calling that function.
+
+The first function, `get_required_args(fn: Callable) -> Set[str]`, takes a callable (function) as its input and returns a set of required argument names for that function. It does this by using the `inspect` module to get the signature of the function and then filtering the parameters based on their kind (positional only, positional or keyword, and keyword only). The function returns a set of required parameter names.
+
+```python
+def example_function(a, b, c=3, *, d, e=5):
+    pass
+
+required_args = get_required_args(example_function)
+# required_args will be {'a', 'b', 'd'}
+```
+
+The second function, `ensure_args(fn: Callable, args: dict) -> bool`, takes a callable (function) and a dictionary of arguments as its inputs. It checks if the provided dictionary of arguments contains all the required arguments for the given function. The function returns a boolean value indicating whether all required arguments are present in the dictionary.
+
+```python
+def example_function(a, b, c=3, *, d, e=5):
+    pass
+
+args = {'a': 1, 'b': 2, 'd': 4}
+result = ensure_args(example_function, args)
+# result will be True
+
+args = {'a': 1, 'b': 2}
+result = ensure_args(example_function, args)
+# result will be False
+```
+
+These utility functions can be used in the turbo-chat project to validate the presence of required arguments when calling functions, ensuring that the functions are called with the correct set of arguments and preventing potential errors due to missing arguments.
+## Questions: 
+ 1. **Question:** What is the purpose of the `get_required_args` function, and how does it determine which arguments are required?
+
+   **Answer:** The `get_required_args` function is used to get the required arguments for a given function `fn`. It does this by inspecting the function's signature, filtering the parameters based on their kind (positional only, positional or keyword, and keyword only), and checking if they have a default value or not.
+
+2. **Question:** How does the `ensure_args` function work, and what does it return?
+
+   **Answer:** The `ensure_args` function checks if the given `args` dictionary contains all the required arguments for the function `fn`. It does this by getting the required arguments using `get_required_args` function, and then checking if the intersection of the required arguments and the keys of the `args` dictionary is equal to the set of required arguments. The function returns `True` if all required arguments are present in the `args` dictionary, and `False` otherwise.
+
+3. **Question:** Can the `ensure_args` function handle cases where the function `fn` has default values for some of its required arguments?
+
+   **Answer:** Yes, the `ensure_args` function can handle cases where the function `fn` has default values for some of its required arguments. The `get_required_args` function, which is used by `ensure_args`, filters out parameters with default values, so only the truly required arguments without default values are considered when checking if the `args` dictionary has all the required arguments.

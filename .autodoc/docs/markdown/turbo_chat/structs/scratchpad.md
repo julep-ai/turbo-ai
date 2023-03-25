@@ -1,0 +1,34 @@
+[View code on GitHub](https://github.com/creatorrr/turbo-chat/blob/master/turbo_chat/structs/scratchpad.py)
+
+The `turbo-chat` project contains a `Scratchpad` class that is designed to parse input strings according to a given specification. The purpose of this class is to extract structured data from unstructured text input, which can be useful in a chat application for processing user messages or commands.
+
+The `Scratchpad` class is a generic class that takes a type variable `ST` as a parameter. This allows the class to be used with different types of structured data, making it more versatile and reusable.
+
+The class has two main methods: `_search` and `parse`. The `_search` method is a private helper method that uses the `parse.search` function from the `parse` library to search for a given pattern in the input string. It takes a specification string and an input string as arguments and returns the parsed result.
+
+The `parse` method is the main method of the class, which takes an input string and returns the parsed result as an instance of the type variable `ST`. It first splits the specification string into a list of line specifications, then iterates through the list and calls the `_search` method for each line specification. The parsed results are then combined into a single dictionary, which is cast to the type variable `ST` before being returned.
+
+In addition to the `Scratchpad` class, the code also defines a `parse_yesno` function, which is a custom parser for boolean values. This function uses a predefined mapping of string values to their corresponding boolean values (e.g., "yes" maps to `True`, "no" maps to `False`, etc.). The `parse_yesno` function is decorated with the `with_pattern` decorator from the `parse` library, which allows it to be used as a custom parser in the `parse.search` function.
+
+Here's an example of how the `Scratchpad` class might be used in the `turbo-chat` project:
+
+```python
+spec = "Name: {name}\nAge: {age:d}\nActive: {active:bool}"
+input_str = "Name: John\nAge: 25\nActive: yes"
+
+scratchpad = Scratchpad(spec)
+result = scratchpad.parse(input_str)
+
+print(result)  # Output: {'name': 'John', 'age': 25, 'active': True}
+```
+
+In this example, the `Scratchpad` class is used to parse a user's input string containing their name, age, and active status. The parsed result is a dictionary containing the extracted data.
+## Questions: 
+ 1. **Question**: What is the purpose of the `yesno_mapping` dictionary and how is it used in the `parse_yesno` function?
+   **Answer**: The `yesno_mapping` dictionary is used to map various string representations of boolean values (e.g., "yes", "no", "on", "off", etc.) to their corresponding boolean values (True or False). The `parse_yesno` function takes a string input and returns the corresponding boolean value by looking it up in the `yesno_mapping` dictionary.
+
+2. **Question**: How does the `Scratchpad` class utilize the `_search` method and what is its role in the parsing process?
+   **Answer**: The `Scratchpad` class uses the `_search` method to parse the input string according to the given spec. The method utilizes the `parse.search` function from the `parse` library to perform the parsing, and it is called for each line spec in the `parse` method of the `Scratchpad` class.
+
+3. **Question**: What is the purpose of the `ST` TypeVar and how is it used in the `Scratchpad` class?
+   **Answer**: The `ST` TypeVar is a generic type variable that is used to represent the type of the parsed result in the `Scratchpad` class. It is used as a type hint for the return type of the `parse` method, allowing the developer to specify the expected type of the parsed result when using the `Scratchpad` class.

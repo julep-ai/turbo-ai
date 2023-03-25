@@ -1,0 +1,42 @@
+[View code on GitHub](https://github.com/creatorrr/turbo-chat/blob/master/turbo_chat/structs/proxies.py)
+
+The `turbo-chat` code provided defines a `TurboGenWrapper` class and a `proxy_turbo_gen_fn` function. The main purpose of this code is to create a proxy wrapper around generator functions in the larger project, allowing them to be used asynchronously and providing a consistent interface for running them.
+
+The `TurboGenWrapper` class inherits from `ObjectWrapper` and adds two methods: `__aiter__` and `run`. The `__aiter__` method allows the wrapped generator to be used as an asynchronous iterator, enabling the use of `async for` loops with the generator. The `run` method is an asynchronous function that takes an optional input of type `str` or `dict` and runs the wrapped generator using the `gen_run` function from the `runner` module. This method is useful for executing the generator with a specific input and handling the result asynchronously.
+
+The `proxy_turbo_gen_fn` function is a decorator that takes a generator function as an argument and returns a wrapped version of the function. When the wrapped function is called, it creates an instance of the `TurboGenWrapper` class with the generator and returns the proxy object. This allows the generator to be used with the additional functionality provided by the `TurboGenWrapper` class.
+
+Here's an example of how this code might be used in the larger project:
+
+```python
+@proxy_turbo_gen_fn
+def my_generator(input):
+    # Generator logic here
+    yield result
+
+async def main():
+    # Create an instance of the wrapped generator
+    wrapped_gen = my_generator("some input")
+
+    # Use the wrapped generator as an async iterator
+    async for result in wrapped_gen:
+        # Process the result asynchronously
+        pass
+
+    # Run the wrapped generator with a specific input
+    result = await wrapped_gen.run("another input")
+```
+
+In summary, the provided code defines a proxy wrapper for generator functions in the `turbo-chat` project, enabling them to be used asynchronously and providing a consistent interface for running them with specific inputs.
+## Questions: 
+ 1. **Question:** What is the purpose of the `TurboGenWrapper` class and how does it extend the functionality of the `ObjectWrapper` class from the `peak.util.proxies` module?
+
+   **Answer:** The `TurboGenWrapper` class is a custom wrapper for generator objects, extending the functionality of the `ObjectWrapper` class by adding an asynchronous iterator method (`__aiter__`) and an asynchronous `run` method. This allows the wrapped generator to be used in asynchronous contexts.
+
+2. **Question:** How does the `proxy_turbo_gen_fn` function work and what is its intended use?
+
+   **Answer:** The `proxy_turbo_gen_fn` function is a decorator that takes a generator function as input and returns a wrapped version of the function. When the wrapped function is called, it creates a generator object, wraps it with a `TurboGenWrapper` instance, and returns the wrapped generator. This allows the generator to be used with the additional functionality provided by the `TurboGenWrapper` class.
+
+3. **Question:** In the `run` method of the `TurboGenWrapper` class, why is the import statement for `gen_run` placed inside the method instead of at the top of the file?
+
+   **Answer:** The import statement for `gen_run` is placed inside the `run` method to avoid a circular import issue. This means that importing the `gen_run` function at the top of the file would cause a circular dependency between the modules, which can lead to errors or unexpected behavior. By importing it inside the method, the circular dependency is avoided.

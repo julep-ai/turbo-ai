@@ -1,0 +1,23 @@
+{
+  "name": "turbo-chat",
+  "repositoryUrl": "https://github.com/creatorrr/turbo-chat",
+  "root": ".",
+  "output": "./.autodoc",
+  "llms": [
+    "gpt-4"
+  ],
+  "ignore": [
+    ".*",
+    "*package-lock.json",
+    "*package.json",
+    "node_modules",
+    "*dist*",
+    "*build*",
+    "*test*",
+    "*.svg",
+    "*.md",
+    "*.mdx",
+    "*.toml",
+    "*autodoc*"
+  ]
+}

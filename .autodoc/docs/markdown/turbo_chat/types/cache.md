@@ -1,0 +1,53 @@
+[View code on GitHub](https://github.com/creatorrr/turbo-chat/blob/master/turbo_chat/types/cache.py)
+
+The `turbo-chat` code provided defines an abstract base class `BaseCache` for caching agent responses. This class is designed to be extended by other cache implementations, providing a consistent interface for caching and retrieving data in the larger project.
+
+`BaseCache` inherits from two classes: `ABC`, which makes it an abstract base class, and `WithSetup`, which is a mixin that provides a setup method for initializing the cache. The class contains several methods for serializing, deserializing, and converting objects to cache keys, as well as abstract methods for cache operations.
+
+The `serialize` method takes an object as input and returns it unchanged. This method can be overridden in derived classes to provide custom serialization logic. Similarly, the `deserialize` method takes a hashed object and returns it unchanged, allowing for custom deserialization logic in derived classes.
+
+The `to_key` method takes an object, serializes it using the `serialize` method, and then converts it to a JSON string. This is used to create a cache key for storing and retrieving data.
+
+The abstract methods `has`, `set`, `get`, and `clear` define the core cache operations:
+
+- `has`: Checks if a given key exists in the cache. Takes a key as input and returns a boolean.
+- `set`: Stores a value in the cache with a given key. Takes a key and a value as input and returns None.
+- `get`: Retrieves a value from the cache using a given key. Takes a key as input and returns the value.
+- `clear`: Clears the cache of all stored data. Returns None.
+
+These methods are marked as `abstractmethod`, meaning they must be implemented by any derived class. They are also asynchronous, allowing for non-blocking cache operations in the larger project.
+
+Example usage in a derived class:
+
+```python
+class CustomCache(BaseCache):
+    async def has(self, key: Any) -> bool:
+        # Custom implementation for checking if key exists
+        ...
+
+    async def set(self, key: Any, value: Any) -> None:
+        # Custom implementation for storing data in cache
+        ...
+
+    async def get(self, key: Any) -> Any:
+        # Custom implementation for retrieving data from cache
+        ...
+
+    async def clear(self) -> Any:
+        # Custom implementation for clearing cache
+        ...
+```
+
+By providing a consistent interface for caching, `BaseCache` allows the `turbo-chat` project to easily switch between different cache implementations without modifying the core application logic.
+## Questions: 
+ 1. **Question:** What is the purpose of the `BaseCache` class and how is it intended to be used?
+
+   **Answer:** The `BaseCache` class is an abstract base class for caching agent responses. It provides a basic structure and common methods for implementing different caching strategies. Subclasses should implement the abstract methods to provide the actual caching functionality.
+
+2. **Question:** How does the `serialize` and `deserialize` methods work, and when are they used?
+
+   **Answer:** The `serialize` method is used to convert an object into a format that can be stored in the cache, while the `deserialize` method is used to convert the stored format back into the original object. By default, these methods do not perform any conversion and simply return the input object. They can be overridden in subclasses to provide custom serialization and deserialization logic.
+
+3. **Question:** What is the purpose of the `to_key` method and how does it work?
+
+   **Answer:** The `to_key` method is used to generate a unique string representation of an object, which can be used as a key in the cache. It works by first serializing the object using the `serialize` method, and then converting the serialized object into a JSON string. This ensures that the generated key is consistent and can be used to look up the cached value later.

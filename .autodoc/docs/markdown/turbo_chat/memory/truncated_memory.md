@@ -1,0 +1,30 @@
+[View code on GitHub](https://github.com/creatorrr/turbo-chat/blob/master/turbo_chat/memory/truncated_memory.py)
+
+The `turbo-chat` code provided defines a memory truncation mechanism for a chatbot model. This mechanism ensures that the total number of tokens in the chat history does not exceed the model's context window, which is the maximum number of tokens the model can process at once. The code defines two classes: `MemoryTruncation` and `LocalTruncatedMemory`.
+
+`MemoryTruncation` is a mixin class that provides an automatic truncation feature. It has a single method, `prepare_prompt`, which takes an optional `max_tokens` parameter. The method first retrieves the chat history (messages) by calling the `prepare_prompt` method of its superclass. It then ensures that the first message in the chat history is within the context window limit. If there are more messages, it checks if the combined length of the first and last messages is within the context window limit.
+
+The method then iteratively filters the middle messages by removing them from the end until the total number of tokens is within the context window limit. The filtered chat history is returned as a list of `MessageDict` objects.
+
+`LocalTruncatedMemory` is a subclass of both `MemoryTruncation` and `LocalMemory`. It inherits the automatic truncation feature from `MemoryTruncation` and the local memory storage functionality from `LocalMemory`. This class can be used to store and manage the chat history while ensuring that the total number of tokens does not exceed the model's context window.
+
+In the larger project, `LocalTruncatedMemory` can be used to manage the chatbot's memory efficiently. When preparing a prompt for the chatbot model, the `prepare_prompt` method can be called to get a truncated chat history that fits within the model's context window. This ensures that the chatbot can process the chat history without running into token limit issues.
+
+Example usage:
+
+```python
+memory = LocalTruncatedMemory(model=TurboModel)
+# Add messages to memory
+memory.add_message(...)
+# Prepare a prompt with truncated chat history
+truncated_prompt = await memory.prepare_prompt(max_tokens=100)
+```
+## Questions: 
+ 1. **Question:** What is the purpose of the `MemoryTruncation` mixin class?
+   **Answer:** The `MemoryTruncation` mixin class provides an automatic truncation functionality for memory classes. It ensures that the total number of tokens in the messages does not exceed the context window limit by iteratively dropping messages while keeping the first and last messages.
+
+2. **Question:** How does the `prepare_prompt` method work in the `MemoryTruncation` class?
+   **Answer:** The `prepare_prompt` method takes an optional `max_tokens` parameter and calculates the context window limit based on the model's maximum tokens length. It then retrieves the messages and ensures that the first message and the combination of the first and last messages are within the context window limit. Finally, it iteratively filters the middle messages by removing them from the end until the total tokens count is within the context window limit.
+
+3. **Question:** What is the purpose of the `LocalTruncatedMemory` class?
+   **Answer:** The `LocalTruncatedMemory` class is a combination of the `MemoryTruncation` mixin and the `LocalMemory` class. It provides a local memory implementation with the automatic truncation functionality from the `MemoryTruncation` mixin.

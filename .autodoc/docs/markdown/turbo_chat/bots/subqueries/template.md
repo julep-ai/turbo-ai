@@ -1,0 +1,33 @@
+[View code on GitHub](https://github.com/creatorrr/turbo-chat/blob/master/turbo_chat/bots/subqueries/template.py)
+
+This code defines a template for generating instructions to create a plan for collecting information to answer a complex question or solve a problem. The template is designed to be used in the larger turbo-chat project, where users interact with a knowledgebase that can provide answers to plain English queries.
+
+The template, `SUBQUERIES_TEMPLATE`, is a multi-line string that uses Jinja2 syntax for variable substitution and control structures. It takes several optional parameters, such as `request_type`, `solve_act`, and `max_queries`, which have default values if not provided. The template guides the user through a step-by-step process to break down a complex request into individual, standalone queries that can be executed by the knowledgebase.
+
+The instructions in the template are divided into two parts: "Thoughts" and "Queries to execute". In the "Thoughts" section, users are encouraged to think about the topic and required information for solving the request. In the "Queries to execute" section, users are instructed to write down a numbered list of concise, standalone queries, with a maximum limit of `max_queries` (default is 6).
+
+The template also provides an example format for users to follow when writing down their thoughts and queries. The example is enclosed within "START EXAMPLE" and "END EXAMPLE" markers.
+
+Here's a sample usage of the template:
+
+```python
+from jinja2 import Template
+
+template = Template(SUBQUERIES_TEMPLATE)
+output = template.render(request_type="question", solve_act="answer", max_queries=5, context="A complex math problem", request="Solve the equation x^2 + 2x - 3 = 0")
+print(output)
+```
+
+This would generate instructions for creating a plan to collect information for solving the given math problem, with a maximum of 5 queries to the knowledgebase.
+## Questions: 
+ 1. **Question:** What is the purpose of the `SUBQUERIES_TEMPLATE` variable in this code?
+
+   **Answer:** The `SUBQUERIES_TEMPLATE` variable holds a template string that is used to generate instructions for creating a plan to collect information for answering a complex question. It includes placeholders for various parameters and a specific format for writing down thoughts and queries.
+
+2. **Question:** What are the default values for `_request_type`, `_solve_act`, and `_max_queries` in the template?
+
+   **Answer:** The default values for `_request_type`, `_solve_act`, and `_max_queries` are "question", "answer", and 6, respectively.
+
+3. **Question:** How does the template handle inflection for the `_solve_act` variable?
+
+   **Answer:** The template uses the `inflect("VBG")` filter to convert the `_solve_act` variable into its gerund form (e.g., "answering" for the default value "answer").

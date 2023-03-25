@@ -1,0 +1,30 @@
+[View code on GitHub](https://github.com/creatorrr/turbo-chat/blob/master/turbo_chat/memory/summary_memory.py)
+
+The `turbo-chat` code provided defines a memory management system with automatic summarization capabilities. This system is designed to handle and summarize conversation messages in the larger project. The code consists of two main classes: `MemorySummarization` and `LocalSummarizeMemory`.
+
+`MemorySummarization` is a mixin class that inherits from `MemoryTruncation`. It provides an asynchronous method `prepare_prompt` that takes an optional `max_tokens` parameter. The purpose of this method is to summarize the conversation by extracting the first, middle, and last messages. If there are no middle messages, the original messages are returned. Otherwise, the middle conversation is summarized using the `summarize_bot` function, which is imported from the `..bots` module. The summarized text is then converted into a `User` object and returned as a list containing the first message, the summary, and the last message.
+
+```python
+summary = await summarize_bot(text=conversation, text_type="conversation").run()
+summary_as_user = User(summary.content).dict()
+return [first, summary_as_user, last]
+```
+
+`LocalSummarizeMemory` is a class that inherits from both `MemorySummarization` and `LocalMemory`. This class combines the functionality of local memory storage with the automatic summarization provided by the `MemorySummarization` mixin. It does not define any additional methods or attributes, but it serves as a concrete implementation of the summarization functionality.
+
+```python
+class LocalSummarizeMemory(MemorySummarization, LocalMemory):
+    """Local memory with automatic summarization"""
+    ...
+```
+
+In the larger project, the `LocalSummarizeMemory` class can be used to store and manage conversation messages while providing automatic summarization capabilities. This can help reduce the amount of text that needs to be processed or displayed, making the conversation more manageable and efficient.
+## Questions: 
+ 1. **Question:** What is the purpose of the `MemorySummarization` class and how does it work?
+   **Answer:** The `MemorySummarization` class is a mixin for automatic summarization of the conversation. It provides an implementation of the `prepare_prompt` method that summarizes the middle part of the conversation using the `summarize_bot`.
+
+2. **Question:** How does the `LocalSummarizeMemory` class utilize the `MemorySummarization` mixin?
+   **Answer:** The `LocalSummarizeMemory` class inherits from both `MemorySummarization` and `LocalMemory` classes, combining their functionalities. This allows it to have local memory storage while also providing automatic summarization of the conversation.
+
+3. **Question:** How does the `prepare_prompt` method in the `MemorySummarization` class handle different conversation lengths?
+   **Answer:** The `prepare_prompt` method first checks if there are any middle messages in the conversation. If there are no middle messages, it returns the original conversation without summarization. If there are middle messages, it summarizes the middle part of the conversation and returns the first message, the summary, and the last message.

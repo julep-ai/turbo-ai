@@ -1,0 +1,25 @@
+[View code on GitHub](https://github.com/creatorrr/turbo-chat/blob/master/turbo_chat/utils/lang.py)
+
+The `turbo-chat` project contains a module that focuses on inflecting words based on their grammatical tags. This module is designed to be a utility for the larger project, which may involve processing and manipulating natural language text.
+
+The module imports the `getInflection` function from the `lemminflect` library, which is a popular library for lemmatization and inflection of English words. The main purpose of this module is to provide a simple interface for inflecting words using the `inflect` function.
+
+The `inflect` function takes two arguments: `word` and `tag`. The `word` argument is the input word that needs to be inflected, and the `tag` argument is the grammatical tag that the word should be inflected to. The function then calls the `getInflection` function from the `lemminflect` library with the given `word` and `tag` arguments. The `getInflection` function returns a tuple containing the inflected word and its grammatical tag. The `inflect` function returns only the inflected word (the first element of the tuple) to the caller.
+
+Here's an example of how the `inflect` function can be used:
+
+```python
+inflected_word = inflect("run", "VBD")
+print(inflected_word)  # Output: "ran"
+```
+
+In this example, the input word "run" is inflected to its past tense form "ran" based on the grammatical tag "VBD" (verb, past tense). This module can be used in the larger `turbo-chat` project for tasks that involve generating or manipulating text, such as generating responses in a chatbot or analyzing user input. By providing a simple interface for inflecting words, this module makes it easier for other parts of the project to work with natural language text.
+## Questions: 
+ 1. **Question:** What is the purpose of the `__all__` variable in this code?
+   **Answer:** The `__all__` variable is used to define the public interface of the module, specifying which names should be imported when a client imports the module using a wildcard import (e.g., `from turbo_chat import *`).
+
+2. **Question:** What is the `lemminflect` library and how is it being used in this code?
+   **Answer:** The `lemminflect` library is a Python library for inflecting words and lemmatizing them. In this code, it is being used to inflect a given word based on the provided part-of-speech tag using the `getInflection` function.
+
+3. **Question:** What are the expected input and output types for the `inflect` function?
+   **Answer:** The `inflect` function expects a string `word` and a string `tag` as input, and it returns a string representing the inflected form of the input word based on the provided part-of-speech tag.

@@ -7,6 +7,7 @@ from typing import (
 )
 
 
+from ..structs.proxies import TurboGenWrapper
 from ..structs.result import Result
 from ..structs.signals import Generate, GetInput
 
@@ -14,12 +15,11 @@ from .messages import Message
 from .memory import BaseMemory
 
 __all__ = [
-    "TurboGen",
+    "TurboGenWrapper",
 ]
 
 
 # Types
-TurboGen = AsyncGenerator[Result, Any]
 TurboGenTemplate = AsyncGenerator[
     Union[Message, Generate, GetInput, Result],
     Any,
@@ -45,5 +45,5 @@ class TurboGenFn(Protocol):
     def __call__(
         self,
         **context,
-    ) -> TurboGen:
+    ) -> TurboGenWrapper:
         ...

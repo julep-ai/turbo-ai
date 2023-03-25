@@ -7,14 +7,14 @@ from turbo_chat.bots import tool_bot
 
 @test("contains returns True when toolbot works")
 async def test_toolbot():
-    name = "Lady Gaga"
+    name = "Gaga"
 
     async def GetMyName(_):
         """Use this tool to get my name"""
         return name
 
     app = tool_bot(tools=[GetMyName])
-    await run(app)
-    result = await run(app, "What is my name?")
+    await app.run()
+    result = await app.run("What is my name?")
 
-    assert "lady gaga" in result.content.lower()
+    assert "gaga" in result.content.lower()

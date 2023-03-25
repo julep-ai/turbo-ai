@@ -20,4 +20,4 @@ async def test_memory_filter():
         yield GetInput(content="You are a fortune teller")
 
     b = example(zodiac="pisces")
-    await run(b)
+    await b.run()

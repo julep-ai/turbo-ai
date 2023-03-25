@@ -20,18 +20,22 @@ from .structs import (
     Result,
 )
 
+from .structs.proxies import proxy_turbo_gen_fn
+
 from .types import (
     BaseCache,
     BaseMemory,
     BaseMessageCollection,
     Message,
-    TurboGen,
+    TurboGenWrapper,
 )
 
 from .types.generators import (
     TurboGenFn,
     TurboGenTemplateFn,
 )
+
+from .utils.args import ensure_args
 
 
 __all__ = [
@@ -44,7 +48,7 @@ def turbo(
     memory_class: Type[BaseMemory] = LocalMemory,
     model: TurboModel = "gpt-3.5-turbo",
     stream: bool = False,
-    cache: Optional[BaseCache] = None,
+    cache_class: Optional[Type[BaseCache]] = None,
     debug: Optional[Callable[[dict], None]] = None,
     **kwargs,
 ) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
@@ -59,7 +63,7 @@ def turbo(
         memory_class=memory_class,
         model=model,
         stream=stream,
-        cache=cache,
+        cache_class=cache_class,
         debug=debug,
     )
 
@@ -75,12 +79,20 @@ def turbo(
         """Wrapper for chatml app async generator"""
 
         @wraps(gen_fn)
-        async def turbo_gen_fn(**context) -> TurboGen:
+        async def turbo_gen_fn(**context) -> TurboGenWrapper:
             """Wrapped chatml app from an async generator"""
 
             # Init memory
             memory = memory_class(model=model)
-            await memory.init(context)
+            assert ensure_args(memory.setup, context)
+            await memory.setup(**context)
+
+            # Init cache
+            cache = None
+            if cache_class:
+                cache = cache_class()
+                assert ensure_args(cache.setup, context)
+                await cache.setup(**context)
 
             # Init generator
             signature = inspect.signature(gen_fn)
@@ -88,6 +100,9 @@ def turbo(
 
             if "memory" in arg_names:
                 context["memory"] = memory
+
+            if "cache" in arg_names:
+                context["cache"] = cache
 
             turbo_gen = gen_fn(**context)
 
@@ -165,6 +180,7 @@ def turbo(
                 pass
 
         # Add reference to the original function
+        turbo_gen_fn = proxy_turbo_gen_fn(turbo_gen_fn)
         turbo_gen_fn.fn = gen_fn
         turbo_gen_fn.settings = settings
         turbo_gen_fn.configure = lambda **new_settings: turbo(

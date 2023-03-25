@@ -17,10 +17,10 @@ async def test_turbo():
         value = yield Generate(temperature=0.9)
 
     b = example(zodiac="pisces")
-    output = await run(b)
+    output = await b.run()
     assert isinstance(output, Result)
     assert not output.done
 
-    output = await run(b, "Tell me my fortune")
+    output = await b.run("Tell me my fortune")
     assert isinstance(output, Result)
     assert output.done

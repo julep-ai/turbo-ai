@@ -1,9 +1,9 @@
-from typing import cast, Optional
+from typing import cast, Optional, Union
 
 from .structs import Result
 
 from .errors import GeneratorAlreadyExhausted, GeneratorAlreadyExhaustedError
-from .types import TurboGen
+from .types import TurboGenWrapper
 
 __all__ = [
     "run",
@@ -11,8 +11,8 @@ __all__ = [
 
 
 async def run(
-    gen: TurboGen,
-    input: Optional[str] = None,
+    gen: TurboGenWrapper,
+    input: Optional[Union[str, dict]] = None,
 ) -> Result:
     """Run a turbo app"""
 

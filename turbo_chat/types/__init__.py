@@ -12,7 +12,7 @@ __all__ = [
     "Message",
     "MessageDict",
     "BaseMessageCollection",
-    "TurboGen",
+    "TurboGenWrapper",
     "BaseMemory",
     "BaseCache",
     "Tool",

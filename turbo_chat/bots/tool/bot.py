@@ -4,10 +4,9 @@ from ...structs import Assistant, GetInput, Generate, User
 from ...turbo import turbo
 from ...types import Tool
 from .scratchpad import scratchpad
-from .template import TOOLBOT_TEMPLATE
+from .template import EXAMPLE_TEMPLATE, TOOLBOT_TEMPLATE
 
 default_tool_example: str = """
-START EXAMPLE
 Customer said: Where is the store located?
 Thought: Use another tool to get information? Yes
 Tool: GetInformation
@@ -15,7 +14,6 @@ Tool Input: What is the address of the store?
 Tool Result: The address of [STORE NAME] is [SOME ADDRESS]
 Thought: Use another tool to get information? No
 Response: [STORE NAME] is located at [SOME ADDRESS].
-END EXAMPLE
 """.strip()
 
 
@@ -42,7 +40,7 @@ async def tool_bot(
     )
 
     # Yield example
-    yield User(content=example)
+    yield User(template=EXAMPLE_TEMPLATE, variables={"example": example})
 
     # Placeholder for message to send to the user
     message = "How can I help you?"

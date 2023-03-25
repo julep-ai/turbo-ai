@@ -10,7 +10,6 @@ from turbo_chat import (
     Assistant,
     GetInput,
     Generate,
-    run,
 )
 
 
@@ -51,10 +50,10 @@ async def test_turbo_example():
         value = yield Generate(temperature=0.9)
 
     # Let's run this
-    app: AsyncGenerator[Union[Assistant, GetInput], str] = horoscope(user_id=1)
+    app = horoscope(user_id=1)
 
     _input = None
-    while not (result := await run(app, _input)).done:
+    while not (result := await app.run(_input)).done:
         if result.needs_input:
             _input = input(result.content)
             continue

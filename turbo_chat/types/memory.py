@@ -10,19 +10,19 @@ from .messages import (
     Message,
 )
 
+from .misc import WithSetup
+
+
 __all__ = [
     "BaseMemory",
 ]
 
 
 # Abstract classes
-class BaseMemory(BaseMessageCollection, pydantic.BaseModel):
+class BaseMemory(BaseMessageCollection, WithSetup, pydantic.BaseModel):
     """Base class for persisting conversation history and state."""
 
     model: TurboModel
-
-    async def init(self, context={}) -> None:
-        ...
 
     @abstractmethod
     async def extend(self, items: List[Message]) -> None:

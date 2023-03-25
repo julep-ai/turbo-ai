@@ -17,4 +17,4 @@ async def test_turbo():
         assert num_tokens
 
     b = example(zodiac="pisces")
-    await run(b)
+    await b.run()

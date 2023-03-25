@@ -1,8 +1,6 @@
 from typing import List
 
 
-from ..config import TurboModel
-from ..runner import run
 from ..structs import User
 from ..types.messages import MessageDict
 from .local_memory import LocalMemory
@@ -17,8 +15,6 @@ __all__ = [
 # Abstract implementations
 class MemorySummarization(MemoryTruncation):
     """Mixin for automatic summarization"""
-
-    model: TurboModel
 
     async def prepare_prompt(
         self,
@@ -44,7 +40,7 @@ class MemorySummarization(MemoryTruncation):
             [f"{message['role']}: {message['content']}" for message in messages]
         )
 
-        summary = await run(summarize_bot(text=conversation, text_type="conversation"))
+        summary = await summarize_bot(text=conversation, text_type="conversation").run()
 
         summary_as_user = User(summary.content).dict()
 

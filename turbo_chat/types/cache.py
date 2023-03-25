@@ -4,6 +4,8 @@ from typing import (
     Any,
 )
 
+from .misc import WithSetup
+
 
 __all__ = [
     "BaseCache",
@@ -11,7 +13,7 @@ __all__ = [
 
 
 # Abstract classes
-class BaseCache(ABC):
+class BaseCache(ABC, WithSetup):
     """Base class for caching agent responses"""
 
     def serialize(self, obj: Any) -> Any:

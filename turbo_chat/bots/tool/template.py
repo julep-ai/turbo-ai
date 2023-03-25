@@ -64,3 +64,9 @@ Begin!
 {% endif %}
 {{user_type | capitalize}} said: <what the {{user_type}} said>
 """.strip()  # noqa: E501
+
+EXAMPLE_TEMPLATE = """
+START EXAMPLE
+{{example}}
+END EXAMPLE
+""".strip()

@@ -22,6 +22,6 @@ async def test_summarize_bot():
     """.strip()
     )
 
-    summary = await run(summarize_bot(text=text))
+    summary = await summarize_bot(text=text).run()
 
     assert 0 < len(summary.content) < len(text)

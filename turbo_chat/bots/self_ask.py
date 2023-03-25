@@ -1,6 +1,5 @@
 from typing import List, Tuple
 
-from ..runner import run
 from ..structs import Result
 from ..turbo import turbo
 from ..types.generators import TurboGenFn
@@ -35,24 +34,20 @@ async def self_ask_bot(
     """Takes a question and qa_bot and uses them to answer step by step."""
 
     # Generate sub queries
-    queries = await run(
-        subqueries_bot(
-            request=question,
-            context=subquery_instructions,
-        )
-    )
+    queries = await subqueries_bot(
+        request=question,
+        context=subquery_instructions,
+    ).run()
 
     # Answer sub-questions
     previous_qa: List[Tuple[str, str]] = []
 
     for query in [*queries.content, question]:
         # Generate new answer
-        answer = await run(
-            qa_bot(
-                question=query,
-                context=make_qa_context(context, previous_qa),
-            )
-        )
+        answer = await qa_bot(
+            question=query,
+            context=make_qa_context(context, previous_qa),
+        ).run()
 
         # Append query and answer to list
         previous_qa.append((query, answer.content))

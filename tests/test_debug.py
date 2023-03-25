@@ -20,6 +20,6 @@ async def test_debug():
     async def example():
         yield Assistant(content="You are a fortune teller")
 
-    await run(example())
+    await example().run()
     assert debug_ran
     assert debug_output and debug_output["type"] == "output"

@@ -90,7 +90,7 @@ async def horoscope(user_id: int):
 app: AsyncGenerator[Union[Assistant, GetInput], str] = horoscope({"user_id": 1})
 
 _input = None
-while not (result := await run(app, _input)).done:
+while not (result := await (app.run(_input)).done:
     if result.needs_input:
         # Prompt user with the input message
         _input = input(result.content)
@@ -115,7 +115,7 @@ from turbo_chat import turbo, BaseMemory
 class RedisMemory(BaseMemory):
     """Implement BaseMemory methods here"""
 
-    async def init(self, context) -> None:
+    async def setup(self, **kwargs) -> None:
         ...
 
     async def append(self, item) -> None:
@@ -183,18 +183,17 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
-* version: 0.2.7. PR [#24](https://github.com/creatorrr/turbo-chat/pull/24) by [@creatorrr](https://github.com/creatorrr).
-* feat: self-ask bot. PR [#23](https://github.com/creatorrr/turbo-chat/pull/23) by [@creatorrr](https://github.com/creatorrr).
-* version: 0.2.6. PR [#22](https://github.com/creatorrr/turbo-chat/pull/22) by [@creatorrr](https://github.com/creatorrr).
-* feat: Add summary memory. PR [#21](https://github.com/creatorrr/turbo-chat/pull/21) by [@creatorrr](https://github.com/creatorrr).
-* version: 0.2.5. PR [#20](https://github.com/creatorrr/turbo-chat/pull/20) by [@creatorrr](https://github.com/creatorrr).
-* version: 0.2.4. PR [#19](https://github.com/creatorrr/turbo-chat/pull/19) by [@creatorrr](https://github.com/creatorrr).
-* refactor: Move trucation logic to a separate memory class. PR [#18](https://github.com/creatorrr/turbo-chat/pull/18) by [@creatorrr](https://github.com/creatorrr).
-* version: 0.2.3. PR [#17](https://github.com/creatorrr/turbo-chat/pull/17) by [@creatorrr](https://github.com/creatorrr).
-* f/memory improvements. PR [#16](https://github.com/creatorrr/turbo-chat/pull/16) by [@creatorrr](https://github.com/creatorrr).
-* version: 0.2.2. PR [#15](https://github.com/creatorrr/turbo-chat/pull/15) by [@creatorrr](https://github.com/creatorrr).
-* f/tool bot. PR [#14](https://github.com/creatorrr/turbo-chat/pull/14) by [@creatorrr](https://github.com/creatorrr).
-* v/0.2.1. PR [#13](https://github.com/creatorrr/turbo-chat/pull/13) by [@creatorrr](https://github.com/creatorrr).
-* feat: Add count_tokens. PR [#12](https://github.com/creatorrr/turbo-chat/pull/12) by [@creatorrr](https://github.com/creatorrr).
-* Update README.md. PR [#11](https://github.com/creatorrr/turbo-chat/pull/11) by [@creatorrr](https://github.com/creatorrr).
-
+- version: 0.2.7. PR [#24](https://github.com/creatorrr/turbo-chat/pull/24) by [@creatorrr](https://github.com/creatorrr).
+- feat: self-ask bot. PR [#23](https://github.com/creatorrr/turbo-chat/pull/23) by [@creatorrr](https://github.com/creatorrr).
+- version: 0.2.6. PR [#22](https://github.com/creatorrr/turbo-chat/pull/22) by [@creatorrr](https://github.com/creatorrr).
+- feat: Add summary memory. PR [#21](https://github.com/creatorrr/turbo-chat/pull/21) by [@creatorrr](https://github.com/creatorrr).
+- version: 0.2.5. PR [#20](https://github.com/creatorrr/turbo-chat/pull/20) by [@creatorrr](https://github.com/creatorrr).
+- version: 0.2.4. PR [#19](https://github.com/creatorrr/turbo-chat/pull/19) by [@creatorrr](https://github.com/creatorrr).
+- refactor: Move trucation logic to a separate memory class. PR [#18](https://github.com/creatorrr/turbo-chat/pull/18) by [@creatorrr](https://github.com/creatorrr).
+- version: 0.2.3. PR [#17](https://github.com/creatorrr/turbo-chat/pull/17) by [@creatorrr](https://github.com/creatorrr).
+- f/memory improvements. PR [#16](https://github.com/creatorrr/turbo-chat/pull/16) by [@creatorrr](https://github.com/creatorrr).
+- version: 0.2.2. PR [#15](https://github.com/creatorrr/turbo-chat/pull/15) by [@creatorrr](https://github.com/creatorrr).
+- f/tool bot. PR [#14](https://github.com/creatorrr/turbo-chat/pull/14) by [@creatorrr](https://github.com/creatorrr).
+- v/0.2.1. PR [#13](https://github.com/creatorrr/turbo-chat/pull/13) by [@creatorrr](https://github.com/creatorrr).
+- feat: Add count_tokens. PR [#12](https://github.com/creatorrr/turbo-chat/pull/12) by [@creatorrr](https://github.com/creatorrr).
+- Update README.md. PR [#11](https://github.com/creatorrr/turbo-chat/pull/11) by [@creatorrr](https://github.com/creatorrr).

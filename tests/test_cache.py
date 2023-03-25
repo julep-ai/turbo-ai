@@ -6,10 +6,13 @@ from turbo_chat import *
 
 @test("contains returns True when Generate no yield works")
 async def test_turbo():
-    cache = SimpleCache()
+    _cache = None
 
-    @turbo(cache=cache)
-    async def example():
+    @turbo(cache_class=SimpleCache)
+    async def example(cache):
+        nonlocal _cache
+        _cache = cache
+
         yield System(content="You are a good guy named John")
         yield User(content="What is your name?")
         result = yield Generate()
@@ -17,4 +20,4 @@ async def test_turbo():
     b = example()
     results = [output async for output in b]
 
-    assert len(cache.cache) == 1
+    assert len(_cache.cache) == 1  # type: ignore

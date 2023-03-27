@@ -22,7 +22,7 @@ async def run(
 
     # Run generator
     try:
-        while (output := await gen.asend(input)):
+        while output := await gen.asend(input):
             if isinstance(output, Start):
                 continue
 

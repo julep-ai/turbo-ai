@@ -15,7 +15,7 @@ async def test_turbo():
         yield User(content="How are you doing?")
         result = yield Generate()
 
-    b = example()
+    b = await example().init()
     results = [output async for output in b]
 
     assert len(results) == 1

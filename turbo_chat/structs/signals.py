@@ -4,6 +4,7 @@ import pydantic
 __all__ = [
     "Generate",
     "GetInput",
+    "Start",
 ]
 
 
@@ -18,3 +19,7 @@ class GetInput(pydantic.BaseModel):
     """Placeholder value to indicate that user input is needed"""
 
     content: str = "User input needed"
+
+
+class Start:
+    """Placeholder value to indicate generator start"""

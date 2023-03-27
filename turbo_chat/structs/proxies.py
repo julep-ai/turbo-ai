@@ -2,6 +2,8 @@ from typing import Optional, Union
 
 from peak.util.proxies import ObjectWrapper
 
+from .signals import Start
+
 
 class TurboGenWrapper(ObjectWrapper):
     g = None
@@ -12,6 +14,14 @@ class TurboGenWrapper(ObjectWrapper):
 
     def __aiter__(self):
         return self.g.__aiter__()
+
+    async def init(self):
+        # Send none to init generator
+        start_value = await self.g.asend(None)
+        assert isinstance(start_value, Start), "Called .init(ß) after start"
+
+        # Enable fluent chaining
+        return self
 
     async def run(
         self,

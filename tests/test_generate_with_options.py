@@ -12,7 +12,7 @@ async def test_turbo():
         yield User(content="What is your name?")
         result = yield Generate(stop="John")
 
-    b = example()
+    b = await example().init()
     results = [output.content async for output in b]
     results_str = "".join(results)
 

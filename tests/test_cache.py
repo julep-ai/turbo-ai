@@ -18,6 +18,8 @@ async def test_turbo():
         result = yield Generate()
 
     b = example()
+    await b.init()
+
     results = [output async for output in b]
 
     assert len(_cache.cache) == 1  # type: ignore

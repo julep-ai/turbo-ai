@@ -14,5 +14,5 @@ async def test_turbo():
         messages = await memory.get()
         assert len(messages)
 
-    b = example(zodiac="pisces")
+    b = await example(zodiac="pisces").init()
     await b.run()

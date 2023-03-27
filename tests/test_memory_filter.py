@@ -19,5 +19,5 @@ async def test_memory_filter():
         # To ensure, generator doesn't get exhausted
         yield GetInput(content="You are a fortune teller")
 
-    b = example(zodiac="pisces")
+    b = await example(zodiac="pisces").init()
     await b.run()

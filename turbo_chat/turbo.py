@@ -18,6 +18,7 @@ from .structs import (
     Generate,
     GetInput,
     Result,
+    Start,
 )
 
 from .structs.proxies import proxy_turbo_gen_fn
@@ -108,6 +109,9 @@ def turbo(
 
             # Parameters
             payload: Any = None
+
+            # Yield Start() to indicate start
+            yield Start()
 
             try:
                 while True:

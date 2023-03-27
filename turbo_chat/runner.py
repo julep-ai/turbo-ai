@@ -1,6 +1,6 @@
-from typing import cast, Optional, Union
+from typing import cast, Union
 
-from .structs import Result
+from .structs import Result, Start
 
 from .errors import GeneratorAlreadyExhausted, GeneratorAlreadyExhaustedError
 from .types import TurboGenWrapper
@@ -12,7 +12,7 @@ __all__ = [
 
 async def run(
     gen: TurboGenWrapper,
-    input: Optional[Union[str, dict]] = None,
+    input: Union[str, dict],
 ) -> Result:
     """Run a turbo app"""
 
@@ -22,8 +22,12 @@ async def run(
 
     # Run generator
     try:
-        while not (output := await gen.asend(input)).needs_input:
-            pass
+        while (output := await gen.asend(input)):
+            if isinstance(output, Start):
+                continue
+
+            if output.needs_input:
+                break
 
     # Generator exhausted, mark done
     except StopAsyncIteration:

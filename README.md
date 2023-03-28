@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* fix: toolbot additional_info parameter. PR [#34](https://github.com/creatorrr/turbo-chat/pull/34) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.2.11. PR [#33](https://github.com/creatorrr/turbo-chat/pull/33) by [@creatorrr](https://github.com/creatorrr).
 * f/json tool bot. PR [#32](https://github.com/creatorrr/turbo-chat/pull/32) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.2.10. PR [#31](https://github.com/creatorrr/turbo-chat/pull/31) by [@creatorrr](https://github.com/creatorrr).

@@ -1,5 +1,6 @@
 from typing import cast, Generic, List, TypeVar
 
+import dirtyjson
 from parse import search as parse_search, with_pattern
 
 __all__ = [
@@ -25,6 +26,11 @@ def parse_yesno(text: str) -> bool:
     return yesno_mapping[text.lower()]
 
 
+@with_pattern(r"(\{.+\})")
+def parse_json(text: str) -> dict:
+    return dirtyjson.loads(text)
+
+
 class Scratchpad(Generic[ST]):
     def __init__(self, spec: str):
         self.spec = spec
@@ -35,7 +41,7 @@ class Scratchpad(Generic[ST]):
         return parse_search(
             spec + "\n",
             input + "\n",
-            extra_types=dict(bool=parse_yesno),
+            extra_types=dict(bool=parse_yesno, json=parse_json),
         )
 
     def parse(self, input: str) -> ST:

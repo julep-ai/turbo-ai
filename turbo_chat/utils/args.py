@@ -4,6 +4,10 @@ import inspect
 from inspect import Parameter as P
 
 
+def get_input_signature(fn: Callable) -> str:
+    return ", ".join([str(p) for p in inspect.signature(fn).parameters.values()])
+
+
 def get_required_args(fn: Callable) -> Set[str]:
     """Get required args for a function."""
 

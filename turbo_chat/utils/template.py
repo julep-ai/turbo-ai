@@ -5,6 +5,7 @@ from jinja2 import Environment
 from jinja2schema import infer, to_json_schema
 from jsonschema import validate
 
+from .args import get_input_signature
 from .lang import inflect
 
 __all__ = [
@@ -20,6 +21,7 @@ jinja_env: Environment = Environment(
 
 # Add custom filters
 jinja_env.filters["inflect"] = inflect
+jinja_env.filters["input_signature"] = get_input_signature
 
 
 # Funcs

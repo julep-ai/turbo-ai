@@ -429,6 +429,18 @@ files = [
 ]
 
 [[package]]
+name = "dirtyjson"
+version = "1.0.8"
+description = "JSON decoder for Python that can extract data from the muck"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "dirtyjson-1.0.8-py3-none-any.whl", hash = "sha256:125e27248435a58acace26d5c2c4c11a1c0de0a9c5124c5a94ba78e517d74f53"},
+    {file = "dirtyjson-1.0.8.tar.gz", hash = "sha256:90ca4a18f3ff30ce849d100dcf4a003953c79d3a2348ef056f1d9c22231a25fd"},
+]
+
+[[package]]
 name = "executing"
 version = "1.2.0"
 description = "Get the currently executing AST node of a frame, and other information"
@@ -2025,4 +2037,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "<3.11,>=3.8"
-content-hash = "07bfe9f9c8fb10c020cf60883d9fda0f569b3e68fb38321c55cf2bff0e3fdf17"
+content-hash = "a13e8d4731553ae978ab6b1db012972e1b1dfe9eb9bda7927d6fc8e647f54792"

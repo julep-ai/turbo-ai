@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* version: 0.2.10. PR [#31](https://github.com/creatorrr/turbo-chat/pull/31) by [@creatorrr](https://github.com/creatorrr).
 * feat: Add sticky messages. PR [#30](https://github.com/creatorrr/turbo-chat/pull/30) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.2.9. PR [#29](https://github.com/creatorrr/turbo-chat/pull/29) by [@creatorrr](https://github.com/creatorrr).
 * feat: Add .init method to TurboGenWrapper. PR [#28](https://github.com/creatorrr/turbo-chat/pull/28) by [@creatorrr](https://github.com/creatorrr).

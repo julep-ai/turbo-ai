@@ -32,6 +32,11 @@ MessageRole = Literal[
 
 
 # Models
+class MessageDict(TypedDict):
+    role: str
+    content: str
+
+
 class Message(pydantic.BaseModel):
     """Container for a single chatml prefix message"""
 
@@ -83,11 +88,6 @@ class Message(pydantic.BaseModel):
         # Include role and content
         kwargs.setdefault("include", {"role", "content"})
         return cast(MessageDict, super().dict(**kwargs))
-
-
-class MessageDict(TypedDict):
-    role: str
-    content: str
 
 
 # Abstract classes

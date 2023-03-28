@@ -79,10 +79,10 @@ class Message(pydantic.BaseModel):
 
         return values
 
-    def dict(self, **kwargs) -> dict:
+    def dict(self, **kwargs) -> MessageDict:
         # Include role and content
         kwargs.setdefault("include", {"role", "content"})
-        return super().dict(**kwargs)
+        return cast(MessageDict, super().dict(**kwargs))
 
 
 class MessageDict(TypedDict):

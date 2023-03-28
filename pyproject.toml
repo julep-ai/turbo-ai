@@ -20,6 +20,7 @@ jinja2schema = "^0.1.4"
 jsonschema = "^4.17.3"
 lemminflect = "^0.2.3"
 proxytypes = "^0.10.0"
+dirtyjson = "^1.0.8"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"

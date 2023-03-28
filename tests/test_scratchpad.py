@@ -16,19 +16,19 @@ async def test_scratchpad():
     spec = """
 Are follow up questions needed here: {follow_up_needed:bool}
 Follow up: {follow_up_question}
-Final answer: {final_response}
+Final answer: {final_response:json}
     """.strip()
 
     input = """
 Are follow up questions needed here: yes
 Follow up: gaga
-Final answer: gaga
+Final answer: {gaga: "gaga"}
     """.strip()
 
     expected: ParsedSelfAskScratchpad = {
         "follow_up_needed": True,
         "follow_up_question": "gaga",
-        "final_response": "gaga",
+        "final_response": {"gaga": "gaga"},
     }
 
     scratchpad: Scratchpad[ParsedSelfAskScratchpad] = Scratchpad[

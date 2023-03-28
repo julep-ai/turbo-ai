@@ -18,6 +18,7 @@ class Generate(pydantic.BaseModel, extra=pydantic.Extra.allow):
 class GetInput(pydantic.BaseModel):
     """Placeholder value to indicate that user input is needed"""
 
+    record: bool = True
     content: str = "User input needed"
 
 

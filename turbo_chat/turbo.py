@@ -150,7 +150,8 @@ def turbo(
 
                     # Yield to user if GetInput
                     elif isinstance(output, GetInput):
-                        await memory.append(Assistant(content=output.content))
+                        if output.record:
+                            await memory.append(Assistant(content=output.content))
 
                         # Get input
                         payload = yield Result.from_message(output)

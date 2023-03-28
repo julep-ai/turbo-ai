@@ -86,7 +86,7 @@ class Message(pydantic.BaseModel):
 
 
 class MessageDict(TypedDict):
-    role: MessageRole
+    role: str
     content: str
 
 

@@ -1,5 +1,7 @@
 from abc import abstractmethod
-from typing import List
+from itertools import groupby
+from operator import attrgetter
+from typing import cast, List
 
 import pydantic
 
@@ -45,6 +47,43 @@ class BaseMemory(BaseMessageCollection, WithSetup, pydantic.BaseModel):
     ) -> List[MessageDict]:
         """Turn message history into a prompt for openai."""
 
-        # Noop: Override to add filtering
-        messages: List[MessageDict] = await self.get_dicts()
-        return messages
+        messages = await self.get()
+        messages = sorted(messages, key=attrgetter("label", "timestamp"))
+
+        sticky_top, sticky_bottom, non_sticky = (
+            [
+                message
+                for message in messages
+                if message.sticky and message.sticky_position == "top"
+            ],
+            [
+                message
+                for message in messages
+                if message.sticky and message.sticky_position == "bottom"
+            ],
+            [message for message in messages if not message.sticky],
+        )
+
+        # Take only last for every label group
+        sticky_top = [
+            list(group)[-1] for _, group in groupby(sticky_top, key=attrgetter("label"))
+        ]
+
+        sticky_bottom = [
+            list(group)[-1]
+            for _, group in groupby(sticky_bottom, key=attrgetter("label"))
+        ]
+
+        messages = sticky_top + non_sticky + sticky_bottom
+
+        # Convert
+        message_dicts = [cast(MessageDict, message.dict()) for message in messages]
+
+        # Add prefix (system name=) for examples
+        for i, message in enumerate(message_dicts):
+            if message["role"].startswith("example"):
+                message_dicts[i]["role"] = f"system name={message['role']}"
+
+        # max_tokens will be used by extending classes
+
+        return message_dicts

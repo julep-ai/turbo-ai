@@ -9,7 +9,7 @@ async def test_turbo():
     @turbo()
     async def example(zodiac: str, memory):
         yield System(content="You are a fortune teller")
-        yield Generate()
+        yield Assistant(content="hi")
 
         messages = await memory.get()
         assert len(messages)

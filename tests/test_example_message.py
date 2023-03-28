@@ -9,11 +9,10 @@ from turbo_chat.utils.tokens import count_tokens, get_max_tokens_length
 async def test_memory_filter():
     @turbo(memory_class=LocalTruncatedMemory)
     async def example(zodiac: str, memory):
-        for _ in range(50_000):
-            yield Assistant(content="You are a fortune teller")
+        yield ExampleAssistant(content="Hello")
+        yield Assistant(content="You are a fortune teller")
 
         messages = await memory.prepare_prompt()
-        num_tokens = count_tokens(messages, memory.model)
-        assert num_tokens < get_max_tokens_length(memory.model)
+        assert messages[0]["role"] == "system name=example_assistant"
 
     await example(zodiac="pisces").run()

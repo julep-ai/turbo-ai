@@ -47,13 +47,13 @@ class Assistant(Message):
 class ExampleUser(Message):
     """User example message"""
 
-    role: MessageRole = "system name=example_user"
+    role: MessageRole = "example_user"
 
 
 class ExampleAssistant(Message):
     """Assistant example message"""
 
-    role: MessageRole = "system name=example_assistant"
+    role: MessageRole = "example_assistant"
 
 
 # Abstract implementations

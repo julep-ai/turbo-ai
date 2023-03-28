@@ -4,4 +4,4 @@ __all__ = [
     "Tool",
 ]
 
-Tool = Callable[[str], Awaitable[str]]
+Tool = Callable[..., Awaitable[str]]

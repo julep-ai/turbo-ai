@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
+import json
 from typing import (
     cast,
     List,
     Literal,
     Optional,
     TypedDict,
+    Union,
 )
 
 import pydantic
@@ -44,7 +46,7 @@ class Message(pydantic.BaseModel):
     timestamp: datetime = pydantic.Field(default_factory=datetime.utcnow)
 
     # Content / Template
-    content: Optional[str] = None
+    content: Optional[Union[str, dict]] = None
     template: Optional[str] = None
     variables: Optional[dict] = None
 
@@ -87,7 +89,13 @@ class Message(pydantic.BaseModel):
     def dict(self, **kwargs) -> MessageDict:
         # Include role and content
         kwargs.setdefault("include", {"role", "content"})
-        return cast(MessageDict, super().dict(**kwargs))
+        data = super().dict(**kwargs)
+
+        # Convert content to json if not str
+        if not isinstance(data["content"], str):
+            data["content"] = json.dumps(data["content"])
+
+        return cast(MessageDict, data)
 
 
 # Abstract classes

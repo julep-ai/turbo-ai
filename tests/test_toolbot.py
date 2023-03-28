@@ -9,7 +9,7 @@ from turbo_chat.bots import tool_bot
 async def test_toolbot():
     name = "Gaga"
 
-    async def GetMyName(_):
+    async def GetMyName():
         """Use this tool to get my name"""
         return name
 
@@ -17,4 +17,6 @@ async def test_toolbot():
     await app.run()
     result = await app.run("What is my name?")
 
-    assert "gaga" in result.content.lower()
+    assert isinstance(result.content, dict)
+    assert "GetMyName" in result.content["tools_used"]
+    assert "gaga" in result.content["response"].lower()

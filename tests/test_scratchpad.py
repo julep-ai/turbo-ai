@@ -25,7 +25,7 @@ Follow up: gaga
 Final answer: {gaga: "gaga"}
     """.strip()
 
-    expected: ParsedSelfAskScratchpad = {
+    expected = {
         "follow_up_needed": True,
         "follow_up_question": "gaga",
         "final_response": {"gaga": "gaga"},

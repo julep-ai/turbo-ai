@@ -10,7 +10,7 @@ default_tool_example: str = """
 Customer said: Where is the store located?
 Thought: Use another tool to get information? Yes
 Tool: GetInformation
-Tool Input: What is the address of the store?
+Tool Input: {"question": "What is the address of the store?"}
 Tool Result: The address of [STORE NAME] is [SOME ADDRESS]
 Thought: Use another tool to get information? No
 Response: [STORE NAME] is located at [SOME ADDRESS].
@@ -23,8 +23,10 @@ async def tool_bot(
     prologue: Optional[str] = None,
     user_type: str = "user",
     instruction: Optional[str] = None,
+    additional_info: Optional[str] = None,
     example: str = default_tool_example,
     max_iterations: int = 6,
+
     # Placeholder for message to send to the user
     message: str = "How can I help you?",
 ):
@@ -36,7 +38,7 @@ async def tool_bot(
             prologue=prologue,
             user_type=user_type,
             instruction=instruction,
-            additional_info=None,
+            additional_info=additional_info,
         ),
         # check=True,  # FIXME: Throws an error, possible bug in jinja2schema
     )

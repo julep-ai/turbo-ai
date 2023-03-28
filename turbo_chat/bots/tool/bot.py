@@ -26,7 +26,6 @@ async def tool_bot(
     additional_info: Optional[str] = None,
     example: str = default_tool_example,
     max_iterations: int = 6,
-
     # Placeholder for message to send to the user
     message: str = "How can I help you?",
 ):

@@ -3,18 +3,24 @@ from ward import test
 
 from turbo_chat import *
 from turbo_chat.bots import tool_bot
+from turbo_chat.utils.pprint import pprint_color
+
+first_name = "Lady"
+last_name = "Gaga"
+
+
+async def GetMyFirstName():
+    """Use this tool to get my first name"""
+    return first_name
+
+
+app = tool_bot.configure(debug=pprint_color)(
+    tools=[GetMyFirstName], initial_state="My last name is Antebellum"
+)
 
 
 @test("contains returns True when toolbot works")
 async def test_toolbot():
-    first_name = "Lady"
-    last_name = "Gaga"
-
-    async def GetMyFirstName():
-        """Use this tool to get my first name"""
-        return first_name
-
-    app = tool_bot(tools=[GetMyFirstName], initial_state="My last name is Antebellum")
     await app.run()
     result = await app.run(
         {

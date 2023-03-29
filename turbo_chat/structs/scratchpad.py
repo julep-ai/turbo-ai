@@ -56,7 +56,7 @@ class Scratchpad(Generic[ST]):
         # Parse the scratchpad
         result = {}
         for parser in self.parsers:
-            parsed = parser.search(input)
+            parsed = parser.search(input + "\n")
             result = {**result, **getattr(parsed, "named", {})}
 
         # Trim results

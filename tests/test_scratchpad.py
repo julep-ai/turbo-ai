@@ -3,6 +3,7 @@ from typing import Optional, TypedDict
 from ward import test
 
 from turbo_chat import *
+from turbo_chat.bots.tool.scratchpad import scratchpad as tool_scratchpad
 
 
 class ParsedSelfAskScratchpad(TypedDict):
@@ -44,3 +45,19 @@ multiline explanation
     ](spec)
 
     assert scratchpad.parse(input) == expected
+
+
+@test("contains returns True when scratchpad works")
+async def test_tool_scratchpad():
+    input = """
+Thought: Need to use a tool? Yes
+Tool: SearchProducts
+Tool Input: {"query": "wedding guest attire"}
+""".strip()
+
+    expected = {
+        "tool_name": "SearchProducts",
+        "tool_input": {"query": "wedding guest attire"},
+    }
+
+    assert tool_scratchpad.parse(input) == expected

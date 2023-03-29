@@ -1,7 +1,7 @@
 from typing import cast, Generic, List, TypeVar
 
 import dirtyjson
-from parse import search as parse_search, with_pattern
+from parse import compile as compile_parser, Parser, with_pattern
 
 __all__ = [
     "Scratchpad",
@@ -31,33 +31,35 @@ def parse_json(text: str) -> dict:
     return dirtyjson.loads(text)
 
 
+@with_pattern(r".+")
+def parse_multiline(text: str) -> str:
+    return text
+
+
 class Scratchpad(Generic[ST]):
+    parsers: List[Parser]
+
     def __init__(self, spec: str):
-        self.spec = spec
+        extra_types = dict(bool=parse_yesno, json=parse_json, multiline=parse_multiline)
 
-    def _search(self, spec: str, input: str):
-        """Use parse.search to parse scratchpad according to spec."""
-
-        return parse_search(
-            spec + "\n",
-            input + "\n",
-            extra_types=dict(bool=parse_yesno, json=parse_json),
-        )
+        self.parsers = [
+            compile_parser(
+                spec_line + ("" if ":multiline" in spec_line else "\n"),
+                extra_types=extra_types,
+            )
+            for spec_line in spec.strip().splitlines()
+        ]
 
     def parse(self, input: str) -> ST:
         """Parse the input string according to the spec."""
-        """Only remembers latest results."""
-
-        # Create parsers
-        line_specs: List[str] = self.spec.split("\n")
 
         # Parse the scratchpad
-        parsed = [self._search(spec, input) for spec in line_specs]
-
-        # Collect results
         result = {}
-        for parsed_line in parsed:
-            p = parsed_line.named if parsed_line else {}
-            result = {**result, **p}
+        for parser in self.parsers:
+            parsed = parser.search(input)
+            result = {**result, **getattr(parsed, "named", {})}
+
+        # Trim results
+        result = {k: v.strip() if isinstance(v, str) else v for k, v in result.items()}
 
         return cast(ST, result)

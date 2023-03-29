@@ -59,10 +59,6 @@ After you are done, {{user_type}} only sees what you ask me to relay using `Resp
 
 Begin!
 
-{% if additional_info -%}
-{{additional_info}}
-
-{% endif %}
 {{user_type | capitalize}} said: <what the {{user_type}} said>
 """.strip()  # noqa: E501
 

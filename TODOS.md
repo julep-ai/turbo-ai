@@ -1,6 +1,6 @@
-- [ ] tool_bot: additional_info should be added as a sticky top message
-- [ ] tool_bot: scratchpad cannot parse response that spans multiple lines
+- [x] tool_bot: additional_info should be added as a sticky top message
+- [x] tool_bot: scratchpad cannot parse response that spans multiple lines
 - [ ] tool_bot: use system/example everywhere but switch it to User prompt for gpt-3.5
 - [ ] tool_bot: add infinite loop back
-- [ ] tool_bot: accept state and input as a dict
+- [x] tool_bot: accept state and input as a dict
 - [ ] turbo: add generic type information to @turbo decorator

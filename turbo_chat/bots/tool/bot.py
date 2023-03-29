@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from ...structs import Assistant, GetInput, Generate, Result, User
 from ...turbo import turbo
-from ...types import Tool
+from ...types import Tool, ToolBotInput
 from .scratchpad import scratchpad
 from .template import EXAMPLE_TEMPLATE, TOOLBOT_TEMPLATE
 
@@ -17,18 +17,24 @@ Response: [STORE NAME] is located at [SOME ADDRESS].
 """.strip()
 
 
-@turbo(model="gpt-3.5-turbo", temperature=0.7)
+@turbo(model="gpt-3.5-turbo", temperature=0)
 async def tool_bot(
     tools: List[Tool],
     prologue: Optional[str] = None,
     user_type: str = "user",
     instruction: Optional[str] = None,
-    additional_info: Optional[str] = None,
+    initial_state: Optional[str] = None,
     example: str = default_tool_example,
     max_iterations: int = 6,
     # Placeholder for message to send to the user
     message: str = "How can I help you?",
 ):
+    # Yield initial state
+    if initial_state:
+        yield User(
+            content=initial_state, sticky=True, sticky_position="bottom", label="state"
+        )
+
     # Yield instructions
     yield User(
         template=TOOLBOT_TEMPLATE,
@@ -37,7 +43,6 @@ async def tool_bot(
             prologue=prologue,
             user_type=user_type,
             instruction=instruction,
-            additional_info=additional_info,
         ),
         # check=True,  # FIXME: Throws an error, possible bug in jinja2schema
     )
@@ -45,8 +50,16 @@ async def tool_bot(
     # Yield example
     yield User(template=EXAMPLE_TEMPLATE, variables={"example": example})
 
+    # while True:
     # Get user input
-    input = yield GetInput(content=message)
+    data: ToolBotInput = yield GetInput(content=message)
+    input: str = data["input"]
+    state: Optional[str] = data.get("state")
+
+    # Yield user input and state
+    if state:
+        yield User(content=state, sticky=True, sticky_position="bottom", label="state")
+
     yield User(content=f"{user_type} said: {input}")
 
     # Start the tool agent

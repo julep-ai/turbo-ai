@@ -5,7 +5,7 @@ from .cache import *
 from .generators import *
 from .memory import *
 from .messages import *
-from .tools import Tool
+from .tools import *
 
 __all__ = [
     "MessageRole",
@@ -16,4 +16,5 @@ __all__ = [
     "BaseMemory",
     "BaseCache",
     "Tool",
+    "ToolBotInput",
 ]

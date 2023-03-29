@@ -74,7 +74,14 @@ class BaseMemory(BaseMessageCollection, WithSetup, pydantic.BaseModel):
             for _, group in groupby(sticky_bottom, key=attrgetter("label"))
         ]
 
-        messages = sticky_top + non_sticky + sticky_bottom
+        if len(non_sticky):
+            *head, last = non_sticky
+            append = [last]
+        else:
+            head = []
+            append = []
+
+        messages = sticky_top + head + sticky_bottom + append
 
         # Convert
         message_dicts = [cast(MessageDict, message.dict()) for message in messages]

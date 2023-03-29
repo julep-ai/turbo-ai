@@ -7,16 +7,23 @@ from turbo_chat.bots import tool_bot
 
 @test("contains returns True when toolbot works")
 async def test_toolbot():
-    name = "Gaga"
+    first_name = "Lady"
+    last_name = "Gaga"
 
-    async def GetMyName():
-        """Use this tool to get my name"""
-        return name
+    async def GetMyFirstName():
+        """Use this tool to get my first name"""
+        return first_name
 
-    app = tool_bot(tools=[GetMyName])
+    app = tool_bot(tools=[GetMyFirstName], initial_state="My last name is Antebellum")
     await app.run()
-    result = await app.run("What is my name?")
+    result = await app.run(
+        {
+            "input": "What is my first and last name?",
+            "state": f"My last name is {last_name}",
+        }
+    )
 
     assert isinstance(result.content, dict)
-    assert "GetMyName" in result.content["tools_used"]
-    assert "gaga" in result.content["response"].lower()
+    assert "GetMyFirstName" in result.content["tools_used"]
+    assert first_name.lower() in result.content["response"].lower()
+    assert last_name.lower() in result.content["response"].lower()

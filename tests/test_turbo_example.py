@@ -57,5 +57,3 @@ async def test_turbo_example():
         if result.needs_input:
             _input = input(result.content)
             continue
-
-        print(result.content)

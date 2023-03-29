@@ -27,7 +27,7 @@ Remember that the {{user_type}} ONLY gets to see what you tell me in the format 
 Tools:
 {% for tool in tools %}
 {% set tool_signature = tool | input_signature -%}
-- {{tool.__name__}}: {{tool.__doc__}}. This tool{% if tool_signature %} requires a valid json as input that includes these keys: ({{tool_signature}}){% else %} does not require an input{% endif %}.
+- {{tool.__name__}}: {{tool.__doc__ or "Use tool"}}. This tool{% if tool_signature %} requires a valid json as input that includes these keys: ({{tool_signature}}){% else %} does not require an input{% endif %}.
 {% endfor %}
 
 Think step by step to process the {{user_type}}'s request and use tools to collect required information or take actions. Do NOT make up answers and politely apologize if unable to help even after using the tools.
@@ -59,10 +59,6 @@ After you are done, {{user_type}} only sees what you ask me to relay using `Resp
 
 Begin!
 
-{% if additional_info -%}
-{{additional_info}}
-
-{% endif %}
 {{user_type | capitalize}} said: <what the {{user_type}} said>
 """.strip()  # noqa: E501
 

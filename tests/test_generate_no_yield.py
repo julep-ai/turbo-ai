@@ -5,7 +5,7 @@ from turbo_chat import *
 
 
 @test("contains returns True when Generate no yield works")
-async def test_turbo():
+async def test_generate_no_yield():
     @turbo()
     async def example():
         yield System(content="You are a good guy named John")

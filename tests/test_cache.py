@@ -5,7 +5,7 @@ from turbo_chat import *
 
 
 @test("contains returns True when Generate no yield works")
-async def test_turbo():
+async def test_cache():
     _cache = None
 
     @turbo(cache_class=SimpleCache)

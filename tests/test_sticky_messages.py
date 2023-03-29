@@ -5,7 +5,7 @@ from turbo_chat import *
 
 
 @test("contains returns True when sticky messages work")
-async def test_turbo():
+async def test_sticky():
     @turbo()
     async def example(zodiac: str, memory):
         for i in range(20):
@@ -26,7 +26,8 @@ async def test_turbo():
         messages = await memory.prepare_prompt()
         assert len(messages) == 20 + 1 + 1
         assert messages[0]["content"] == "You are a fortune teller"
-        assert messages[-1]["content"] == "Hello 19"
+        assert messages[-1]["content"] == "Hi"
+        assert messages[-2]["content"] == "Hello 19"
 
     b = await example(zodiac="pisces").init()
     await b.run()

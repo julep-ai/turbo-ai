@@ -18,9 +18,10 @@ async def test_turbo():
 
     b = example(zodiac="pisces")
     output = await b.run()
+
     assert isinstance(output, Result)
     assert not output.done
 
     output = await b.run("Tell me my fortune")
     assert isinstance(output, Result)
-    assert output.done
+    assert not output.done

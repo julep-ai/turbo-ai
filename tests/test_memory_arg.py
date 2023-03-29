@@ -5,7 +5,7 @@ from turbo_chat import *
 
 
 @test("contains returns True when memory injection works")
-async def test_turbo():
+async def test_memory_arg():
     @turbo()
     async def example(zodiac: str, memory):
         yield System(content="You are a fortune teller")

@@ -5,7 +5,7 @@ from turbo_chat import *
 
 
 @test("contains returns True when sticky messages work")
-async def test_turbo():
+async def test_sticky():
     @turbo()
     async def example(zodiac: str, memory):
         for i in range(20):

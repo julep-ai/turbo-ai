@@ -1,4 +1,4 @@
-from typing import Any, Protocol
+from typing import Any, Optional, Protocol
 
 import pydantic
 
@@ -19,6 +19,7 @@ class Result(pydantic.BaseModel):
     content: Any
     needs_input: bool = False
     done: bool = False
+    original_role: Optional[str] = None
 
     @classmethod
     def from_message(
@@ -27,9 +28,11 @@ class Result(pydantic.BaseModel):
         done: bool = False,
     ) -> "Result":
         assert hasattr(message, "content"), "Content holder object required"
+        role = getattr(message, "role", None)
 
         return cls(
             content=message.content,
+            original_role=role,
             needs_input=isinstance(message, GetInput),
             done=done,
         )

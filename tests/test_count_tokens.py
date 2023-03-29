@@ -6,7 +6,7 @@ from turbo_chat.utils.tokens import count_tokens
 
 
 @test("contains returns True when count tokens works")
-async def test_turbo():
+async def test_count_tokens():
     @turbo()
     async def example(zodiac: str, memory):
         yield System(content="You are a fortune teller")

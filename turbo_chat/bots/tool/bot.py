@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from ...structs import Assistant, GetInput, Generate, Result, User
+from ...structs import Assistant, GetInput, Generate, User
 from ...turbo import turbo
 from ...types import Tool, ToolBotInput
 from .scratchpad import scratchpad
@@ -50,66 +50,68 @@ async def tool_bot(
     # Yield example
     yield User(template=EXAMPLE_TEMPLATE, variables={"example": example})
 
-    # while True:
-    # Get user input
-    data: ToolBotInput = yield GetInput(content=message)
-    input: str = data["input"]
-    state: Optional[str] = data.get("state")
+    while True:
+        # Get user input
+        data: ToolBotInput = yield GetInput(content=message)
+        input: str = data["input"]
+        state: Optional[str] = data.get("state")
 
-    # Yield user input and state
-    if state:
-        yield User(content=state, sticky=True, sticky_position="bottom", label="state")
-
-    yield User(content=f"{user_type} said: {input}")
-
-    # Start the tool agent
-    parsed_tools = {}
-    iterations_left = max_iterations
-    tools_used = []
-
-    # Keep running until we get final response
-    while "final_response" not in parsed_tools and iterations_left > 0:
-        iterations_left -= 1
-
-        output = yield Generate(stop=["Tool Result"], forward=False)
-        parsed_tools = scratchpad.parse(output.content)
-
-        # If no tool required to run, continue
-        if not parsed_tools.get("tool_name"):
-            continue
-
-        # Otherwise run tool
-        # First check if tool is valid
-        selected_tool = parsed_tools["tool_name"]
-        tool_names = [tool.__name__ for tool in tools]
-
-        if selected_tool not in tool_names:
+        # Yield user input and state
+        if state:
             yield User(
-                content=(
-                    f"Tool Result: `{selected_tool}` is not a valid tool."
-                    f"Pick one from [{', '.join(tool_names)}]."
-                )
+                content=state, sticky=True, sticky_position="bottom", label="state"
             )
 
-            continue
+        yield User(content=f"{user_type} said: {input}")
 
-        # Tool is valid. Run it
-        tools_used.append(selected_tool)
+        # Start the tool agent
+        parsed_tools = {}
+        iterations_left = max_iterations
+        tools_used = []
 
-        # Get tool input
-        tool_fn = next(tool for tool in tools if tool.__name__ == selected_tool)
-        tool_input = parsed_tools.get("tool_input") or {}
+        # Keep running until we get final response
+        while "final_response" not in parsed_tools and iterations_left > 0:
+            iterations_left -= 1
 
-        # Run tool
-        tool_result = await tool_fn(**tool_input)
+            output = yield Generate(stop=["Tool Result"], forward=False)
+            parsed_tools = scratchpad.parse(output.content)
 
-        # Yield the observation
-        yield Assistant(content=f"Tool Result: {tool_result.strip()}")
+            # If no tool required to run, continue
+            if not parsed_tools.get("tool_name"):
+                continue
 
-    # Yield final response if any
-    response = parsed_tools.get(
-        "final_response",
-        "I am not sure how to answer this question",
-    )
+            # Otherwise run tool
+            # First check if tool is valid
+            selected_tool = parsed_tools["tool_name"]
+            tool_names = [tool.__name__ for tool in tools]
 
-    yield Result(content=dict(response=response, tools_used=tools_used))
+            if selected_tool not in tool_names:
+                yield User(
+                    content=(
+                        f"Tool Result: `{selected_tool}` is not a valid tool."
+                        f"Pick one from [{', '.join(tool_names)}]."
+                    )
+                )
+
+                continue
+
+            # Tool is valid. Run it
+            tools_used.append(selected_tool)
+
+            # Get tool input
+            tool_fn = next(tool for tool in tools if tool.__name__ == selected_tool)
+            tool_input = parsed_tools.get("tool_input") or {}
+
+            # Run tool
+            tool_result = await tool_fn(**tool_input)
+
+            # Yield the observation
+            yield User(content=f"Tool Result: {tool_result.strip()}")
+
+        # Yield final response if any
+        response = parsed_tools.get(
+            "final_response",
+            "I am not sure how to answer this question",
+        )
+
+        yield Assistant(content=dict(response=response, tools_used=tools_used))

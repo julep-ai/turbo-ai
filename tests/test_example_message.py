@@ -6,7 +6,7 @@ from turbo_chat.utils.tokens import count_tokens, get_max_tokens_length
 
 
 @test("contains returns True when memory filter works")
-async def test_memory_filter():
+async def test_example_message():
     @turbo(memory_class=LocalTruncatedMemory)
     async def example(zodiac: str, memory):
         yield ExampleAssistant(content="Hello")

@@ -2,6 +2,7 @@
 from ward import test
 
 from turbo_chat import *
+from turbo_chat import tool_bot
 
 products = {
     21: "Classic Tweed suit",
@@ -18,8 +19,8 @@ def render_cart():
     if not cart:
         return "Cart:\nempty"
 
-    items = "- ".join(
-        [f"id {id} | {products[id]} | {qty}" for id, qty in cart.values()]
+    items = "\n- ".join(
+        [f"id {id} | {products[id]} | {qty}" for id, qty in cart.items()]
     )
 
     return f"Cart:\nProduct ID | Product Name | Quantity\n- {items}"
@@ -89,7 +90,6 @@ You are a {assistant_gender} AI {assistant_designation} for {store_name}. Your n
     while True:
         input = yield GetInput(content=message)
 
-        # FIXME: possibly buggy
         bot = tool_bot.configure(temperature=0.0)(
             prologue=prologue,
             user_type="Customer",

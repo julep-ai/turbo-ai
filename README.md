@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* v/0.3.2. PR [#41](https://github.com/creatorrr/turbo-chat/pull/41) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.1. PR [#40](https://github.com/creatorrr/turbo-chat/pull/40) by [@creatorrr](https://github.com/creatorrr).
 * fix: Fix scratchpad parsing. PR [#39](https://github.com/creatorrr/turbo-chat/pull/39) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.0. PR [#38](https://github.com/creatorrr/turbo-chat/pull/38) by [@creatorrr](https://github.com/creatorrr).

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from ...structs import Assistant, GetInput, Generate, User
 from ...turbo import turbo
@@ -26,13 +26,20 @@ async def tool_bot(
     initial_state: Optional[str] = None,
     example: str = default_tool_example,
     max_iterations: int = 6,
+    state_message_position: Literal["top", "bottom"] = "top",
     # Placeholder for message to send to the user
     message: str = "How can I help you?",
 ):
+    # Capitalize user_type
+    user_type = user_type.strip().capitalize()
+
     # Yield initial state
     if initial_state:
         yield User(
-            content=initial_state, sticky=True, sticky_position="bottom", label="state"
+            content=initial_state,
+            sticky=True,
+            sticky_position=state_message_position,
+            label="state",
         )
 
     # Yield instructions
@@ -59,7 +66,10 @@ async def tool_bot(
         # Yield user input and state
         if state:
             yield User(
-                content=state, sticky=True, sticky_position="bottom", label="state"
+                content=state,
+                sticky=True,
+                sticky_position=state_message_position,
+                label="state",
             )
 
         yield User(content=f"{user_type} said: {input}")
@@ -73,7 +83,11 @@ async def tool_bot(
         while "final_response" not in parsed_tools and iterations_left > 0:
             iterations_left -= 1
 
-            output = yield Generate(stop=["Tool Result"], forward=False)
+            output = yield Generate(
+                stop=["Tool Result", f"{user_type} said:"],
+                forward=False,
+            )
+
             parsed_tools = scratchpad.parse(output.content)
 
             # If no tool required to run, continue

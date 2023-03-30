@@ -29,6 +29,9 @@ class System(Message):
     """System message"""
 
     role: MessageRole = "system"
+    sticky: bool = True
+    sticky_position: str = "top"
+    label: str = "system"
 
 
 class User(Message):

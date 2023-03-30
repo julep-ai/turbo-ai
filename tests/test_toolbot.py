@@ -14,9 +14,7 @@ async def GetMyFirstName():
     return first_name
 
 
-app = tool_bot.configure(debug=pprint_color)(
-    tools=[GetMyFirstName], initial_state="My last name is Antebellum"
-)
+app = tool_bot(tools=[GetMyFirstName], initial_state="My last name is Antebellum")
 
 
 @test("contains returns True when toolbot works")

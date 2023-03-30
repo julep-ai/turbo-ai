@@ -70,6 +70,11 @@ class Message(pydantic.BaseModel):
         variables = values.pop("variables")
         sticky = values["sticky"]
         label = values["label"]
+        role = values["role"]
+
+        # Label can be system only if role is system
+        if label == "system":
+            assert role == "system", "System label can only be used with system role"
 
         # Check that sticky messages have an id
         assert not (sticky ^ bool(label)), "Sticky must be set with label"

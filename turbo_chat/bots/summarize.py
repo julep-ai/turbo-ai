@@ -13,7 +13,7 @@ Summarize the following {{text_type}}:
 """.strip()
 
 
-@turbo(model="gpt-3.5-turbo", temperature=0.2)
+@turbo(temperature=0.5)
 async def summarize_bot(text: str, text_type: str = "text"):
     yield User(
         template=SUMMARIZE_TEMPLATE,

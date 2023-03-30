@@ -86,10 +86,27 @@ class BaseMemory(BaseMessageCollection, WithSetup, pydantic.BaseModel):
         # Convert
         message_dicts = [cast(MessageDict, message.dict()) for message in messages]
 
-        # Add prefix (system name=) for examples
+        # Rework system and example messages
         for i, message in enumerate(message_dicts):
-            if message["role"].startswith("example"):
-                message_dicts[i]["role"] = f"system name={message['role']}"
+            # TODO: Re-enable when gpt-3.5-turbo api gets support for example prompts
+            # # For older chatgpt models, change system prompts to user prompts
+            # if self.model == "gpt-3.5-turbo-0301":
+            if True:
+                if message["role"] == "system":
+                    message_dicts[i]["role"] = "user"
+
+                if message["role"].startswith("example"):
+                    example_type = message["role"].split("example_", 1)[1]
+
+                    message_dicts[i]["role"] = "user"
+                    message_dicts[i][
+                        "content"
+                    ] = f"{example_type} example:\n\n{message['content']}"
+
+            # TODO: Re-enable when gpt-3.5-turbo api gets support for example prompts
+            # # For newer prompts, add prefix (system name=) for examples
+            # elif message["role"].startswith("example"):
+            #     message_dicts[i]["role"] = f"system name={message['role']}"
 
         # max_tokens will be used by extending classes
 

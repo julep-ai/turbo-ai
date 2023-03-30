@@ -10,7 +10,7 @@ async def test_memory_filter():
     @turbo(memory_class=LocalTruncatedMemory)
     async def example(zodiac: str, memory):
         for _ in range(50_000):
-            yield Assistant(content="You are a fortune teller")
+            yield User(content="You are a fortune teller")
 
         messages = await memory.prepare_prompt()
         num_tokens = count_tokens(messages, memory.model)

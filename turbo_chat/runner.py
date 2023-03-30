@@ -28,7 +28,7 @@ async def run(
             if isinstance(output, Start):
                 continue
 
-            if output.needs_input or output.original_role == "assistant":
+            if output.needs_input or output.original_role == "result":
                 break
 
     # Generator exhausted, mark done

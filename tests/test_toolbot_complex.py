@@ -90,11 +90,11 @@ You are a {assistant_gender} AI {assistant_designation} for {store_name}. Your n
     while True:
         input = yield GetInput(content=message)
 
-        bot = tool_bot.configure(temperature=0.0)(
+        bot = tool_bot(
             prologue=prologue,
             user_type="Customer",
             instruction="Assist the customer with any questions they have about the store or products and help them place orders when they are ready.",
-            initial_state=render_cart(),  # FIXME: this is buggy, should be sticky top instead
+            initial_state=render_cart(),
             tools=tools,
         )
 

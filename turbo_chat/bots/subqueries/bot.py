@@ -28,7 +28,7 @@ Queries to execute:
 """.strip()  # noqa: E501
 
 
-@turbo(model="gpt-3.5-turbo")
+@turbo(temperature=0)
 async def subqueries_bot(
     request: str,
     context: str,

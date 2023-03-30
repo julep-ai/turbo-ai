@@ -47,7 +47,7 @@ __all__ = [
 # Decorator
 def turbo(
     memory_class: Type[BaseMemory] = LocalMemory,
-    model: TurboModel = "gpt-3.5-turbo",
+    model: TurboModel = "gpt-3.5-turbo-0301",
     stream: bool = False,
     cache_class: Optional[Type[BaseCache]] = None,
     debug: Optional[Callable[[dict], None]] = None,
@@ -83,17 +83,20 @@ def turbo(
         async def turbo_gen_fn(**context) -> TurboGenWrapper:
             """Wrapped chatml app from an async generator"""
 
+            memory_args = context.pop("memory_args", {})
+            cache_args = context.pop("cache_args", {})
+
             # Init memory
             memory = memory_class(model=model)
-            assert ensure_args(memory.setup, context)
-            await memory.setup(**context)
+            assert ensure_args(memory.setup, memory_args)
+            await memory.setup(**memory_args)
 
             # Init cache
             cache = None
             if cache_class:
                 cache = cache_class()
-                assert ensure_args(cache.setup, context)
-                await cache.setup(**context)
+                assert ensure_args(cache.setup, cache_args)
+                await cache.setup(**cache_args)
 
             # Init generator
             signature = inspect.signature(gen_fn)
@@ -125,17 +128,17 @@ def turbo(
                             timestamp=datetime.utcnow(),
                         )
 
-                        payload and debug(
-                            {**params, "type": "input", "payload": payload}
-                        )
-                        output and debug(
-                            {**params, "type": "output", "payload": output}
-                        )
+                        if payload:
+                            debug({**params, "type": "input", "payload": payload})
+
+                        if output:
+                            debug({**params, "type": "output", "payload": output})
 
                     payload = None
 
                     # Add to memory
                     if isinstance(output, Result):
+                        output.original_role = "result"
                         yield output
 
                     elif isinstance(output, Message):
@@ -146,7 +149,7 @@ def turbo(
                             yield Result.from_message(output)
 
                     elif isinstance(output, BaseMessageCollection):
-                        await memory.extend(output)
+                        await memory.extend(await output.get())
 
                     # Yield to user if GetInput
                     elif isinstance(output, GetInput):

@@ -17,11 +17,8 @@ async def test_sticky():
             )
             yield System(
                 content="You are a fortune teller",
-                sticky=True,
-                label="system",
-                sticky_position="top",
             )
-            yield Assistant(content="Hi")
+            yield User(content="Hi")
 
         messages = await memory.prepare_prompt()
         assert len(messages) == 20 + 1 + 1

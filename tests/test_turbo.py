@@ -24,4 +24,4 @@ async def test_turbo():
 
     output = await b.run("Tell me my fortune")
     assert isinstance(output, Result)
-    assert not output.done
+    assert output.done

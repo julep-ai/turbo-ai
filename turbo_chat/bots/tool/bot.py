@@ -1,10 +1,10 @@
 from typing import List, Literal, Optional
 
-from ...structs import Assistant, GetInput, Generate, User
+from ...structs import Example, GetInput, Generate, Result, User
 from ...turbo import turbo
 from ...types import Tool, ToolBotInput
 from .scratchpad import scratchpad
-from .template import EXAMPLE_TEMPLATE, TOOLBOT_TEMPLATE
+from .template import TOOLBOT_TEMPLATE
 
 default_tool_example: str = """
 Customer said: Where is the store located?
@@ -17,7 +17,7 @@ Response: [STORE NAME] is located at [SOME ADDRESS].
 """.strip()
 
 
-@turbo(model="gpt-3.5-turbo", temperature=0)
+@turbo(temperature=0)
 async def tool_bot(
     tools: List[Tool],
     prologue: Optional[str] = None,
@@ -55,7 +55,12 @@ async def tool_bot(
     )
 
     # Yield example
-    yield User(template=EXAMPLE_TEMPLATE, variables={"example": example})
+    # yield User(template=EXAMPLE_TEMPLATE, variables={"example": example})
+    example_user_line, *example_assistant_lines = example.splitlines()
+    yield Example(
+        user=example_user_line,
+        assistant="\n".join(example_assistant_lines),
+    )
 
     while True:
         # Get user input
@@ -128,4 +133,4 @@ async def tool_bot(
             "I am not sure how to answer this question",
         )
 
-        yield Assistant(content=dict(response=response, tools_used=tools_used))
+        yield Result(content=dict(response=response, tools_used=tools_used))

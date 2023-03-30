@@ -18,7 +18,7 @@ async def test_debug():
 
     @turbo(debug=debug)
     async def example():
-        yield Assistant(content="You are a fortune teller")
+        yield User(content="You are a fortune teller")
 
     app = await example().init()
     await app.run()

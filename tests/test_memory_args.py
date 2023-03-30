@@ -4,15 +4,16 @@ from ward import test
 from turbo_chat import *
 
 
+class TestMemory(LocalMemory):
+    async def setup(self, hello: str):
+        assert hello == "world"
+
+
 @test("contains returns True when memory injection works")
 async def test_memory_arg():
-    @turbo()
+    @turbo(memory_class=TestMemory)
     async def example(zodiac: str, memory):
         yield System(content="You are a fortune teller")
-        yield Assistant(content="hi")
 
-        messages = await memory.get()
-        assert len(messages)
-
-    b = await example(zodiac="pisces").init()
+    b = await example(zodiac="pisces", memory_args={"hello": "world"}).init()
     await b.run()

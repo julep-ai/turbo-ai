@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* feat: Add @completion decorator. PR [#44](https://github.com/creatorrr/turbo-chat/pull/44) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.3. PR [#43](https://github.com/creatorrr/turbo-chat/pull/43) by [@creatorrr](https://github.com/creatorrr).
 * feat: Memory expects memory_args, Assistant no longer yields automatically. PR [#42](https://github.com/creatorrr/turbo-chat/pull/42) by [@creatorrr](https://github.com/creatorrr).
 * v/0.3.2. PR [#41](https://github.com/creatorrr/turbo-chat/pull/41) by [@creatorrr](https://github.com/creatorrr).

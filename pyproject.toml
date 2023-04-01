@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "turbo-chat"
-version = "0.3.3"
+version = "0.3.4"
 description = "Idiomatic way to build chatgpt apps using async generators in python"
 authors = ["Diwank Singh Tomer <singh@diwank.name>"]
 license = "MIT"

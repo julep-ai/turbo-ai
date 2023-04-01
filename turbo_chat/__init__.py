@@ -3,6 +3,7 @@
 from .bots import *
 from .cache import *
 from .chat import *
+from .completion import *
 from .config import *
 from .errors import *
 from .memory import *
@@ -36,6 +37,7 @@ __all__ = [
     "Result",
     "Tool",
     "turbo",
+    "completion",
     "summarize_bot",
     "subqueries_bot",
     "tool_bot",

@@ -1,3 +1,9 @@
+- [ ] misc: Add support for chaining and parsing completion outputs (either via json or scratchpads)
+- [ ] misc: Add support for building chatgpt plugins
+- [ ] misc: Add support for embeddings
+- [ ] turbo: Add support for n>1 choices and selection
+- [ ] turbo: Add support for streaming
+- [ ] completion: dedent doc comment
 - [ ] docs_bot: create docs-bot to generate documentation
 - [ ] turbo: add generic type information to @turbo decorator
 - [x] turbo: yield assistant ONLY on generate?

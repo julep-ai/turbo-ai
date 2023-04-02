@@ -1,3 +1,4 @@
+- [ ] scratchpad: Add support for parsing json lists in addition to objects
 - [ ] misc: Add support for chaining and parsing completion outputs (either via json or scratchpads)
 - [ ] misc: Add support for building chatgpt plugins
 - [ ] misc: Add support for embeddings

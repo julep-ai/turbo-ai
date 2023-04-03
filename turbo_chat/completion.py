@@ -1,3 +1,4 @@
+import inspect
 from typing import (
     Awaitable,
     Callable,
@@ -46,7 +47,7 @@ def completion(**opts) -> Callable[[CompletionFn], Completion]:
     def wrapper(fn: CompletionFn):
         @turbo(**opts)
         async def generate(**kwargs):
-            yield User(template=fn.__doc__, variables=kwargs)
+            yield User(template=inspect.getdoc(fn), variables=kwargs)
             yield Generate()
 
         # @wraps(fn)

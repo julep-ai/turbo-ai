@@ -1,11 +1,12 @@
 # flake8: noqa
 # This is so ruff doesn't remove * imports
 
+import inspect
 from jinja2 import Environment
 from jinja2schema import infer, to_json_schema
 from jsonschema import validate
 
-from .args import get_input_signature
+from .args import get_fn_signature
 from .lang import inflect
 
 __all__ = [
@@ -21,7 +22,8 @@ jinja_env: Environment = Environment(
 
 # Add custom filters
 jinja_env.filters["inflect"] = inflect
-jinja_env.filters["input_signature"] = get_input_signature
+jinja_env.filters["fn_signature"] = get_fn_signature
+jinja_env.filters["fn_doc"] = inspect.getdoc
 
 
 # Funcs

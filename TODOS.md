@@ -1,12 +1,15 @@
+
+- [ ] turbo: Add support for args in addition to kwargs
 - [ ] scratchpad: Add support for parsing json lists in addition to objects
 - [ ] misc: Add support for chaining and parsing completion outputs (either via json or scratchpads)
 - [ ] misc: Add support for building chatgpt plugins
 - [ ] misc: Add support for embeddings
 - [ ] turbo: Add support for n>1 choices and selection
 - [ ] turbo: Add support for streaming
-- [ ] completion: dedent doc comment
 - [ ] docs_bot: create docs-bot to generate documentation
 - [ ] turbo: add generic type information to @turbo decorator
+- [x] completion: dedent doc comment
+- [x] fix: function docstring and signature getter
 - [x] turbo: yield assistant ONLY on generate?
 - [x] turbo: move memory_args and cache_args
 - [x] tool_bot: use system/example everywhere but switch it to User prompt for gpt-3.5

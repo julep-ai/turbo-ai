@@ -62,14 +62,15 @@ Tool Input: {"query": "wedding guest attire"}
 
     assert tool_scratchpad.parse(input) == expected
 
+
 @test("contains returns True when scratchpad json array works")
 async def test_scratchpad_json_array():
     input = """
 Input: [1, 2, 3]
 """
-    
+
     scratchpad = Scratchpad(
-"""
+        """
 Input: {input:json}
 """.strip()
     )

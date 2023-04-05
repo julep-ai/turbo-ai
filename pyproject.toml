@@ -21,6 +21,7 @@ jsonschema = "^4.17.3"
 lemminflect = "^0.2.3"
 proxytypes = "^0.10.0"
 dirtyjson = "^1.0.8"
+redis = {version = ">=4.5.0,<5.0.0", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
@@ -30,6 +31,9 @@ poethepoet = "^0.18.1"
 ward = "^0.67.2b0"
 ipython = "^8.11.0"
 nest-asyncio = "^1.5.6"
+
+[tool.poetry.extras]
+redis = ["redis"]
 
 [tool.poe.tasks]
 _ruff = "ruff --fix **/*.py"

@@ -26,7 +26,7 @@ def parse_yesno(text: str) -> bool:
     return yesno_mapping[text.lower()]
 
 
-@with_pattern(r"(\{.+\})")
+@with_pattern(r"([\[\{].+[\]\}])")
 def parse_json(text: str) -> dict:
     return dirtyjson.loads(text)
 

@@ -1,6 +1,5 @@
-
+- [ ] cache: Add redis cache
 - [ ] turbo: Add support for args in addition to kwargs
-- [ ] scratchpad: Add support for parsing json lists in addition to objects
 - [ ] misc: Add support for chaining and parsing completion outputs (either via json or scratchpads)
 - [ ] misc: Add support for building chatgpt plugins
 - [ ] misc: Add support for embeddings
@@ -8,6 +7,7 @@
 - [ ] turbo: Add support for streaming
 - [ ] docs_bot: create docs-bot to generate documentation
 - [ ] turbo: add generic type information to @turbo decorator
+- [x] scratchpad: Add support for parsing json lists in addition to objects
 - [x] completion: dedent doc comment
 - [x] fix: function docstring and signature getter
 - [x] turbo: yield assistant ONLY on generate?

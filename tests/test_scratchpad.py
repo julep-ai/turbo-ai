@@ -47,7 +47,7 @@ multiline explanation
     assert scratchpad.parse(input) == expected
 
 
-@test("contains returns True when scratchpad works")
+@test("contains returns True when tool scratchpad works")
 async def test_tool_scratchpad():
     input = """
 Thought: Need to use a tool? Yes
@@ -61,3 +61,21 @@ Tool Input: {"query": "wedding guest attire"}
     }
 
     assert tool_scratchpad.parse(input) == expected
+
+@test("contains returns True when scratchpad json array works")
+async def test_scratchpad_json_array():
+    input = """
+Input: [1, 2, 3]
+"""
+    
+    scratchpad = Scratchpad(
+"""
+Input: {input:json}
+""".strip()
+    )
+
+    expected = {
+        "input": [1, 2, 3],
+    }
+
+    assert scratchpad.parse(input) == expected

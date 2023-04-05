@@ -33,6 +33,7 @@ __all__ = [
     "Example",
     "BaseCache",
     "SimpleCache",
+    "RedisCache",
     "Scratchpad",
     "Result",
     "Tool",

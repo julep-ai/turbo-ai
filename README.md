@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* fix: Fix json array. PR [#48](https://github.com/creatorrr/turbo-chat/pull/48) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.5. PR [#47](https://github.com/creatorrr/turbo-chat/pull/47) by [@creatorrr](https://github.com/creatorrr).
 * fix: Fix how function signature and docstring was being parsed. PR [#46](https://github.com/creatorrr/turbo-chat/pull/46) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.4. PR [#45](https://github.com/creatorrr/turbo-chat/pull/45) by [@creatorrr](https://github.com/creatorrr).

@@ -1,3 +1,7 @@
+- [ ] debug: Add debug_color
+- [ ] turbo: Add an interactive chat runner .chat()
+- [ ] debug: Make pygments and colorama optional deps under debug
+- [ ] misc: Decide nomenclature of what is an app, the factory function and a bot?
 - [ ] turbo: Add support for args in addition to kwargs
 - [ ] misc: Add support for chaining and parsing completion outputs (either via json or scratchpads)
 - [ ] misc: Add support for building chatgpt plugins

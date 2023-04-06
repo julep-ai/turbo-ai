@@ -1,3 +1,4 @@
+- [ ] turbo: Remove delay caused by tiktoken get_encoding
 - [ ] bug: Fix user-type in default example for toolbot
 - [ ] debug: Add debug_color
 - [ ] turbo: Add an interactive chat runner .chat()

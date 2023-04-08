@@ -1,3 +1,4 @@
+- [ ] cache: Add TTL support to RedisCache
 - [ ] perf: load spacy only when needed using a memoized func
 - [ ] turbo: Remove delay caused by tiktoken get_encoding by hardcoding stuff
 - [ ] bug: Fix user-type in default example for toolbot

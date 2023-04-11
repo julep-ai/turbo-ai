@@ -16,6 +16,7 @@ class RedisCache(BaseCache):
 
     client: redis.Redis
     prefix: str
+    ttl: int = 0
 
     async def setup(
         self,
@@ -42,7 +43,14 @@ class RedisCache(BaseCache):
         _key = self.to_key(key)
         _value = self.serialize(value)
 
-        await self.client.set(_key, _value)
+        # Set ttl
+        ttl = self.ttl
+        opts = {}
+        if ttl:
+            opts["px"] = ttl
+            opts["keepttl"] = True
+
+        await self.client.set(_key, _value, **opts)
 
     async def get(self, key) -> Any:
         _key = self.to_key(key)

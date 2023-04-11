@@ -1,3 +1,6 @@
+- [ ] turbo: simplify interface further
+- [ ] analytics: Add analytics
+- [ ] debug: add visualizer
 - [ ] cache: Add TTL support to RedisCache
 - [ ] perf: load spacy only when needed using a memoized func
 - [ ] turbo: Remove delay caused by tiktoken get_encoding by hardcoding stuff
@@ -7,13 +10,14 @@
 - [ ] debug: Make pygments and colorama optional deps under debug
 - [ ] misc: Decide nomenclature of what is an app, the factory function and a bot?
 - [ ] turbo: Add support for args in addition to kwargs
-- [ ] misc: Add support for chaining and parsing completion outputs (either via json or scratchpads)
 - [ ] misc: Add support for building chatgpt plugins
 - [ ] misc: Add support for embeddings
-- [ ] turbo: Add support for n>1 choices and selection
 - [ ] turbo: Add support for streaming
 - [ ] docs_bot: create docs-bot to generate documentation
 - [ ] turbo: add generic type information to @turbo decorator
+- [ ] turbo: Add support for n>1 choices and selection
+- [ ] misc: Add support for chaining
+- [x] misc: Add support for parsing completion outputs
 - [x] cache: Add redis cache
 - [x] scratchpad: Add support for parsing json lists in addition to objects
 - [x] completion: dedent doc comment

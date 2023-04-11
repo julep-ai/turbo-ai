@@ -1,9 +1,10 @@
+from functools import wraps
 import inspect
 from typing import (
     Awaitable,
     Callable,
     Protocol,
-    Union,
+    TypeVar,
 )
 
 
@@ -21,27 +22,27 @@ __all__ = [
     "completion",
 ]
 
-
-class CompletionFnWithResult(Protocol):
-    def __call__(self, result: str, **kwargs) -> Awaitable[str]:
-        ...
+T = TypeVar("T")
 
 
-class CompletionFnWithoutResult(Protocol):
+class CompletionFn(Protocol[T]):
     def __call__(self, **kwargs) -> Awaitable[None]:
         ...
 
 
-CompletionFn = Union[CompletionFnWithResult, CompletionFnWithoutResult]
-
-
-class Completion(Protocol):
-    def __call__(self, **kwargs) -> Awaitable[str]:
+class Completion(Protocol[T]):
+    def __call__(self, **kwargs) -> Awaitable[T]:
         ...
 
 
+ParseFn = Callable[[str], T]
+
+
 # Decorator
-def completion(**opts) -> Callable[[CompletionFn], Completion]:
+def completion(
+    parse: ParseFn[T] = lambda s: str(s),
+    **opts,
+) -> Callable[[CompletionFn], Completion[T]]:
     """Parameterized decorator for creating a simple generate function"""
 
     def wrapper(fn: CompletionFn):
@@ -50,7 +51,7 @@ def completion(**opts) -> Callable[[CompletionFn], Completion]:
             yield User(template=inspect.getdoc(fn), variables=kwargs)
             yield Generate()
 
-        # @wraps(fn)
+        @wraps(fn)
         async def wrapped(**kwargs) -> str:
             # Ensure args
             assert ensure_args(fn, kwargs)
@@ -58,7 +59,7 @@ def completion(**opts) -> Callable[[CompletionFn], Completion]:
             # Get result
             result = await generate(**kwargs).run()
 
-            return result.content
+            return parse(result.content)
 
         return wrapped
 

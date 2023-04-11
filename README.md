@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* feat: Support for parsing completions. PR [#51](https://github.com/creatorrr/turbo-chat/pull/51) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.6. PR [#50](https://github.com/creatorrr/turbo-chat/pull/50) by [@creatorrr](https://github.com/creatorrr).
 * feat: Add RedisCache implementation. PR [#49](https://github.com/creatorrr/turbo-chat/pull/49) by [@creatorrr](https://github.com/creatorrr).
 * fix: Fix json array. PR [#48](https://github.com/creatorrr/turbo-chat/pull/48) by [@creatorrr](https://github.com/creatorrr).

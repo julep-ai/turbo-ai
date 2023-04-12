@@ -1,8 +1,11 @@
 from typing import (
+    Callable,
+    List,
     Optional,
 )
 
 import openai
+from openai.openai_object import OpenAIObject
 
 
 from .structs import Assistant
@@ -24,6 +27,9 @@ __all__ = [
 async def run_chat(
     memory: BaseMemory,
     cache: Optional[BaseCache] = None,
+    select_choice: Callable[[List[OpenAIObject]], OpenAIObject] = (
+        lambda choices: choices[0]
+    ),
     **kwargs,
 ) -> Assistant:
     """Run ChatCompletion for the memory so far"""
@@ -44,7 +50,7 @@ async def run_chat(
     )
 
     # Parse result
-    output = chat_completion.choices[0].message
+    output = select_choice(chat_completion.choices).message
     payload = dict(content=output["content"])
     result = Assistant(**payload)
 

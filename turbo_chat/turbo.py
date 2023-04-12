@@ -4,9 +4,12 @@ import inspect
 from typing import (
     Any,
     Callable,
+    List,
     Optional,
     Type,
 )
+
+from openai.openai_object import OpenAIObject
 
 from .chat import run_chat
 from .config import TurboModel
@@ -52,6 +55,10 @@ def turbo(
     cache_class: Optional[Type[BaseCache]] = None,
     debug: Optional[Callable[[dict], None]] = None,
     original_fn: Optional[Callable] = None,
+    select_choice: Callable[[List[OpenAIObject]], OpenAIObject] = (
+        lambda choices: choices[0]
+    ),
+    n: int = 1,
     **kwargs,
 ) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
     """Parameterized decorator for creating a chatml app from an async generator"""
@@ -74,6 +81,7 @@ def turbo(
         **kwargs,
         "model": model,
         "stream": stream,
+        "n": n,
     }
 
     # Parameterized decorator fn
@@ -172,6 +180,7 @@ def turbo(
                         payload = await run_chat(
                             memory,
                             cache,
+                            select_choice=select_choice,
                             **{
                                 **chat_completion_args,
                                 **output_dict,

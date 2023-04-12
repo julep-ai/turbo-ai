@@ -1,20 +1,20 @@
-- [ ] turbo: simplify interface further
 - [ ] analytics: Add analytics
-- [ ] debug: add visualizer
 - [ ] embeddings: Add support for visualizing in nomic atlas
-- [ ] turbo: Remove delay caused by tiktoken get_encoding by hardcoding stuff
+- [ ] misc: Add support for building chatgpt plugins
+- [ ] turbo: add generic type information to @turbo decorator
+- [ ] turbo: Add support for streaming
+- [ ] turbo: Add an interactive chat runner .chat()
+- [ ] debug: add visualizer
+- [ ] docs_bot: create docs-bot to generate documentation
+- [ ] misc: Add support for embeddings
+- [ ] turbo: simplify interface further
+- [ ] misc: Decide nomenclature of what is an app, the factory function and a bot?
 - [ ] bug: Fix user-type in default example for toolbot
 - [ ] debug: Add debug_color
-- [ ] turbo: Add an interactive chat runner .chat()
 - [ ] debug: Make pygments and colorama optional deps under debug
-- [ ] misc: Decide nomenclature of what is an app, the factory function and a bot?
-- [ ] misc: Add support for building chatgpt plugins
-- [ ] misc: Add support for embeddings
-- [ ] turbo: Add support for streaming
-- [ ] docs_bot: create docs-bot to generate documentation
-- [ ] turbo: add generic type information to @turbo decorator
 - [ ] misc: Add support for chaining
-- [ ] turbo: Add support for n>1 choices and selection
+- [x] turbo: Add support for n>1 choices and selection
+- [x] turbo: Remove delay caused by tiktoken get_encoding by hardcoding stuff
 - [x] turbo: Add support for args in addition to kwargs
 - [x] perf: load encoding cached
 - [x] cache: Add TTL support to RedisCache

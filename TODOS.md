@@ -11,8 +11,8 @@
 - [ ] misc: Decide nomenclature of what is an app, the factory function and a bot?
 - [ ] bug: Fix user-type in default example for toolbot
 - [ ] misc: Add support for embeddings
-- [ ] debug: Add debug_color
-- [ ] debug: Make pygments and colorama optional deps under debug
+- [x] debug: Add debug_color
+- [x] debug: Make pygments and colorama optional deps under debug
 - [x] turbo: Add support for n>1 choices and selection
 - [x] turbo: Remove delay caused by tiktoken get_encoding by hardcoding stuff
 - [x] turbo: Add support for args in addition to kwargs

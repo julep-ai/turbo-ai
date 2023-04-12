@@ -1,6 +1,7 @@
 - [ ] turbo: simplify interface further
 - [ ] analytics: Add analytics
 - [ ] debug: add visualizer
+- [ ] embeddings: Add support for visualizing in nomic atlas
 - [ ] perf: load spacy only when needed using a memoized func
 - [ ] turbo: Remove delay caused by tiktoken get_encoding by hardcoding stuff
 - [ ] bug: Fix user-type in default example for toolbot

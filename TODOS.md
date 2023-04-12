@@ -15,7 +15,7 @@
 - [ ] turbo: add generic type information to @turbo decorator
 - [ ] misc: Add support for chaining
 - [ ] turbo: Add support for n>1 choices and selection
-- [ ] turbo: Add support for args in addition to kwargs
+- [x] turbo: Add support for args in addition to kwargs
 - [x] perf: load encoding cached
 - [x] cache: Add TTL support to RedisCache
 - [x] misc: Add support for parsing completion outputs

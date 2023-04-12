@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* f/support multi choice. PR [#56](https://github.com/creatorrr/turbo-chat/pull/56) by [@creatorrr](https://github.com/creatorrr).
 * feat: Support multiple choices selector; n > 1. PR [#55](https://github.com/creatorrr/turbo-chat/pull/55) by [@creatorrr](https://github.com/creatorrr).
 * feat: Support positional arguments for running apps. PR [#54](https://github.com/creatorrr/turbo-chat/pull/54) by [@creatorrr](https://github.com/creatorrr).
 * feat: Make get_encoding faster. PR [#53](https://github.com/creatorrr/turbo-chat/pull/53) by [@creatorrr](https://github.com/creatorrr).

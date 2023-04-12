@@ -1,6 +1,9 @@
+from functools import lru_cache
+import os
 from typing import Dict, List
 
 import tiktoken
+from tiktoken.load import load_tiktoken_bpe
 
 from ..config import TurboModel
 
@@ -8,6 +11,54 @@ __all__ = [
     "count_tokens",
     "get_max_tokens_length",
 ]
+
+
+@lru_cache(maxsize=1)
+def get_cl100k_base():
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    mergeable_ranks = load_tiktoken_bpe(f"{current_dir}/cl100k_base.tiktoken")
+
+    ENDOFTEXT = "<|endoftext|>"
+    FIM_PREFIX = "<|fim_prefix|>"
+    FIM_MIDDLE = "<|fim_middle|>"
+    FIM_SUFFIX = "<|fim_suffix|>"
+    ENDOFPROMPT = "<|endofprompt|>"
+
+    special_tokens = {
+        ENDOFTEXT: 100257,
+        FIM_PREFIX: 100258,
+        FIM_MIDDLE: 100259,
+        FIM_SUFFIX: 100260,
+        ENDOFPROMPT: 100276,
+    }
+
+    return {
+        "name": "cl100k_base",
+        "pat_str": r"""(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+""",  # noqa: E501
+        "mergeable_ranks": mergeable_ranks,
+        "special_tokens": special_tokens,
+    }
+
+
+@lru_cache(maxsize=1)
+def get_cl100k_encoding() -> tiktoken.Encoding:
+    cl100k_base = get_cl100k_base()
+
+    # In production, load the arguments directly instead of accessing private attributes
+    # See openai_public.py for examples of arguments for specific encodings
+    enc = tiktoken.Encoding(
+        name="cl100k_im",
+        pat_str=cl100k_base["pat_str"],
+        mergeable_ranks=cl100k_base["mergeable_ranks"],
+        special_tokens={
+            **cl100k_base["special_tokens"],
+            "<|im_start|>": 100264,
+            "<|im_end|>": 100265,
+        },
+    )
+
+    return enc
+
 
 # See: https://platform.openai.com/docs/models/gpt-4
 MODEL_WINDOWS: Dict[str, int] = {
@@ -38,13 +89,17 @@ def get_max_tokens_length(model_name: str) -> int:
 def count_tokens(messages: List[dict], model: TurboModel) -> int:
     """Count the number of tokens stored in list of messages."""
 
+    is_cl100k_model = model.startswith("gpt-3.5-turbo") or model.startswith("gpt-4")
+
     # Get tiktoken encoding
-    encoding = tiktoken.encoding_for_model(model)
+    encoding: tiktoken.Encoding = (
+        get_cl100k_encoding() if is_cl100k_model else tiktoken.encoding_for_model(model)
+    )
 
     ###########
     # From https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb  # noqa: E501
     ###########
-    if model == "gpt-3.5-turbo-0301":  # note: future models may deviate from this
+    if is_cl100k_model:  # note: future models may deviate from this
         num_tokens = 0
         for message in messages:
             # every message follows <im_start>{role/name}\n{content}<im_end>\n

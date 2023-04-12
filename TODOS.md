@@ -2,7 +2,6 @@
 - [ ] analytics: Add analytics
 - [ ] debug: add visualizer
 - [ ] embeddings: Add support for visualizing in nomic atlas
-- [ ] perf: load spacy only when needed using a memoized func
 - [ ] turbo: Remove delay caused by tiktoken get_encoding by hardcoding stuff
 - [ ] bug: Fix user-type in default example for toolbot
 - [ ] debug: Add debug_color
@@ -15,8 +14,9 @@
 - [ ] docs_bot: create docs-bot to generate documentation
 - [ ] turbo: add generic type information to @turbo decorator
 - [ ] misc: Add support for chaining
-- [ ] turbo: Add support for args in addition to kwargs
 - [ ] turbo: Add support for n>1 choices and selection
+- [ ] turbo: Add support for args in addition to kwargs
+- [x] perf: load encoding cached
 - [x] cache: Add TTL support to RedisCache
 - [x] misc: Add support for parsing completion outputs
 - [x] cache: Add redis cache

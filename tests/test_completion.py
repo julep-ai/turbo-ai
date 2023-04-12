@@ -40,3 +40,14 @@ async def test_completion_parse():
 
     assert isinstance(result, dict)
     assert result["answer"]
+
+
+@test("contains returns True when completion with positional args works")
+async def test_completion_with_positional_args():
+    name = "Baloo"
+
+    @completion()
+    async def say_hi(name: str):
+        """Say hi to {{name}}"""
+
+    assert name.lower() in (await say_hi(name)).lower()

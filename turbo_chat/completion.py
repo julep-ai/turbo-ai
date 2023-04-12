@@ -25,13 +25,13 @@ __all__ = [
 T = TypeVar("T")
 
 
-class CompletionFn(Protocol[T]):
-    def __call__(self, **kwargs) -> Awaitable[None]:
+class CompletionFn(Protocol):
+    def __call__(self, *args, **kwargs) -> Awaitable[None]:
         ...
 
 
 class Completion(Protocol[T]):
-    def __call__(self, **kwargs) -> Awaitable[T]:
+    def __call__(self, *args, **kwargs) -> Awaitable[T]:
         ...
 
 
@@ -46,18 +46,21 @@ def completion(
     """Parameterized decorator for creating a simple generate function"""
 
     def wrapper(fn: CompletionFn):
-        @turbo(**opts)
+        @turbo(original_fn=fn, **opts)
         async def generate(**kwargs):
             yield User(template=inspect.getdoc(fn), variables=kwargs)
             yield Generate()
 
         @wraps(fn)
-        async def wrapped(**kwargs) -> str:
+        async def wrapped(*args, **kwargs) -> str:
+            params = inspect.signature(fn).bind(*args, **kwargs)
+            opts = params.arguments
+
             # Ensure args
-            assert ensure_args(fn, kwargs)
+            assert ensure_args(fn, opts)
 
             # Get result
-            result = await generate(**kwargs).run()
+            result = await generate(**opts).run()
 
             return parse(result.content)
 

@@ -44,6 +44,7 @@ class TurboGenFn(Protocol):
 
     def __call__(
         self,
-        **context,
+        *args,
+        **kwargs,
     ) -> TurboGenWrapper:
         ...

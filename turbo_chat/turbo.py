@@ -51,6 +51,7 @@ def turbo(
     stream: bool = False,
     cache_class: Optional[Type[BaseCache]] = None,
     debug: Optional[Callable[[dict], None]] = None,
+    original_fn: Optional[Callable] = None,
     **kwargs,
 ) -> Callable[[TurboGenTemplateFn], TurboGenFn]:
     """Parameterized decorator for creating a chatml app from an async generator"""
@@ -80,8 +81,11 @@ def turbo(
         """Wrapper for chatml app async generator"""
 
         @wraps(gen_fn)
-        async def turbo_gen_fn(**context) -> TurboGenWrapper:
+        async def turbo_gen_fn(*args, **kwargs) -> TurboGenWrapper:
             """Wrapped chatml app from an async generator"""
+
+            params = inspect.signature(original_fn or gen_fn).bind(*args, **kwargs)
+            context = params.arguments
 
             memory_args = context.pop("memory_args", {})
             cache_args = context.pop("cache_args", {})

@@ -6,13 +6,13 @@
 - [ ] turbo: Add an interactive chat runner .chat()
 - [ ] debug: add visualizer
 - [ ] docs_bot: create docs-bot to generate documentation
-- [ ] misc: Add support for embeddings
+- [ ] misc: Add support for chaining
 - [ ] turbo: simplify interface further
 - [ ] misc: Decide nomenclature of what is an app, the factory function and a bot?
 - [ ] bug: Fix user-type in default example for toolbot
+- [ ] misc: Add support for embeddings
 - [ ] debug: Add debug_color
 - [ ] debug: Make pygments and colorama optional deps under debug
-- [ ] misc: Add support for chaining
 - [x] turbo: Add support for n>1 choices and selection
 - [x] turbo: Remove delay caused by tiktoken get_encoding by hardcoding stuff
 - [x] turbo: Add support for args in addition to kwargs

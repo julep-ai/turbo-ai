@@ -1,3 +1,4 @@
+- [ ] turbo: hash-based deduplication of old history+new prompts
 - [ ] analytics: Add analytics
 - [ ] embeddings: Add support for visualizing in nomic atlas
 - [ ] misc: Add support for building chatgpt plugins

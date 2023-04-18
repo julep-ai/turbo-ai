@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* version: 0.3.9. PR [#59](https://github.com/creatorrr/turbo-chat/pull/59) by [@creatorrr](https://github.com/creatorrr).
 * x/fix cache args. PR [#58](https://github.com/creatorrr/turbo-chat/pull/58) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.7. PR [#57](https://github.com/creatorrr/turbo-chat/pull/57) by [@creatorrr](https://github.com/creatorrr).
 * f/support multi choice. PR [#56](https://github.com/creatorrr/turbo-chat/pull/56) by [@creatorrr](https://github.com/creatorrr).

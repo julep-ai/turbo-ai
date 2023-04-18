@@ -92,11 +92,12 @@ def turbo(
         async def turbo_gen_fn(*args, **kwargs) -> TurboGenWrapper:
             """Wrapped chatml app from an async generator"""
 
+            # Get cache and memory args
+            cache_args = kwargs.pop("cache_args", {})
+            memory_args = kwargs.pop("memory_args", {})
+
             params = inspect.signature(original_fn or gen_fn).bind(*args, **kwargs)
             context = params.arguments
-
-            memory_args = context.pop("memory_args", {})
-            cache_args = context.pop("cache_args", {})
 
             # Init memory
             memory = memory_class(model=model)

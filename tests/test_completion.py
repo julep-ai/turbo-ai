@@ -51,3 +51,14 @@ async def test_completion_with_positional_args():
         """Say hi to {{name}}"""
 
     assert name.lower() in (await say_hi(name)).lower()
+
+
+@test("contains returns True when completion with cache_args works")
+async def test_completion_with_positional_args():
+    name = "Baloo"
+
+    @completion(cache_class=SimpleCache)
+    async def say_hi(name: str):
+        """Say hi to {{name}}"""
+
+    assert name.lower() in (await say_hi(name, cache_args={})).lower()

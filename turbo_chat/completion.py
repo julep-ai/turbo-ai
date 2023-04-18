@@ -53,6 +53,11 @@ def completion(
 
         @wraps(fn)
         async def wrapped(*args, **kwargs) -> str:
+            # Get cache and memory args
+            cache_args = kwargs.pop("cache_args", {})
+            memory_args = kwargs.pop("memory_args", {})
+
+            # Bind args
             params = inspect.signature(fn).bind(*args, **kwargs)
             opts = params.arguments
 
@@ -60,7 +65,11 @@ def completion(
             assert ensure_args(fn, opts)
 
             # Get result
-            result = await generate(**opts).run()
+            result = await generate(
+                **opts,
+                cache_args=cache_args,
+                memory_args=memory_args,
+            ).run()
 
             return parse(result.content)
 

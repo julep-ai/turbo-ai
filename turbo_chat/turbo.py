@@ -96,8 +96,9 @@ def turbo(
             cache_args = kwargs.pop("cache_args", {})
             memory_args = kwargs.pop("memory_args", {})
 
-            params = inspect.signature(original_fn or gen_fn).bind(*args, **kwargs)
-            context = params.arguments
+            # Prepare kwargs
+            signature = inspect.signature(original_fn or gen_fn)
+            arg_names = [k for k in signature.parameters.keys()]
 
             # Init memory
             memory = memory_class(model=model)
@@ -111,16 +112,16 @@ def turbo(
                 assert ensure_args(cache.setup, cache_args)
                 await cache.setup(**cache_args)
 
-            # Init generator
-            signature = inspect.signature(gen_fn)
-            arg_names = [k for k in signature.parameters.keys()]
-
             if "memory" in arg_names:
-                context["memory"] = memory
+                kwargs["memory"] = memory
 
             if "cache" in arg_names:
-                context["cache"] = cache
+                kwargs["cache"] = cache
 
+            params = signature.bind(*args, **kwargs)
+            context = params.arguments
+
+            # Init generator
             turbo_gen = gen_fn(**context)
 
             # Parameters

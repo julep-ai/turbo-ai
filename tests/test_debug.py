@@ -18,10 +18,10 @@ async def test_debug():
 
     @turbo(debug=debug)
     async def example():
-        yield User(content="You are a fortune teller")
+        yield System(content="You are a fortune teller")
 
     app = await example().init()
     await app.run()
 
     assert debug_ran
-    assert debug_output and debug_output["type"] == "output"
+    assert debug_output and debug_output["source"] == "app"

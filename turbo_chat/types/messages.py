@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
+from enum import Enum
+from functools import cached_property
 import json
 from typing import (
-    cast,
     List,
-    Literal,
     Optional,
-    TypedDict,
     Union,
 )
 
@@ -17,33 +16,39 @@ from ..utils import render_template
 __all__ = [
     "MessageRole",
     "Message",
-    "MessageDict",
-    "BaseMessageCollection",
+    "ChatMLMessage",
 ]
 
 
 # Enums
 # Allowed values for openai chatml prefixes
-MessageRole = Literal[
-    "system",
-    "user",
-    "assistant",
-    "example_user",  # Will add prefix (system name=) in prepare_prompt
-    "example_assistant",
-]
+class MessageRole(str, Enum):
+    System = "system"
+    User = "user"
+    Assistant = "assistant"
 
 
 # Models
-class MessageDict(TypedDict):
-    role: str
+class ChatMLMessage(
+    pydantic.BaseModel,
+    extra=pydantic.Extra.forbid,
+    frozen=True,
+    use_enum_values=True,
+):
+    role: MessageRole
     content: str
 
 
-class Message(pydantic.BaseModel):
+class Message(
+    pydantic.BaseModel,
+    extra=pydantic.Extra.ignore,
+    use_enum_values=True,
+):
     """Container for a single chatml prefix message"""
 
     role: MessageRole
     timestamp: datetime = pydantic.Field(default_factory=datetime.utcnow)
+    metadata: dict = pydantic.Field(default_factory=dict)
 
     # Content / Template
     content: Optional[Union[str, dict]] = None
@@ -53,13 +58,24 @@ class Message(pydantic.BaseModel):
     # Check template variables
     check: bool = False
 
-    # Stickiness
-    sticky: bool = False
-    label: str = ""
-    sticky_position: Literal["top", "bottom"] = "bottom"
+    def dict(self, **kwargs) -> dict:
+        # Exclude config values by default
+        kwargs.setdefault("exclude", {"template", "variables", "check"})
+        return super().dict(**kwargs)
 
-    # Should forward downstream
-    forward: bool = False
+
+    def to_chatml(self) -> ChatMLMessage:
+        """Convert to chatml message"""
+
+        keys = ChatMLMessage.schema()["properties"].keys()
+        data = self.dict(include=set(keys))
+
+        # Convert content to json if not str
+        if not isinstance(data["content"], str):
+            data["content"] = json.dumps(data["content"])
+
+        return ChatMLMessage(**data)
+
 
     @pydantic.root_validator
     def validate_content_template(cls, values: dict) -> dict:
@@ -68,16 +84,7 @@ class Message(pydantic.BaseModel):
         check = values["check"]
         template_string = values.pop("template")
         variables = values.pop("variables")
-        sticky = values["sticky"]
-        label = values["label"]
         role = values["role"]
-
-        # Label can be system only if role is system
-        if label == "system":
-            assert role == "system", "System label can only be used with system role"
-
-        # Check that sticky messages have an id
-        assert not (sticky ^ bool(label)), "Sticky must be set with label"
 
         # Check that correct values set
         template_set = bool(template_string) and (variables is not None)
@@ -90,17 +97,6 @@ class Message(pydantic.BaseModel):
             values["content"] = render_template(template_string, variables, check)
 
         return values
-
-    def dict(self, **kwargs) -> MessageDict:
-        # Include role and content
-        kwargs.setdefault("include", {"role", "content"})
-        data = super().dict(**kwargs)
-
-        # Convert content to json if not str
-        if not isinstance(data["content"], str):
-            data["content"] = json.dumps(data["content"])
-
-        return cast(MessageDict, data)
 
 
 # Abstract classes

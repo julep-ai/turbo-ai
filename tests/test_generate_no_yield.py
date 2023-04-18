@@ -4,18 +4,21 @@ from ward import test
 from turbo_chat import *
 
 
-@test("contains returns True when Generate no yield works")
-async def test_generate_no_yield():
+@test("contains returns True when User yield_as_result=True works")
+async def test_generate_yield_as_result():
+    lady = "gaga"
+
     @turbo()
     async def example():
         yield System(content="You are a good guy named John")
-        yield User(content="What is your name?")
-        result = yield Generate(forward=False)
+        yield User(
+            content="What is your name?",
+            yield_as_result=True,
+        )
+        
+        nonlocal lady
+        lady = "finger"
 
-        yield User(content="How are you doing?")
-        result = yield Generate()
+    await example().run()
 
-    b = await example().init()
-    results = [output async for output in b]
-
-    assert len(results) == 1
+    assert lady == "gaga"

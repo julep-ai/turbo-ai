@@ -12,8 +12,7 @@ class TestMemory(LocalMemory):
 @test("contains returns True when memory injection works")
 async def test_memory_arg():
     @turbo(memory_class=TestMemory)
-    async def example(zodiac: str, memory):
+    async def example():
         yield System(content="You are a fortune teller")
 
-    b = await example(zodiac="pisces", memory_args={"hello": "world"}).init()
-    await b.run()
+    await example(memory_args={"hello": "world"}).init()

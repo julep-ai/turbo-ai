@@ -7,7 +7,7 @@ from turbo_chat import *
 @test("contains returns True when message template works")
 async def test_message_template():
     name = "Turbo"
-    msg = Assistant(template="{{name}}", variables={"name": name})
+    msg = User(template="{{name}}", variables={"name": name})
     assert msg.content == name
 
 
@@ -16,9 +16,9 @@ async def test_message_template():
     error_thrown = False
 
     try:
-        msg = Assistant(
+        User(
             template="{{name}}",
-            variables={"gaga": "gaga"},
+            variables={"lady": "gaga"},
             check=True,
         )
 

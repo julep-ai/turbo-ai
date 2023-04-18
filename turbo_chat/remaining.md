@@ -1,0 +1,14 @@
+remaining:
+- [ ] agents/
+- [ ] chat
+- [ ] runner
+- [ ] turbo
+- [ ] memory/
+- [ ] completion
+- [ ] utils/
+- [ ] errors
+- [ ] structs/
+- [ ] types/
+- [x] cache/
+- [x] config
+- [x] apps/

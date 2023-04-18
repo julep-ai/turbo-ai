@@ -2,7 +2,7 @@
 from ward import test
 
 from turbo_chat import *
-from turbo_chat import tool_bot
+from turbo_chat import tool_agent_factory
 
 products = {
     21: "Classic Tweed suit",
@@ -59,7 +59,7 @@ tools = [
 
 
 @turbo()
-async def app(
+async def app_factory(
     assistant_gender="female",
     assistant_designation="sales rep",
     store_name="Julep Fashion Company",
@@ -78,17 +78,16 @@ You are a {assistant_gender} AI {assistant_designation} for {store_name}. Your n
 {store_name} sells {product_categories} like {up_to_three_product_names} {"and other products" if more else ""}. {additional_store_info}
 """.strip()
 
-    yield System(
+    output = yield User(
         content=prologue
         + "\n"
         + "You are chatting with the customer, start by greeting the customer politely.",
+        generate_kwargs=dict(temperature=0.9),
     )
 
-    output = yield Generate(temperature=0.9, forward=False)
-    message = output.content
+    message = output
 
-    while True:
-        input = yield GetInput(content=message)
+    while (input := yield Input.from_message(message)):
 
         bot = tool_bot(
             prologue=prologue,

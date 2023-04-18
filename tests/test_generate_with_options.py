@@ -9,11 +9,12 @@ async def test_generate_options():
     @turbo()
     async def example():
         yield System(content="You are a good guy named John")
-        yield User(content="What is your name?")
-        result = yield Generate(stop="John")
+        yield User(
+            content="What is your name?",
+            generate_kwargs={"stop": "John"},
+            yield_as_result=True,
+        )
 
-    b = await example().init()
-    results = [output.content async for output in b]
-    results_str = "".join(results)
+    output = await example().run()
 
-    assert "john" not in results_str.lower()
+    assert "john" not in output.content_str.lower()

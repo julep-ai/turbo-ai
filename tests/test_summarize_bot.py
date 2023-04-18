@@ -6,7 +6,7 @@ from turbo_chat import *
 
 
 @test("contains returns True when summarize_bot works")
-async def test_summarize_bot():
+async def test_summarize():
     text = dedent(
         """
     Monty Python (also collectively known as the Pythons)
@@ -22,6 +22,7 @@ async def test_summarize_bot():
     """.strip()
     )
 
-    summary = await summarize_bot(text=text).run()
+    summary = await summarize(text=text)
 
+    assert isinstance(summary.content, str)
     assert 0 < len(summary.content) < len(text)

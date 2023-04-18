@@ -1,0 +1,3 @@
+class WithSetup:
+    async def setup(self, **kwargs) -> None:
+        ...

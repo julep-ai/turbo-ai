@@ -1,13 +1,7 @@
-from typing import Awaitable, Callable, Optional, TypedDict
+from typing import Awaitable, Callable
 
 __all__ = [
     "Tool",
-    "ToolBotInput",
 ]
 
 Tool = Callable[..., Awaitable[str]]
-
-
-class ToolBotInput(TypedDict):
-    state: Optional[str]
-    input: str

@@ -10,12 +10,10 @@ async def test_count_tokens():
     @turbo()
     async def example(zodiac: str, memory):
         yield System(content="You are a fortune teller")
-        yield Generate()
 
         messages = await memory.get_dicts()
         num_tokens = count_tokens(messages, memory.model)
         assert num_tokens
 
     b = example(zodiac="pisces")
-    await b.init()
     await b.run()

@@ -19,10 +19,10 @@ async def test_completion_simple():
 
 @test("contains returns True when completion with parse works")
 async def test_completion_parse():
-    class Result(TypedDict):
+    class SampleParser(TypedDict):
         answer: str
 
-    scratchpad: Scratchpad[Result] = Scratchpad(
+    scratchpad: Scratchpad[SampleParser] = Scratchpad(
         """
         Answer: {answer}
         """
@@ -36,7 +36,7 @@ async def test_completion_parse():
         """
 
     concept = "apple"
-    result: Result = await what_is(concept=concept)
+    result: SampleParser = await what_is(concept=concept)
 
     assert isinstance(result, dict)
     assert result["answer"]

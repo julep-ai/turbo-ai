@@ -1,4 +1,3 @@
-- [ ] turbo: hash-based deduplication of old history+new prompts
 - [ ] analytics: Add analytics
 - [ ] embeddings: Add support for visualizing in nomic atlas
 - [ ] misc: Add support for building chatgpt plugins
@@ -8,10 +7,30 @@
 - [ ] debug: add visualizer
 - [ ] docs_bot: create docs-bot to generate documentation
 - [ ] misc: Add support for chaining
-- [ ] turbo: simplify interface further
 - [ ] misc: Decide nomenclature of what is an app, the factory function and a bot?
 - [ ] bug: Fix user-type in default example for toolbot
 - [ ] misc: Add support for embeddings
+- [ ] turbo: hash-based deduplication of old history+new prompts
+- [ ] random: change debug type -> source
+- [ ] random: access memory and cache from outside
+- [ ] turbo: simplify interface further
+  + [ ] simplify: Remove Generate
+  + [ ] simplify: generate after User
+  + [ ] simplify: generated is sent back to yield site as Assistant() object
+  + [ ] simplify: no more yielding Assistant
+  + [ ] simplify: Rename GetInput to Input
+  + [ ] simplify: Result exits app
+  + [ ] simplify: If Input in a factory, it is an agent
+  + [ ] simplify: .chat() for agents and .run() otherwise
+  + [ ] simplify: Remove sticky messages
+  + [ ] simplify: System messages go on top
+  + [ ] simplify: Add key to identify
+  + [ ] simplify: default key is hash + : + index
+  + [ ] simplify: on re-run, memory + new messages are stacked together, new messages with the same key replace the previous, remaining are concatenated to prepare prompt
+  + [ ] simplify: If key==None, then the message is used for generation and then immediately discarded without adding to memory
+  + [ ] simplify: Add custom metadata to messages so `prepare_prompt` can use it for filtering etc
+  + [ ] simplify: Add content_str as a stringified property getter
+- [ ] implement turbo generator as a class implementation of async iterator instead of a proxied async_generator
 - [x] debug: Add debug_color
 - [x] debug: Make pygments and colorama optional deps under debug
 - [x] turbo: Add support for n>1 choices and selection

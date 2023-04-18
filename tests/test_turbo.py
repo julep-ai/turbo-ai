@@ -9,15 +9,17 @@ async def test_turbo():
     @turbo()
     async def example(zodiac: str):
         yield System(content="You are a fortune teller")
-        yield User(content=f"My zodiac sign is {zodiac}")
+        user_input = yield Input(content="What do you want to know?")
+        output = yield User(
+            content=f"My zodiac sign is {zodiac}. {user_input.content}",
+            generate_kwargs=dict(temperature=0.9),
+        )
 
-        input = yield GetInput(content="What do you want to know?")
-        yield User(content=input)
+        assert isinstance(output, Assistant)
+        yield Result.from_message(output)
 
-        value = yield Generate(temperature=0.9)
-
-    b = example(zodiac="pisces")
-    output = await b.run()
+    b = await example(zodiac="pisces").init()
+    output = await b.chat()
 
     assert isinstance(output, Result)
     assert not output.done

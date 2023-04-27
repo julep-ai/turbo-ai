@@ -11,7 +11,7 @@ packages = [{include = "turbo_chat"}]
 python = "<3.11,>=3.8"
 aiohttp = "^3.8.4"
 openai = "^0.27.0"
-pydantic = "^1.10.5"
+pydantic = "^1.10.7"
 tenacity = "^8.2.2"
 tiktoken = "^0.3.1"
 parse = "^1.19.0"
@@ -25,6 +25,8 @@ redis = {version = ">=4.5.0,<5.0.0", optional = true}
 pygments = {version = "^2.15.0", optional = true}
 colorama = {version = "^0.4.6", optional = true}
 blobfile = "^2.0.1"
+docarray = {version = "^0.30.0"}
+weaviate-client = {version = "^3.16.0", optional = true}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.1.0"
@@ -34,10 +36,12 @@ poethepoet = "^0.18.1"
 ward = "^0.67.2b0"
 ipython = "^8.11.0"
 nest-asyncio = "^1.5.6"
+ipykernel = "^6.22.0"
 
 [tool.poetry.extras]
 redis = ["redis"]
 debug = ["colorama", "pygments"]
+weaviate = ["weaviate-client"]
 
 [tool.poe.tasks]
 _ruff = "ruff --fix **/*.py"

@@ -31,7 +31,18 @@ class MemoryTruncation:
 
         # Make sure first message is within limits
         first, *rest = messages
-        assert count_tokens([first], self.model) <= context_window
+        # assert count_tokens([first], self.model) <= context_window
+        
+        count_so_far = 0
+        
+        toks = [
+            word
+            for word, tk
+            in zip(first.split(" "), count_tokens(sp, self.model))
+            if (count_tokens := count_tokens + tk) < context_window
+        ]
+        
+        first = " ".join(toks)
 
         if not len(rest):
             return messages

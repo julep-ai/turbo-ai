@@ -32,17 +32,19 @@ class MemoryTruncation:
         # Make sure first message is within limits
         first, *rest = messages
         # assert count_tokens([first], self.model) <= context_window
-        
+
         count_so_far = 0
-        
+        sp = first["content"].split(" ")
         toks = [
             word
-            for word, tk
-            in zip(first.split(" "), count_tokens(sp, self.model))
-            if (count_tokens := count_tokens + tk) < context_window
+            for word, tk in zip(
+                sp,
+                map(lambda s: count_tokens([dict(content=s)], self.model), sp),
+            )
+            if (count_so_far := count_so_far + tk) < context_window
         ]
-        
-        first = " ".join(toks)
+
+        first = {"role": first["role"], "content": " ".join(toks)}
 
         if not len(rest):
             return messages

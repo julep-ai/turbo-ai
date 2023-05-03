@@ -183,6 +183,7 @@ assert len(cache.cache) == 1
 
 ### Latest Changes
 
+* fix: Fix cache not saving to memory. PR [#63](https://github.com/creatorrr/turbo-chat/pull/63) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.11. PR [#62](https://github.com/creatorrr/turbo-chat/pull/62) by [@creatorrr](https://github.com/creatorrr).
 * fix: Fix truncation. PR [#61](https://github.com/creatorrr/turbo-chat/pull/61) by [@creatorrr](https://github.com/creatorrr).
 * version: 0.3.10. PR [#60](https://github.com/creatorrr/turbo-chat/pull/60) by [@creatorrr](https://github.com/creatorrr).

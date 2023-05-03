@@ -41,7 +41,11 @@ async def run_chat(
     # Check cache
     if cache and await cache.has(prompt):
         cached = await cache.get(prompt)
-        return Assistant(**cached)
+
+        result = Assistant(**cached)
+        await memory.append(result)
+
+        return result
 
     # Create completion
     chat_completion = await openai.ChatCompletion.acreate(

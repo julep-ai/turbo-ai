@@ -21,9 +21,9 @@ __all__ = [
 
 # Retries
 def create_retry_decorator(
-    min_seconds: int = 4,
-    max_seconds: int = 10,
-    max_retries: int = 5,
+    min_seconds: int = 1,
+    max_seconds: int = 60,
+    max_retries: int = 6,
 ) -> Callable[[Any], Any]:
     # Wait 2^x * 1 second between each retry starting with
     # 4 seconds, then up to 10 seconds, then 10 seconds afterwards

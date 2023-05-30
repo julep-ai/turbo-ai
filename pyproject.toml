@@ -10,30 +10,35 @@ packages = [{include = "turbo_chat"}]
 [tool.poetry.dependencies]
 python = "<3.11,>=3.8"
 aiohttp = "^3.8.4"
-openai = "^0.27.0"
-pydantic = "^1.10.5"
+openai = "^0.27.7"
+pydantic = "^1.10.8"
 tenacity = "^8.2.2"
-tiktoken = "^0.3.1"
+tiktoken = "^0.4.0"
 parse = "^1.19.0"
 jinja2 = "^3.1.2"
-jinja2schema = "^0.1.4"
-jsonschema = "^4.17.3"
 lemminflect = "^0.2.3"
-proxytypes = "^0.10.0"
 dirtyjson = "^1.0.8"
 redis = {version = ">=4.5.0,<5.0.0", optional = true}
 pygments = {version = "^2.15.0", optional = true}
 colorama = {version = "^0.4.6", optional = true}
 blobfile = "^2.0.1"
+pyrsistent = "^0.19.3"
+aiochan = "^0.2.7"
+cloudevents = "^1.9.0"
+duckdb = "^0.8.0"
+pylance = "^0.4.15"
+pandas = "^2.0.1"
+pyarrow = "^12.0.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.1.0"
-ruff = "^0.0.254"
-pytype = "^2023.3.2"
-poethepoet = "^0.18.1"
-ward = "^0.67.2b0"
-ipython = "^8.11.0"
+black = "^23.3.0"
+ruff = "^0.0.270"
+pytype = "^2023.5.24"
+poethepoet = "^0.20.0"
+pytest = "^7.3.1"
 nest-asyncio = "^1.5.6"
+jupyterlab = "^4.0.0"
+ipython = "<8.13"
 
 [tool.poetry.extras]
 redis = ["redis"]

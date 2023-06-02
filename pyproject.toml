@@ -39,6 +39,7 @@ pytest = "^7.3.1"
 nest-asyncio = "^1.5.6"
 jupyterlab = "^4.0.0"
 ipython = "<8.13"
+jupyter = {extras = ["black"], version = "^1.0.0"}
 
 [tool.poetry.extras]
 redis = ["redis"]
